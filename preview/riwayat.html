@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Absensi Jaya Kedhaton - Riwayat Absensi</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <!-- SIDEBAR -->
+    <aside class="fixed top-0 left-0 w-64 h-full bg-slate-800 text-white flex flex-col z-50 shadow-xl">
+        <div class="px-5 py-5 border-b border-slate-700 flex items-center gap-3">
+            <img src="images/logo.png" alt="Logo Jaya Kedhaton" 
+                 class="w-12 h-12 object-contain shrink-0">
+            <div class="overflow-hidden">
+                <h1 class="text-base font-bold tracking-wide text-white leading-tight truncate">Jaya Kedhaton</h1>
+                <p class="text-xs text-slate-400 mt-0.5 truncate">Sistem Absensi Digital</p>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-4 py-5 space-y-1.5 overflow-y-auto">
+            
+            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-chart-bar w-6 text-center text-lg"></i>
+                <span>Dashboard</span>
+                
+            </a>
+        
+            <a href="riwayat.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 bg-teal-600 text-white shadow-md">
+                <i class="fas fa-clipboard-list w-6 text-center text-lg"></i>
+                <span>Riwayat Absensi</span>
+                
+            </a>
+        
+            <a href="rekap.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-calendar-week w-6 text-center text-lg"></i>
+                <span>Rekap Mingguan</span>
+                
+            </a>
+        
+            <a href="upah.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-money-bill-wave w-6 text-center text-lg"></i>
+                <span>Upah & Lembur</span>
+                <span class="bg-amber-400 text-slate-900 text-xs font-bold px-2 py-0.5 rounded-full uppercase ml-auto">Baru</span>
+            </a>
+        
+            <a href="karyawan.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-users w-6 text-center text-lg"></i>
+                <span>Karyawan</span>
+                
+            </a>
+        
+            <a href="kartu-rfid.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-id-card-clip w-6 text-center text-lg"></i>
+                <span>Kartu RFID</span>
+                
+            </a>
+        
+            <a href="device.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-desktop w-6 text-center text-lg"></i>
+                <span>Device</span>
+                
+            </a>
+        
+        </nav>
+
+        <div class="px-6 py-4 border-t border-slate-700 text-xs text-slate-400">
+            &copy; 2026 Sistem Absensi Jaya Kedhaton — Dual-ESP32
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="ml-64 min-h-screen flex flex-col">
+        <!-- Top Bar -->
+        <header class="bg-white shadow-sm px-8 py-4 flex items-center justify-between sticky top-0 z-40">
+            <div class="text-base text-slate-600">
+                Login sebagai <span class="font-semibold text-slate-800">Admin Keuangan & Absensi</span> - admin
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="javascript:location.reload()"
+                   class="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </a>
+                <a href="login.html"
+                   class="inline-flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <main class="flex-1 p-8">
+            
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-slate-800">Riwayat Absensi</h2>
+            <p class="text-base text-slate-500 mt-1">Daftar log absensi masuk dilengkapi bukti foto otomatis ESP32-S3 Cam</p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <form id="formFilterRiwayat" class="flex flex-wrap items-end gap-4" onsubmit="event.preventDefault(); jalankanFilterRiwayat();">
+                <div class="flex-1 min-w-[180px]">
+                    <label class="block text-sm font-semibold text-slate-600 mb-1">Dari Tanggal</label>
+                    <input id="filterTglDari" type="date" value="2026-08-01" onchange="jalankanFilterRiwayat()" class="w-full border-2 border-slate-300 rounded-lg px-4 py-3 text-base text-slate-700 font-medium focus:border-teal-600 focus:outline-none">
+                </div>
+                <div class="flex-1 min-w-[180px]">
+                    <label class="block text-sm font-semibold text-slate-600 mb-1">Sampai Tanggal</label>
+                    <input id="filterTglSampai" type="date" value="2026-08-03" onchange="jalankanFilterRiwayat()" class="w-full border-2 border-slate-300 rounded-lg px-4 py-3 text-base text-slate-700 font-medium focus:border-teal-600 focus:outline-none">
+                </div>
+                <div class="flex-1 min-w-[180px]">
+                    <label class="block text-sm font-semibold text-slate-600 mb-1">
+                        Kategori Karyawan <span class="text-xs text-teal-600 font-bold">(Filter)</span>
+                    </label>
+                    <select id="filterKategoriRiwayat" onchange="jalankanFilterRiwayat()" class="w-full border-2 border-slate-300 rounded-lg px-4 py-3 text-base text-slate-800 font-semibold bg-white focus:border-teal-600 focus:outline-none cursor-pointer hover:border-teal-400 transition-colors">
+                        <option value="" selected>Semua (2 Kategori)</option>
+                        <option value="Staff Kantor" >Staff Kantor</option>
+                        <option value="Pekerja Harian" >Pekerja Harian</option>
+                    </select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="jalankanFilterRiwayat()" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-lg text-base transition-colors shadow flex items-center gap-2 cursor-pointer">
+                        <i class="fas fa-search"></i> Cari
+                    </button>
+                    <button type="button" onclick="resetFilterRiwayat()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold py-3 px-4 rounded-lg text-base transition-colors cursor-pointer" title="Reset">
+                        <i class="fas fa-rotate-left"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-slate-700 text-white text-xs uppercase tracking-wider">
+                            <th class="px-5 py-4 text-left">No</th>
+                            <th class="px-4 py-4 text-left">Tanggal</th>
+                            <th class="px-5 py-4 text-left">Nama</th>
+                            <th class="px-4 py-4 text-left">Kategori</th>
+                            <th class="px-4 py-4 text-left">Batas Masuk</th>
+                            <th class="px-4 py-4 text-left">Masuk</th>
+                            <th class="px-4 py-4 text-left">Pulang</th>
+                            <th class="px-4 py-4 text-left">Lembur (&gt;17:30)</th>
+                            <th class="px-4 py-4 text-left">UID</th>
+                            <th class="px-4 py-4 text-center">Foto Bukti</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableRiwayatBody" class="divide-y divide-slate-100">
+                        
+            <tr class="row-riwayat hover:bg-slate-50 transition-colors" data-kategori="Pekerja Harian" data-tanggal="2026-08-03">
+                <td class="px-5 py-4 text-base text-slate-500">1</td>
+                <td class="px-4 py-4 text-base text-slate-700 font-medium">2026-08-03</td>
+                <td class="px-5 py-4 text-base text-slate-900 font-bold">Joko Susilo</td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-800">Pekerja Harian</span></td>
+                <td class="px-4 py-4 text-xs font-mono font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded">Maks. 07:30</td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">07:15:20</td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">19:35:10</td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800"><i class="fas fa-clock mr-1 text-[10px]"></i> Lembur 2 Jam</span></td>
+                <td class="px-4 py-4 text-sm font-mono text-slate-500">83A192B4</td>
+                <td class="px-4 py-4 text-center">
+                    <img src="https://ui-avatars.com/api/?name=Joko+Susilo&background=f59e0b&color=fff&size=96" alt="Foto" class="w-11 h-11 rounded-lg mx-auto border-2 border-slate-200 shadow-sm object-cover">
+                </td>
+            </tr>
+        
+            <tr class="row-riwayat hover:bg-slate-50 transition-colors" data-kategori="Pekerja Harian" data-tanggal="2026-08-03">
+                <td class="px-5 py-4 text-base text-slate-500">2</td>
+                <td class="px-4 py-4 text-base text-slate-700 font-medium">2026-08-03</td>
+                <td class="px-5 py-4 text-base text-slate-900 font-bold">Slamet Riyadi</td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-800">Pekerja Harian</span></td>
+                <td class="px-4 py-4 text-xs font-mono font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded">Maks. 07:30</td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">07:22:14</td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">18:32:00</td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800"><i class="fas fa-clock mr-1 text-[10px]"></i> Lembur 1 Jam</span></td>
+                <td class="px-4 py-4 text-sm font-mono text-slate-500">47C201F8</td>
+                <td class="px-4 py-4 text-center">
+                    <img src="https://ui-avatars.com/api/?name=Slamet+Riyadi&background=f59e0b&color=fff&size=96" alt="Foto" class="w-11 h-11 rounded-lg mx-auto border-2 border-slate-200 shadow-sm object-cover">
+                </td>
+            </tr>
+        
+            <tr class="row-riwayat hover:bg-slate-50 transition-colors" data-kategori="Staff Kantor" data-tanggal="2026-08-03">
+                <td class="px-5 py-4 text-base text-slate-500">3</td>
+                <td class="px-4 py-4 text-base text-slate-700 font-medium">2026-08-03</td>
+                <td class="px-5 py-4 text-base text-slate-900 font-bold">Dimas Arya Kedhaton</td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-800">Staff Kantor</span></td>
+                <td class="px-4 py-4 text-xs font-mono font-bold text-blue-800 bg-blue-50 px-2 py-0.5 rounded">Maks. 08:30</td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">08:22:45</td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">17:15:30</td>
+                <td class="px-4 py-4"><span class="text-xs text-slate-400">Normal (0 Jam)</span></td>
+                <td class="px-4 py-4 text-sm font-mono text-slate-500">53492607</td>
+                <td class="px-4 py-4 text-center">
+                    <img src="https://ui-avatars.com/api/?name=Dimas+Arya&background=0d9488&color=fff&size=96" alt="Foto" class="w-11 h-11 rounded-lg mx-auto border-2 border-slate-200 shadow-sm object-cover">
+                </td>
+            </tr>
+        
+            <tr class="row-riwayat hover:bg-slate-50 transition-colors" data-kategori="Staff Kantor" data-tanggal="2026-08-03">
+                <td class="px-5 py-4 text-base text-slate-500">4</td>
+                <td class="px-4 py-4 text-base text-slate-700 font-medium">2026-08-03</td>
+                <td class="px-5 py-4 text-base text-slate-900 font-bold">Akmal Zaidan</td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-800">Staff Kantor</span></td>
+                <td class="px-4 py-4 text-xs font-mono font-bold text-blue-800 bg-blue-50 px-2 py-0.5 rounded">Maks. 08:30</td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">08:42:10</td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">17:25:00</td>
+                <td class="px-4 py-4"><span class="text-xs text-slate-400">Normal (0 Jam)</span></td>
+                <td class="px-4 py-4 text-sm font-mono text-slate-500">9491F306</td>
+                <td class="px-4 py-4 text-center">
+                    <img src="https://ui-avatars.com/api/?name=Akmal+Zaidan&background=2563eb&color=fff&size=96" alt="Foto" class="w-11 h-11 rounded-lg mx-auto border-2 border-slate-200 shadow-sm object-cover">
+                </td>
+            </tr>
+        
+            <tr class="row-riwayat hover:bg-slate-50 transition-colors" data-kategori="Pekerja Harian" data-tanggal="2026-08-02">
+                <td class="px-5 py-4 text-base text-slate-500">5</td>
+                <td class="px-4 py-4 text-base text-slate-700 font-medium">2026-08-02</td>
+                <td class="px-5 py-4 text-base text-slate-900 font-bold">Joko Susilo</td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-800">Pekerja Harian</span></td>
+                <td class="px-4 py-4 text-xs font-mono font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded">Maks. 07:30</td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">07:20:00</td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">19:30:00</td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800"><i class="fas fa-clock mr-1 text-[10px]"></i> Lembur 2 Jam</span></td>
+                <td class="px-4 py-4 text-sm font-mono text-slate-500">83A192B4</td>
+                <td class="px-4 py-4 text-center">
+                    <img src="https://ui-avatars.com/api/?name=Joko+Susilo&background=f59e0b&color=fff&size=96" alt="Foto" class="w-11 h-11 rounded-lg mx-auto border-2 border-slate-200 shadow-sm object-cover">
+                </td>
+            </tr>
+        
+            <tr class="row-riwayat hover:bg-slate-50 transition-colors" data-kategori="Staff Kantor" data-tanggal="2026-08-02">
+                <td class="px-5 py-4 text-base text-slate-500">6</td>
+                <td class="px-4 py-4 text-base text-slate-700 font-medium">2026-08-02</td>
+                <td class="px-5 py-4 text-base text-slate-900 font-bold">Anom Arya</td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-800">Staff Kantor</span></td>
+                <td class="px-4 py-4 text-xs font-mono font-bold text-blue-800 bg-blue-50 px-2 py-0.5 rounded">Maks. 08:30</td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">08:28:50</td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">17:10:00</td>
+                <td class="px-4 py-4"><span class="text-xs text-slate-400">Normal (0 Jam)</span></td>
+                <td class="px-4 py-4 text-sm font-mono text-slate-500">A3B7C901</td>
+                <td class="px-4 py-4 text-center">
+                    <img src="https://ui-avatars.com/api/?name=Anom+Arya&background=64748b&color=fff&size=96" alt="Foto" class="w-11 h-11 rounded-lg mx-auto border-2 border-slate-200 shadow-sm object-cover">
+                </td>
+            </tr>
+        
+                        <tr id="emptyRiwayatRow" style="display: none;">
+                            <td colspan="10" class="px-6 py-12 text-center text-slate-400 text-base">
+                                <i class="fas fa-search text-3xl mb-2 block text-slate-300"></i>
+                                Tidak ada data riwayat absensi untuk filter ini.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <script>
+            function jalankanFilterRiwayat() {
+                const selectKat = document.getElementById('filterKategoriRiwayat');
+                const tglDari = document.getElementById('filterTglDari')?.value;
+                const tglSampai = document.getElementById('filterTglSampai')?.value;
+                if (!selectKat) return;
+
+                const kat = selectKat.value;
+                const rows = document.querySelectorAll('#tableRiwayatBody tr.row-riwayat');
+                let visibleCount = 0;
+
+                rows.forEach(tr => {
+                    const rowKat = tr.getAttribute('data-kategori');
+                    const rowTgl = tr.getAttribute('data-tanggal');
+                    
+                    const matchKat = (!kat || kat === 'Semua (2 Kategori)') ? true : (rowKat === kat);
+                    let matchTgl = true;
+                    if (tglDari && rowTgl && rowTgl < tglDari) matchTgl = false;
+                    if (tglSampai && rowTgl && rowTgl > tglSampai) matchTgl = false;
+
+                    if (matchKat && matchTgl) {
+                        tr.style.display = '';
+                        visibleCount++;
+                    } else {
+                        tr.style.display = 'none';
+                    }
+                });
+
+                const emptyRow = document.getElementById('emptyRiwayatRow');
+                if (emptyRow) emptyRow.style.display = (visibleCount === 0) ? '' : 'none';
+            }
+
+            function resetFilterRiwayat() {
+                const selectKat = document.getElementById('filterKategoriRiwayat');
+                if (selectKat) selectKat.value = '';
+                document.getElementById('filterTglDari').value = '2026-08-01';
+                document.getElementById('filterTglSampai').value = '2026-08-03';
+                jalankanFilterRiwayat();
+            }
+
+            jalankanFilterRiwayat();
+        </script>
+    
+        </main>
+    </div>
+
+</body>
+</html>

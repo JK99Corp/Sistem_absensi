@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Absensi Jaya Kedhaton - Dashboard</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <!-- SIDEBAR -->
+    <aside class="fixed top-0 left-0 w-64 h-full bg-slate-800 text-white flex flex-col z-50 shadow-xl">
+        <div class="px-5 py-5 border-b border-slate-700 flex items-center gap-3">
+            <img src="images/logo.png" alt="Logo Jaya Kedhaton" 
+                 class="w-12 h-12 object-contain shrink-0">
+            <div class="overflow-hidden">
+                <h1 class="text-base font-bold tracking-wide text-white leading-tight truncate">Jaya Kedhaton</h1>
+                <p class="text-xs text-slate-400 mt-0.5 truncate">Sistem Absensi Digital</p>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-4 py-5 space-y-1.5 overflow-y-auto">
+            
+            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 bg-teal-600 text-white shadow-md">
+                <i class="fas fa-chart-bar w-6 text-center text-lg"></i>
+                <span>Dashboard</span>
+                
+            </a>
+        
+            <a href="riwayat.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-clipboard-list w-6 text-center text-lg"></i>
+                <span>Riwayat Absensi</span>
+                
+            </a>
+        
+            <a href="rekap.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-calendar-week w-6 text-center text-lg"></i>
+                <span>Rekap Mingguan</span>
+                
+            </a>
+        
+            <a href="upah.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-money-bill-wave w-6 text-center text-lg"></i>
+                <span>Upah & Lembur</span>
+                <span class="bg-amber-400 text-slate-900 text-xs font-bold px-2 py-0.5 rounded-full uppercase ml-auto">Baru</span>
+            </a>
+        
+            <a href="karyawan.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-users w-6 text-center text-lg"></i>
+                <span>Karyawan</span>
+                
+            </a>
+        
+            <a href="kartu-rfid.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-id-card-clip w-6 text-center text-lg"></i>
+                <span>Kartu RFID</span>
+                
+            </a>
+        
+            <a href="device.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-desktop w-6 text-center text-lg"></i>
+                <span>Device</span>
+                
+            </a>
+        
+        </nav>
+
+        <div class="px-6 py-4 border-t border-slate-700 text-xs text-slate-400">
+            &copy; 2026 Sistem Absensi Jaya Kedhaton — Dual-ESP32
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="ml-64 min-h-screen flex flex-col">
+        <!-- Top Bar -->
+        <header class="bg-white shadow-sm px-8 py-4 flex items-center justify-between sticky top-0 z-40">
+            <div class="text-base text-slate-600">
+                Login sebagai <span class="font-semibold text-slate-800">Admin Keuangan & Absensi</span> - admin
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="javascript:location.reload()"
+                   class="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </a>
+                <a href="login.html"
+                   class="inline-flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <main class="flex-1 p-8">
+            
+        <div class="mb-6">
+            <h2 class="text-2xl font-bold text-slate-800">Dashboard</h2>
+            <p class="text-base text-slate-500 mt-0.5">Ringkasan absensi masuk & pulang karyawan Jaya Kedhaton</p>
+        </div>
+
+        <!-- Ketentuan Jam Kerja (Rapi & Simpel) -->
+        <div class="bg-white border border-slate-200 rounded-xl px-6 py-4 mb-6 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-4 text-sm">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                    <span class="text-slate-600">Pekerja Harian: <strong class="text-slate-800">Masuk maks. 07:30</strong></span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+                    <span class="text-slate-600">Staff Kantor: <strong class="text-slate-800">Masuk maks. 08:30</strong></span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+                    <span class="text-slate-600">Pulang Normal: <strong class="text-slate-800">17:00 – 17:30</strong></span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                    <span class="text-slate-600">Lembur: <strong class="text-slate-800">Tap pulang > 17:30</strong> (Staff & Harian)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-teal-500">
+                <p class="text-sm font-medium text-slate-500 uppercase tracking-wide">Hadir pada filter ini</p>
+                <p class="text-5xl font-extrabold text-slate-800 mt-2" id="countHadirDisplay">5</p>
+                <p class="text-xs text-slate-400 mt-2" id="countHadirSubtext">2 Staff Kantor + 3 Pekerja Harian</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-blue-500">
+                <p class="text-sm font-medium text-slate-500 uppercase tracking-wide">Karyawan aktif</p>
+                <p class="text-5xl font-extrabold text-slate-800 mt-2">6</p>
+                <p class="text-xs text-slate-400 mt-2">Terbagi dalam 2 Kategori Kerja</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-amber-500">
+                <p class="text-sm font-medium text-slate-500 uppercase tracking-wide">Device aktif</p>
+                <p class="text-5xl font-extrabold text-slate-800 mt-2">1</p>
+                <p class="text-xs text-slate-400 mt-2">KANTORJK_01 (Online Standalone)</p>
+            </div>
+        </div>
+
+        <!-- Form Filter Kategori & Device Aktif Berfungsi Penuh -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <form id="formFilterDashboard" class="flex flex-wrap items-end gap-4" onsubmit="event.preventDefault(); jalankanFilterDashboard();">
+                <div class="flex-1 min-w-[200px]">
+                    <label class="block text-sm font-semibold text-slate-600 mb-1">Tanggal</label>
+                    <input type="text" value="03 - Aug - 2026" readonly
+                           class="w-full border border-slate-300 rounded-lg px-4 py-3 text-base text-slate-700 bg-slate-50 font-medium">
+                </div>
+
+                <div class="flex-1 min-w-[200px]">
+                    <label class="block text-sm font-semibold text-slate-600 mb-1">
+                        Kategori Karyawan <span class="text-xs text-teal-600 font-bold">(Pilih untuk Memfilter)</span>
+                    </label>
+                    <select id="filterKategori" onchange="jalankanFilterDashboard()"
+                            class="w-full border-2 border-slate-300 rounded-lg px-4 py-3 text-base text-slate-800 bg-white font-semibold focus:border-teal-600 focus:outline-none cursor-pointer hover:border-teal-400 transition-colors">
+                        <option value="" selected>Semua (2 Kategori)</option>
+                        <option value="Staff Kantor" >Staff Kantor</option>
+                        <option value="Pekerja Harian" >Pekerja Harian</option>
+                    </select>
+                </div>
+
+                <div class="flex-1 min-w-[200px]">
+                    <label class="block text-sm font-semibold text-slate-600 mb-1">Device</label>
+                    <select id="filterDevice" onchange="jalankanFilterDashboard()"
+                            class="w-full border-2 border-slate-300 rounded-lg px-4 py-3 text-base text-slate-800 bg-white font-semibold focus:border-teal-600 focus:outline-none cursor-pointer hover:border-teal-400 transition-colors">
+                        <option value="" selected>Semua Device</option>
+                        <option value="KANTORJK_01" >KANTORJK_01</option>
+                        <option value="KANTORJK_02" >KANTORJK_02</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="jalankanFilterDashboard()"
+                            class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-lg text-base transition-colors shadow flex items-center gap-2 cursor-pointer">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                    <button type="button" onclick="resetFilterDashboard()"
+                            class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold py-3 px-4 rounded-lg text-base transition-colors cursor-pointer" title="Reset Filter">
+                        <i class="fas fa-rotate-left"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+                <h3 class="text-base font-bold text-slate-800">Data Absensi Masuk & Pulang Hari Ini</h3>
+                <span class="text-xs text-slate-500">Pekerja Harian maks. <strong>07:30</strong> | Staff Kantor maks. <strong>08:30</strong> | Lembur: tap pulang &gt; 17:30</span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-slate-700 text-white text-xs uppercase tracking-wider">
+                            <th class="px-5 py-4 text-left">NAMA KARYAWAN</th>
+                            <th class="px-4 py-4 text-left">KATEGORI</th>
+                            <th class="px-4 py-4 text-left">BATAS MASUK</th>
+                            <th class="px-4 py-4 text-left">JAM MASUK</th>
+                            <th class="px-4 py-4 text-left">JAM PULANG</th>
+                            <th class="px-4 py-4 text-left">STATUS MASUK</th>
+                            <th class="px-4 py-4 text-left">STATUS LEMBUR</th>
+                            <th class="px-4 py-4 text-left">UID</th>
+                            <th class="px-4 py-4 text-left">DEVICE</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableAbsensiBody" class="divide-y divide-slate-100">
+                        
+            <tr class="row-absensi hover:bg-slate-50 transition-colors" data-kategori="Pekerja Harian" data-device="KANTORJK_01">
+                <td class="px-5 py-4 font-bold text-slate-900 text-base">Joko Susilo</td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-800"><i class="fas fa-hammer mr-1 text-[10px]"></i> Pekerja Harian</span></td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-amber-50 text-amber-900 border border-amber-200">Maks. 07:30</span></td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">07:15:20</td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">19:35:10</td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700"><i class="fas fa-check-circle mr-1 text-[10px]"></i> Tepat Waktu</span></td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 shadow-sm"><i class="fas fa-clock mr-1 text-[10px]"></i> Lembur 2 Jam</span></td>
+                <td class="px-4 py-4 text-sm font-mono text-slate-500">83A192B4</td>
+                <td class="px-4 py-4 text-sm text-slate-600">KANTORJK_01</td>
+            </tr>
+        
+            <tr class="row-absensi hover:bg-slate-50 transition-colors" data-kategori="Pekerja Harian" data-device="KANTORJK_01">
+                <td class="px-5 py-4 font-bold text-slate-900 text-base">Slamet Riyadi</td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-800"><i class="fas fa-hammer mr-1 text-[10px]"></i> Pekerja Harian</span></td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-amber-50 text-amber-900 border border-amber-200">Maks. 07:30</span></td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">07:22:14</td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">18:32:00</td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700"><i class="fas fa-check-circle mr-1 text-[10px]"></i> Tepat Waktu</span></td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 shadow-sm"><i class="fas fa-clock mr-1 text-[10px]"></i> Lembur 1 Jam</span></td>
+                <td class="px-4 py-4 text-sm font-mono text-slate-500">47C201F8</td>
+                <td class="px-4 py-4 text-sm text-slate-600">KANTORJK_01</td>
+            </tr>
+        
+            <tr class="row-absensi hover:bg-slate-50 transition-colors" data-kategori="Staff Kantor" data-device="KANTORJK_01">
+                <td class="px-5 py-4 font-bold text-slate-900 text-base">Dimas Arya Kedhaton</td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-blue-100 text-blue-800"><i class="fas fa-briefcase mr-1 text-[10px]"></i> Staff Kantor</span></td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-blue-50 text-blue-900 border border-blue-200">Maks. 08:30</span></td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">08:22:45</td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">17:15:30</td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700"><i class="fas fa-check-circle mr-1 text-[10px]"></i> Tepat Waktu</span></td>
+                <td class="px-4 py-4"><span class="text-xs text-slate-400 font-medium">Normal (0 Jam)</span></td>
+                <td class="px-4 py-4 text-sm font-mono text-slate-500">53492607</td>
+                <td class="px-4 py-4 text-sm text-slate-600">KANTORJK_01</td>
+            </tr>
+        
+            <tr class="row-absensi hover:bg-slate-50 transition-colors" data-kategori="Staff Kantor" data-device="KANTORJK_01">
+                <td class="px-5 py-4 font-bold text-slate-900 text-base">Akmal Zaidan</td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-blue-100 text-blue-800"><i class="fas fa-briefcase mr-1 text-[10px]"></i> Staff Kantor</span></td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-blue-50 text-blue-900 border border-blue-200">Maks. 08:30</span></td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">08:42:10</td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">17:25:00</td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-700"><i class="fas fa-exclamation-triangle mr-1 text-[10px]"></i> Terlambat 12 Mnt</span></td>
+                <td class="px-4 py-4"><span class="text-xs text-slate-400 font-medium">Normal (0 Jam)</span></td>
+                <td class="px-4 py-4 text-sm font-mono text-slate-500">9491F306</td>
+                <td class="px-4 py-4 text-sm text-slate-600">KANTORJK_01</td>
+            </tr>
+        
+            <tr class="row-absensi hover:bg-slate-50 transition-colors" data-kategori="Pekerja Harian" data-device="KANTORJK_01">
+                <td class="px-5 py-4 font-bold text-slate-900 text-base">Bambang Triyono</td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-800"><i class="fas fa-hammer mr-1 text-[10px]"></i> Pekerja Harian</span></td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-amber-50 text-amber-900 border border-amber-200">Maks. 07:30</span></td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">07:45:00</td>
+                <td class="px-4 py-4 text-base font-semibold text-slate-800">19:30:15</td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-700"><i class="fas fa-exclamation-triangle mr-1 text-[10px]"></i> Terlambat 15 Mnt</span></td>
+                <td class="px-4 py-4"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 shadow-sm"><i class="fas fa-clock mr-1 text-[10px]"></i> Lembur 2 Jam</span></td>
+                <td class="px-4 py-4 text-sm font-mono text-slate-500">19E873A2</td>
+                <td class="px-4 py-4 text-sm text-slate-600">KANTORJK_01</td>
+            </tr>
+        
+                        <tr id="emptyAbsensiRow" style="display: none;">
+                            <td colspan="9" class="px-6 py-12 text-center text-slate-400 text-base">
+                                <i class="fas fa-search text-3xl mb-2 block text-slate-300"></i>
+                                Tidak ada data absensi untuk filter ini.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <script>
+            function jalankanFilterDashboard() {
+                const selectKat = document.getElementById('filterKategori');
+                const selectDev = document.getElementById('filterDevice');
+                if (!selectKat) return;
+
+                const kat = selectKat.value;
+                const dev = selectDev ? selectDev.value : '';
+                const rows = document.querySelectorAll('#tableAbsensiBody tr.row-absensi');
+                let visibleCount = 0;
+                let harianCount = 0;
+                let staffCount = 0;
+
+                rows.forEach(tr => {
+                    const rowKat = tr.getAttribute('data-kategori');
+                    const rowDev = tr.getAttribute('data-device');
+                    
+                    const matchKat = (!kat || kat === 'Semua (2 Kategori)') ? true : (rowKat === kat);
+                    const matchDev = (!dev || dev === 'Semua Device') ? true : (rowDev === dev);
+
+                    if (matchKat && matchDev) {
+                        tr.style.display = '';
+                        visibleCount++;
+                        if (rowKat === 'Pekerja Harian') harianCount++;
+                        if (rowKat === 'Staff Kantor') staffCount++;
+                    } else {
+                        tr.style.display = 'none';
+                    }
+                });
+
+                const displayEl = document.getElementById('countHadirDisplay');
+                if (displayEl) displayEl.textContent = visibleCount;
+
+                const subtextEl = document.getElementById('countHadirSubtext');
+                if (subtextEl) {
+                    if (!kat || kat === 'Semua (2 Kategori)') {
+                        subtextEl.textContent = staffCount + ' Staff Kantor + ' + harianCount + ' Pekerja Harian';
+                    } else if (kat === 'Pekerja Harian') {
+                        subtextEl.textContent = harianCount + ' Pekerja Harian';
+                    } else {
+                        subtextEl.textContent = staffCount + ' Staff Kantor';
+                    }
+                }
+
+                const emptyRow = document.getElementById('emptyAbsensiRow');
+                if (emptyRow) emptyRow.style.display = (visibleCount === 0) ? '' : 'none';
+            }
+
+            function resetFilterDashboard() {
+                const selectKat = document.getElementById('filterKategori');
+                const selectDev = document.getElementById('filterDevice');
+                if (selectKat) selectKat.value = '';
+                if (selectDev) selectDev.value = '';
+                jalankanFilterDashboard();
+            }
+
+            // Jalankan filter saat render
+            jalankanFilterDashboard();
+        </script>
+    
+        </main>
+    </div>
+
+</body>
+</html>

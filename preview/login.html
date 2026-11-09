@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Absensi Jaya Kedhaton - Login</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="bg-slate-100 min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+        <div class="bg-white rounded-2xl shadow-xl p-8 md:p-10">
+            <div class="text-center mb-8">
+                <img src="images/logo.png" alt="Logo Jaya Kedhaton" 
+                     class="w-24 h-24 mx-auto object-contain mb-3 drop-shadow-sm">
+                <h1 class="text-2xl font-bold text-slate-800">Jaya Kedhaton</h1>
+                <p class="text-slate-500 text-sm mt-1">Sistem Absensi Digital</p>
+            </div>
+
+            <form action="dashboard.html" method="GET">
+                <div class="mb-5">
+                    <label class="block text-base font-semibold text-slate-700 mb-2">
+                        <i class="fas fa-user mr-1 text-slate-400"></i> Username
+                    </label>
+                    <input type="text" value="admin"
+                           class="w-full border border-slate-300 rounded-lg px-4 py-3.5 text-base text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                </div>
+
+                <div class="mb-8">
+                    <label class="block text-base font-semibold text-slate-700 mb-2">
+                        <i class="fas fa-lock mr-1 text-slate-400"></i> Password
+                    </label>
+                    <input type="password" value="••••••••"
+                           class="w-full border border-slate-300 rounded-lg px-4 py-3.5 text-base text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                </div>
+
+                <button type="submit"
+                        class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3.5 px-6 rounded-lg text-lg transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+                    <i class="fas fa-sign-in-alt"></i> Masuk ke Dashboard
+                </button>
+            </form>
+
+            <div class="mt-6 pt-6 border-t border-slate-100 text-center">
+                <p class="text-xs text-slate-400">Default Login: <span class="font-mono font-semibold">admin</span> / <span class="font-mono font-semibold">admin123</span></p>
+            </div>
+        </div>
+        <p class="text-center text-slate-400 text-xs mt-6">&copy; 2026 Sistem Absensi Jaya Kedhaton</p>
+    </div>
+</body>
+</html>
