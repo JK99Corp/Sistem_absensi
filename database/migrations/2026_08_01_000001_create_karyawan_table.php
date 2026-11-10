@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->enum('kategori', ['Staff Kantor', 'Pekerja Harian'])->default('Pekerja Harian');
+            $table->string('projek', 100)->default('-')->comment('Nama Projek untuk Pekerja Harian, atau - jika staf kantor');
             $table->string('uid_rfid', 32)->unique()->nullable()->comment('UID Kartu RFID fisik');
             $table->unsignedInteger('gaji_pokok')->default(0)->comment('Gaji pokok bulanan jika Staff Kantor');
             $table->unsignedInteger('upah_harian')->default(120000)->comment('Upah pokok harian jika Pekerja Harian');

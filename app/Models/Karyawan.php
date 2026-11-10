@@ -18,6 +18,7 @@ class Karyawan extends Model
     protected $fillable = [
         'nama',
         'kategori', // 'Staff Kantor' atau 'Pekerja Harian'
+        'projek', // 'Projek A', 'Projek B', 'Projek C', atau '-' untuk staf kantor
         'uid_rfid',
         'gaji_pokok', // Gaji pokok bulanan untuk Staff Kantor
         'upah_harian', // Upah harian untuk Pekerja Harian

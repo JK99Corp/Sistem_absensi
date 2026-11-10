@@ -94,6 +94,7 @@ class DatabaseSeeder extends Seeder
             [
                 'nama' => 'Dimas Arya Kedhaton',
                 'kategori' => 'Staff Kantor',
+                'projek' => '-',
                 'uid_rfid' => '53492607',
                 'gaji_pokok' => 3500000,
                 'upah_harian' => 0,
@@ -104,6 +105,7 @@ class DatabaseSeeder extends Seeder
             [
                 'nama' => 'Akmal Zaidan',
                 'kategori' => 'Staff Kantor',
+                'projek' => '-',
                 'uid_rfid' => '9491F306',
                 'gaji_pokok' => 3200000,
                 'upah_harian' => 0,
@@ -114,6 +116,7 @@ class DatabaseSeeder extends Seeder
             [
                 'nama' => 'Anom Arya',
                 'kategori' => 'Staff Kantor',
+                'projek' => '-',
                 'uid_rfid' => 'A3B7C901',
                 'gaji_pokok' => 3000000,
                 'upah_harian' => 0,
@@ -125,6 +128,7 @@ class DatabaseSeeder extends Seeder
             [
                 'nama' => 'Joko Susilo',
                 'kategori' => 'Pekerja Harian',
+                'projek' => 'Projek A',
                 'uid_rfid' => '83A192B4',
                 'gaji_pokok' => 0,
                 'upah_harian' => 120000,
@@ -135,6 +139,7 @@ class DatabaseSeeder extends Seeder
             [
                 'nama' => 'Slamet Riyadi',
                 'kategori' => 'Pekerja Harian',
+                'projek' => 'Projek B',
                 'uid_rfid' => '47C201F8',
                 'gaji_pokok' => 0,
                 'upah_harian' => 120000,
@@ -145,6 +150,7 @@ class DatabaseSeeder extends Seeder
             [
                 'nama' => 'Bambang Triyono',
                 'kategori' => 'Pekerja Harian',
+                'projek' => 'Projek C',
                 'uid_rfid' => '19E873A2',
                 'gaji_pokok' => 0,
                 'upah_harian' => 110000,
