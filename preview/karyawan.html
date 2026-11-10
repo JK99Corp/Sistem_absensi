@@ -30,12 +30,6 @@
                 <i class="fas fa-chart-bar w-6 text-center text-lg"></i>
                 <span>Dashboard</span>
             </a>
-
-            <a href="proyek.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-hard-hat w-6 text-center text-lg text-amber-400"></i>
-                <span>Master Proyek</span>
-                <span class="bg-amber-400 text-slate-900 text-xs font-bold px-2 py-0.5 rounded-full uppercase ml-auto">Di Awal</span>
-            </a>
         
             <a href="riwayat.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
                 <i class="fas fa-clipboard-list w-6 text-center text-lg"></i>
@@ -266,7 +260,7 @@
                         <p class="text-base font-bold text-slate-900">Joko Susilo</p>
                         <span class="text-xs text-slate-400">Bergabung: 01/07/2026</span>
                     </td>
-                    <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-800"><i class="fas fa-hammer mr-1 text-[10px]"></i> Pekerja Harian</span></td>
+                    <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300"><i class="fas fa-hammer mr-1 text-[10px] text-amber-700"></i> Pekerja Harian (Projek A)</span></td>
                     <td class="px-4 py-4 font-mono text-sm font-semibold text-slate-700">83A192B4</td>
                     <td class="px-4 py-4 text-sm text-slate-600">0857-1234-5678</td>
                     <td class="px-4 py-4 text-sm"><p class="font-bold text-slate-800">Rp 120.000 / hari</p><span class="text-xs text-amber-700 font-semibold">+ Lembur Rp 25.000/jam</span></td>
@@ -296,7 +290,7 @@
                         <p class="text-base font-bold text-slate-900">Slamet Riyadi</p>
                         <span class="text-xs text-slate-400">Bergabung: 05/07/2026</span>
                     </td>
-                    <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-800"><i class="fas fa-hammer mr-1 text-[10px]"></i> Pekerja Harian</span></td>
+                    <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300"><i class="fas fa-hammer mr-1 text-[10px] text-amber-700"></i> Pekerja Harian (Projek B)</span></td>
                     <td class="px-4 py-4 font-mono text-sm font-semibold text-slate-700">47C201F8</td>
                     <td class="px-4 py-4 text-sm text-slate-600">0858-8765-4321</td>
                     <td class="px-4 py-4 text-sm"><p class="font-bold text-slate-800">Rp 120.000 / hari</p><span class="text-xs text-amber-700 font-semibold">+ Lembur Rp 25.000/jam</span></td>
@@ -326,7 +320,7 @@
                         <p class="text-base font-bold text-slate-900">Bambang Triyono</p>
                         <span class="text-xs text-slate-400">Bergabung: 10/07/2026</span>
                     </td>
-                    <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-800"><i class="fas fa-hammer mr-1 text-[10px]"></i> Pekerja Harian</span></td>
+                    <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300"><i class="fas fa-hammer mr-1 text-[10px] text-amber-700"></i> Pekerja Harian (Projek C)</span></td>
                     <td class="px-4 py-4 font-mono text-sm font-semibold text-slate-700">19E873A2</td>
                     <td class="px-4 py-4 text-sm text-slate-600">0878-9988-7766</td>
                     <td class="px-4 py-4 text-sm"><p class="font-bold text-slate-800">Rp 110.000 / hari</p><span class="text-xs text-amber-700 font-semibold">+ Lembur Rp 25.000/jam</span></td>
@@ -384,42 +378,22 @@
 
                     <div class="mb-5">
                         <label class="block text-base font-bold text-slate-700 mb-2">
-                            Kategori Karyawan <span class="text-rose-500">*</span>
+                            Kategori & Projek Karyawan <span class="text-rose-500">*</span>
                         </label>
-                        <div class="grid grid-cols-2 gap-3">
-                            <label class="border-2 border-slate-300 rounded-xl p-3.5 flex items-center gap-3 cursor-pointer hover:border-teal-500 transition-colors">
-                                <input type="radio" name="kategori" value="Staff Kantor" class="w-5 h-5 text-teal-600" onchange="toggleKategoriForm(this.value)">
-                                <div>
-                                    <p class="font-bold text-slate-800 text-sm">Staff Kantor</p>
-                                    <span class="text-xs text-slate-500">Gaji Tetap Bulanan</span>
-                                </div>
-                            </label>
-
-                            <label class="border-2 border-slate-300 rounded-xl p-3.5 flex items-center gap-3 cursor-pointer hover:border-amber-500 transition-colors bg-amber-50/50">
-                                <input type="radio" name="kategori" value="Pekerja Harian" checked class="w-5 h-5 text-amber-600" onchange="toggleKategoriForm(this.value)">
-                                <div>
-                                    <p class="font-bold text-slate-800 text-sm">Pekerja Harian</p>
-                                    <span class="text-xs text-slate-500">Upah Harian + Lembur</span>
-                                </div>
-                            </label>
-                        </div>
+                        <select name="kategori" id="selectKategoriKaryawan" onchange="toggleKategoriForm(this.value)"
+                                class="w-full border-2 border-slate-300 rounded-xl px-4 py-3 text-base font-bold text-slate-800 bg-white focus:outline-none focus:border-teal-500">
+                            <option value="Pekerja Harian (Projek A)" selected>Pekerja Harian (Projek A)</option>
+                            <option value="Pekerja Harian (Projek B)">Pekerja Harian (Projek B)</option>
+                            <option value="Pekerja Harian (Projek C)">Pekerja Harian (Projek C)</option>
+                            <option value="Staff Kantor">Staff Kantor (Gaji Tetap Bulanan)</option>
+                        </select>
+                        <p class="text-xs text-slate-400 mt-1.5">Pilih kategori serta bagian projek pekerja (misal: Projek A, B, atau C).</p>
                     </div>
 
                     <div id="boxPekerjaHarian" class="p-4 bg-amber-50/70 border border-amber-200 rounded-xl mb-5 space-y-4">
                         <p class="text-xs font-bold text-amber-900 uppercase tracking-wide">
-                            <i class="fas fa-coins text-amber-600 mr-1"></i> Ketentuan Upah & Penugasan Proyek
+                            <i class="fas fa-coins text-amber-600 mr-1"></i> Ketentuan Upah Default (Pekerja Harian)
                         </p>
-                        <div>
-                            <label class="block text-xs font-bold text-amber-950 uppercase mb-1">
-                                <i class="fas fa-hard-hat text-amber-600 mr-1"></i> Penugasan Bagian Proyek <span class="text-rose-500">*</span>
-                            </label>
-                            <select name="projek" id="selectProyekPekerja" class="w-full border-2 border-amber-400 bg-white rounded-lg px-3 py-2.5 text-sm font-bold text-amber-950 focus:outline-none focus:border-amber-600">
-                                <option value="Proyek Bagian A">Proyek Bagian A (Pembangunan Ruko & Struktur)</option>
-                                <option value="Proyek Bagian B">Proyek Bagian B (Renovasi Gudang Logistik)</option>
-                                <option value="Proyek Bagian C">Proyek Bagian C (Finishing & Pengecatan)</option>
-                            </select>
-                            <p class="text-[11px] text-amber-800 mt-1">*Pilih proyek bagian mana pekerja harian ini dialokasikan.</p>
-                        </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">Upah Pokok / Hari (Rp)</label>
@@ -432,7 +406,6 @@
                                        class="w-full border-2 border-slate-300 rounded-lg px-3 py-2 text-sm font-bold text-slate-800 bg-white">
                             </div>
                         </div>
-                        <p class="text-[11px] text-slate-500 italic">*Nominal ini dapat disesuaikan kembali sewaktu-waktu oleh staf keuangan di menu Upah & Lembur.</p>
                     </div>
 
                     <div class="mb-5">

@@ -12,8 +12,7 @@
       "tarifLembur": 0,
       "tglGabung": "01/01/2026",
       "deletedAt": "9/11/2026, 14.13.19",
-      "keterangan": "Diarsipkan oleh admin. Data keuangan & riwayat absensi tetap aman 100%.",
-      "projek": "Kantor Pusat"
+      "keterangan": "Diarsipkan oleh admin. Data keuangan & riwayat absensi tetap aman 100%."
     },
     {
       "id": 2,
@@ -26,8 +25,7 @@
       "tarifLembur": 0,
       "tglGabung": "15/01/2026",
       "deletedAt": "9/11/2026, 14.13.11",
-      "keterangan": "Diarsipkan oleh admin. Data keuangan & riwayat absensi tetap aman 100%.",
-      "projek": "Kantor Pusat"
+      "keterangan": "Diarsipkan oleh admin. Data keuangan & riwayat absensi tetap aman 100%."
     },
     {
       "id": 3,
@@ -40,44 +38,40 @@
       "tarifLembur": 0,
       "tglGabung": "01/02/2026",
       "deletedAt": "9/11/2026, 14.13.11",
-      "keterangan": "Diarsipkan oleh admin. Data keuangan & riwayat absensi tetap aman 100%.",
-      "projek": "Kantor Pusat"
+      "keterangan": "Diarsipkan oleh admin. Data keuangan & riwayat absensi tetap aman 100%."
     },
     {
       "id": 4,
       "nama": "Joko Susilo",
-      "kategori": "Pekerja Harian",
+      "kategori": "Pekerja Harian (Projek A)",
       "uid": "83A192B4",
       "noHp": "0857-1234-5678",
       "status": "Aktif",
       "upahHarian": 120000,
       "tarifLembur": 25000,
-      "tglGabung": "01/07/2026",
-      "projek": "Proyek Bagian A"
+      "tglGabung": "01/07/2026"
     },
     {
       "id": 5,
       "nama": "Slamet Riyadi",
-      "kategori": "Pekerja Harian",
+      "kategori": "Pekerja Harian (Projek B)",
       "uid": "47C201F8",
       "noHp": "0858-8765-4321",
       "status": "Aktif",
       "upahHarian": 120000,
       "tarifLembur": 25000,
-      "tglGabung": "05/07/2026",
-      "projek": "Proyek Bagian B"
+      "tglGabung": "05/07/2026"
     },
     {
       "id": 6,
       "nama": "Bambang Triyono",
-      "kategori": "Pekerja Harian",
+      "kategori": "Pekerja Harian (Projek C)",
       "uid": "19E873A2",
       "noHp": "0878-9988-7766",
       "status": "Aktif",
       "upahHarian": 110000,
       "tarifLembur": 25000,
-      "tglGabung": "10/07/2026",
-      "projek": "Proyek Bagian C"
+      "tglGabung": "10/07/2026"
     }
   ],
   "deviceAktif": 1,
@@ -88,23 +82,21 @@
       "jamMasuk": "07:15:20",
       "jamPulang": "19:35:10",
       "nama": "Joko Susilo",
-      "kategori": "Pekerja Harian",
+      "kategori": "Pekerja Harian (Projek A)",
       "uid": "83A192B4",
       "device": "KANTORJK_01",
       "statusMasuk": "Tepat Waktu",
-      "lembur": "Lembur 2 Jam",
-      "projek": "Proyek Bagian A"
+      "lembur": "Lembur 2 Jam"
     },
     {
       "jamMasuk": "07:22:14",
       "jamPulang": "18:32:00",
       "nama": "Slamet Riyadi",
-      "kategori": "Pekerja Harian",
+      "kategori": "Pekerja Harian (Projek B)",
       "uid": "47C201F8",
       "device": "KANTORJK_01",
       "statusMasuk": "Tepat Waktu",
-      "lembur": "Lembur 1 Jam",
-      "projek": "Proyek Bagian B"
+      "lembur": "Lembur 1 Jam"
     },
     {
       "jamMasuk": "08:22:45",
@@ -114,8 +106,7 @@
       "uid": "53492607",
       "device": "KANTORJK_01",
       "statusMasuk": "Tepat Waktu",
-      "lembur": "Normal (0 Jam)",
-      "projek": "Kantor Pusat"
+      "lembur": "Normal (0 Jam)"
     },
     {
       "jamMasuk": "08:42:10",
@@ -125,19 +116,17 @@
       "uid": "9491F306",
       "device": "KANTORJK_01",
       "statusMasuk": "Terlambat 12 Mnt",
-      "lembur": "Normal (0 Jam)",
-      "projek": "Kantor Pusat"
+      "lembur": "Normal (0 Jam)"
     },
     {
       "jamMasuk": "07:45:00",
       "jamPulang": "19:30:15",
       "nama": "Bambang Triyono",
-      "kategori": "Pekerja Harian",
+      "kategori": "Pekerja Harian (Projek C)",
       "uid": "19E873A2",
       "device": "KANTORJK_01",
       "statusMasuk": "Terlambat 15 Mnt",
-      "lembur": "Lembur 2 Jam",
-      "projek": "Proyek Bagian C"
+      "lembur": "Lembur 2 Jam"
     }
   ],
   "riwayat": [
@@ -146,24 +135,22 @@
       "masuk": "07:15:20",
       "pulang": "19:35:10",
       "nama": "Joko Susilo",
-      "kategori": "Pekerja Harian",
+      "kategori": "Pekerja Harian (Projek A)",
       "uid": "83A192B4",
       "device": "KANTORJK_01",
       "lembur": "Lembur 2 Jam",
-      "foto": "https://ui-avatars.com/api/?name=Joko+Susilo&background=f59e0b&color=fff&size=96",
-      "projek": "Proyek Bagian A"
+      "foto": "https://ui-avatars.com/api/?name=Joko+Susilo&background=f59e0b&color=fff&size=96"
     },
     {
       "tanggal": "2026-08-03",
       "masuk": "07:22:14",
       "pulang": "18:32:00",
       "nama": "Slamet Riyadi",
-      "kategori": "Pekerja Harian",
+      "kategori": "Pekerja Harian (Projek B)",
       "uid": "47C201F8",
       "device": "KANTORJK_01",
       "lembur": "Lembur 1 Jam",
-      "foto": "https://ui-avatars.com/api/?name=Slamet+Riyadi&background=f59e0b&color=fff&size=96",
-      "projek": "Proyek Bagian B"
+      "foto": "https://ui-avatars.com/api/?name=Slamet+Riyadi&background=f59e0b&color=fff&size=96"
     },
     {
       "tanggal": "2026-08-03",
@@ -174,8 +161,7 @@
       "uid": "53492607",
       "device": "KANTORJK_01",
       "lembur": "Normal (0 Jam)",
-      "foto": "https://ui-avatars.com/api/?name=Dimas+Arya&background=0d9488&color=fff&size=96",
-      "projek": "Kantor Pusat"
+      "foto": "https://ui-avatars.com/api/?name=Dimas+Arya&background=0d9488&color=fff&size=96"
     },
     {
       "tanggal": "2026-08-03",
@@ -186,20 +172,18 @@
       "uid": "9491F306",
       "device": "KANTORJK_01",
       "lembur": "Normal (0 Jam)",
-      "foto": "https://ui-avatars.com/api/?name=Akmal+Zaidan&background=2563eb&color=fff&size=96",
-      "projek": "Kantor Pusat"
+      "foto": "https://ui-avatars.com/api/?name=Akmal+Zaidan&background=2563eb&color=fff&size=96"
     },
     {
       "tanggal": "2026-08-02",
       "masuk": "07:20:00",
       "pulang": "19:30:00",
       "nama": "Joko Susilo",
-      "kategori": "Pekerja Harian",
+      "kategori": "Pekerja Harian (Projek A)",
       "uid": "83A192B4",
       "device": "KANTORJK_01",
       "lembur": "Lembur 2 Jam",
-      "foto": "https://ui-avatars.com/api/?name=Joko+Susilo&background=f59e0b&color=fff&size=96",
-      "projek": "Proyek Bagian A"
+      "foto": "https://ui-avatars.com/api/?name=Joko+Susilo&background=f59e0b&color=fff&size=96"
     },
     {
       "tanggal": "2026-08-02",
@@ -210,8 +194,7 @@
       "uid": "A3B7C901",
       "device": "KANTORJK_01",
       "lembur": "Normal (0 Jam)",
-      "foto": "https://ui-avatars.com/api/?name=Anom+Arya&background=64748b&color=fff&size=96",
-      "projek": "Kantor Pusat"
+      "foto": "https://ui-avatars.com/api/?name=Anom+Arya&background=64748b&color=fff&size=96"
     }
   ],
   "rekap": [
@@ -224,8 +207,7 @@
       "kamis": "-",
       "jumat": "-",
       "sabtu": "-",
-      "total": 1,
-      "projek": "Kantor Pusat"
+      "total": 1
     },
     {
       "nama": "Anom Arya",
@@ -236,8 +218,7 @@
       "kamis": "-",
       "jumat": "-",
       "sabtu": "-",
-      "total": 0,
-      "projek": "Kantor Pusat"
+      "total": 0
     },
     {
       "nama": "Dimas Arya Kedhaton",
@@ -248,44 +229,40 @@
       "kamis": "-",
       "jumat": "-",
       "sabtu": "-",
-      "total": 1,
-      "projek": "Kantor Pusat"
+      "total": 1
     },
     {
       "nama": "Joko Susilo",
-      "kategori": "Pekerja Harian",
+      "kategori": "Pekerja Harian (Projek A)",
       "senin": "Hadir",
       "selasa": "Hadir",
       "rabu": "Hadir",
       "kamis": "Hadir",
       "jumat": "Hadir",
       "sabtu": "Hadir",
-      "total": 6,
-      "projek": "Proyek Bagian A"
+      "total": 6
     },
     {
       "nama": "Slamet Riyadi",
-      "kategori": "Pekerja Harian",
+      "kategori": "Pekerja Harian (Projek B)",
       "senin": "Hadir",
       "selasa": "Hadir",
       "rabu": "Hadir",
       "kamis": "Hadir",
       "jumat": "Hadir",
       "sabtu": "-",
-      "total": 5,
-      "projek": "Proyek Bagian B"
+      "total": 5
     },
     {
       "nama": "Bambang Triyono",
-      "kategori": "Pekerja Harian",
+      "kategori": "Pekerja Harian (Projek C)",
       "senin": "Hadir",
       "selasa": "Hadir",
       "rabu": "Hadir",
       "kamis": "Hadir",
       "jumat": "Hadir",
       "sabtu": "Hadir",
-      "total": 6,
-      "projek": "Proyek Bagian C"
+      "total": 6
     }
   ],
   "karyawanUpah": [
@@ -1158,26 +1135,6 @@
       "aksi": "AKSES_DITOLAK",
       "keterangan": "Percobaan akses tidak sah ke Log Audit Pimpinan (Otomatis ditolak sistem)",
       "ip": "192.168.1.28"
-    }
-  ],
-  "proyekList": [
-    {
-      "id": "PRJ-A",
-      "nama": "Proyek Bagian A",
-      "deskripsi": "Pembangunan Ruko & Struktur",
-      "status": "Aktif"
-    },
-    {
-      "id": "PRJ-B",
-      "nama": "Proyek Bagian B",
-      "deskripsi": "Renovasi Gudang Logistik",
-      "status": "Aktif"
-    },
-    {
-      "id": "PRJ-C",
-      "nama": "Proyek Bagian C",
-      "deskripsi": "Finishing & Pengecatan",
-      "status": "Aktif"
     }
   ]
 }
