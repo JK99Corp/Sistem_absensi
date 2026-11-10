@@ -9,6 +9,7 @@ use App\Http\Controllers\UpahController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\KartuRfidController;
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\AuditLogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,4 +48,7 @@ Route::middleware(['simple.auth'])->group(function () {
 
     // Device
     Route::get('/device', [DeviceController::class, 'index'])->name('device.index');
+
+    // Audit Log (Log Aktivitas Keamanan)
+    Route::get('/audit-log', [AuditLogController::class, 'index'])->name('audit-log.index');
 });

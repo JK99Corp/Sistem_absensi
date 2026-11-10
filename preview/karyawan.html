@@ -354,13 +354,50 @@
                             <button onclick="alert('Edit data: Bambang Triyono')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors cursor-pointer">
                                 <i class="fas fa-edit mr-1"></i> Edit
                             </button>
-                            <form method="POST" action="/karyawan/delete" onsubmit="return confirm('PERINGATAN AMAN:\n\nKaryawan ini akan dipindahkan ke Arsip.\n\nApakah Anda yakin? Seluruh data laporan keuangan dan jam lembur masa lalu TETAP AMAN dan TIDAK AKAN HILANG.')">
+                            <form method="POST" action="/karyawan/delete" onsubmit="return arsipkanKaryawan(event, 6, 'Bambang Triyono')">
                                 <input type="hidden" name="id" value="6">
                                 <button type="submit" class="bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-semibold py-1.5 px-3 rounded-lg text-xs transition-colors flex items-center gap-1 cursor-pointer">
                                     <i class="fas fa-archive"></i> Arsipkan
                                 </button>
                             </form>
                         </div>
+                    </td>
+                </tr>
+
+                <!-- KARYAWAN ARSIP (Contoh data historis tetap aman) -->
+                <tr id="rowKaryawan_7" class="hover:bg-amber-50/40 transition-colors row-karyawan opacity-80" data-status="Diarsipkan" style="display: none;">
+                    <td class="px-5 py-4 text-base text-slate-400">7</td>
+                    <td class="px-5 py-4 text-base font-bold text-slate-700">
+                        <span>Sugeng Raharjo</span>
+                        <span class="block text-xs font-normal text-slate-400 mt-0.5">Diarsipkan 28/07/2026 (Proyek Harian Selesai)</span>
+                    </td>
+                    <td class="px-4 py-4">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-800">
+                            Pekerja Harian
+                        </span>
+                    </td>
+                    <td class="px-4 py-4 bg-slate-50 text-slate-400 font-mono text-xs text-center border-x border-slate-200">-</td>
+                    <td class="px-4 py-4 text-sm font-mono text-slate-500">B1287FE0</td>
+                    <td class="px-4 py-4 text-sm text-slate-500">0856-3344-5566</td>
+                    <td class="px-4 py-4 text-xs font-medium text-slate-600">
+                        Rp 110.000 / Hari
+                    </td>
+                    <td class="px-4 py-4 text-center">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                            <i class="fas fa-archive text-[10px]"></i> Diarsipkan
+                        </span>
+                    </td>
+                    <td class="px-4 py-4 text-center">
+                        <button onclick="restoreKaryawan(7, 'Sugeng Raharjo')" class="bg-teal-50 hover:bg-teal-100 text-teal-700 border border-teal-200 font-bold py-1.5 px-3 rounded-lg text-xs transition-colors flex items-center gap-1 cursor-pointer mx-auto">
+                            <i class="fas fa-undo"></i> Aktifkan Kembali
+                        </button>
+                    </td>
+                </tr>
+
+                <tr id="emptyKaryawanRow" style="display: none;">
+                    <td colspan="9" class="px-6 py-12 text-center text-slate-400 text-base">
+                        <i class="fas fa-users-slash text-3xl mb-2 block text-slate-300"></i>
+                        Tidak ada data karyawan di tab ini.
                     </td>
                 </tr>
             
@@ -386,7 +423,7 @@
                     </p>
                 </div>
 
-                <form method="POST" action="/karyawan/create">
+                <form id="formTambahKaryawan" method="POST" action="/karyawan/create" onsubmit="return simpanKaryawanPreview(event)">
                     <div class="mb-5">
                         <label class="block text-base font-bold text-slate-700 mb-1.5">
                             Nama Lengkap <span class="text-rose-500">*</span>
@@ -403,7 +440,7 @@
                         </label>
                         <div class="grid grid-cols-2 gap-3">
                             <label class="border-2 border-slate-300 rounded-xl p-3.5 flex items-center gap-3 cursor-pointer hover:border-teal-500 transition-colors">
-                                <input type="radio" name="kategori" value="Staff Kantor" class="w-5 h-5 text-teal-600" onchange="pilihKategoriForm(this.value)">
+                                <input type="radio" name="kategori" value="Staff Kantor" class="w-5 h-5 text-teal-600" onchange="toggleKategoriForm(this.value)">
                                 <div>
                                     <p class="font-bold text-slate-800 text-sm">Staff Kantor</p>
                                     <span class="text-xs text-slate-500">Kantor Pusat</span>
@@ -411,7 +448,7 @@
                             </label>
 
                             <label class="border-2 border-slate-300 rounded-xl p-3.5 flex items-center gap-3 cursor-pointer hover:border-amber-500 transition-colors bg-amber-50/50">
-                                <input type="radio" name="kategori" value="Pekerja Harian" checked class="w-5 h-5 text-amber-600" onchange="pilihKategoriForm(this.value)">
+                                <input type="radio" name="kategori" value="Pekerja Harian" checked class="w-5 h-5 text-amber-600" onchange="toggleKategoriForm(this.value)">
                                 <div>
                                     <p class="font-bold text-slate-800 text-sm">Pekerja Harian</p>
                                     <span class="text-xs text-slate-500">Per Bagian Projek</span>
@@ -502,18 +539,41 @@
             setInterval(updateClock, 1000);
             updateClock();
 
+            let activeTab = 'aktif';
+
+            function updateTabBadges() {
+                const rows = document.querySelectorAll('tbody tr.row-karyawan');
+                let aktifCount = 0;
+                let arsipCount = 0;
+                rows.forEach(r => {
+                    const status = r.getAttribute('data-status') || r.querySelector('td:nth-last-child(2)')?.innerText || '';
+                    if (status.includes('Arsip') || status.includes('Nonaktif')) {
+                        arsipCount++;
+                    } else {
+                        aktifCount++;
+                    }
+                });
+                const bAktif = document.getElementById('badgeCountAktif');
+                const bArsip = document.getElementById('badgeCountArsip');
+                if (bAktif) bAktif.innerText = aktifCount;
+                if (bArsip) bArsip.innerText = arsipCount;
+            }
+
             function gantiTabKaryawan(tab) {
+                activeTab = tab;
                 const btnAktif = document.getElementById('tabBtnAktif');
                 const btnArsip = document.getElementById('tabBtnArsip');
-                const rows = document.querySelectorAll('tbody tr');
+                const rows = document.querySelectorAll('tbody tr.row-karyawan');
+                let visibleCount = 0;
                 
                 if (tab === 'arsip') {
                     btnArsip.className = 'inline-flex items-center gap-2 px-5 py-3 rounded-lg text-base font-bold transition-colors bg-teal-600 text-white shadow-sm cursor-pointer';
                     btnAktif.className = 'inline-flex items-center gap-2 px-5 py-3 rounded-lg text-base font-bold transition-colors bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 cursor-pointer';
                     rows.forEach(r => {
-                        const status = r.querySelector('td:nth-last-child(2)')?.innerText || '';
+                        const status = r.getAttribute('data-status') || r.querySelector('td:nth-last-child(2)')?.innerText || '';
                         if (status.includes('Arsip') || status.includes('Nonaktif')) {
                             r.style.display = '';
+                            visibleCount++;
                         } else {
                             r.style.display = 'none';
                         }
@@ -522,13 +582,19 @@
                     btnAktif.className = 'inline-flex items-center gap-2 px-5 py-3 rounded-lg text-base font-bold transition-colors bg-teal-600 text-white shadow-sm cursor-pointer';
                     btnArsip.className = 'inline-flex items-center gap-2 px-5 py-3 rounded-lg text-base font-bold transition-colors bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 cursor-pointer';
                     rows.forEach(r => {
-                        const status = r.querySelector('td:nth-last-child(2)')?.innerText || '';
+                        const status = r.getAttribute('data-status') || r.querySelector('td:nth-last-child(2)')?.innerText || '';
                         if (!status.includes('Arsip') && !status.includes('Nonaktif')) {
                             r.style.display = '';
+                            visibleCount++;
                         } else {
                             r.style.display = 'none';
                         }
                     });
+                }
+
+                const emptyRow = document.getElementById('emptyKaryawanRow');
+                if (emptyRow) {
+                    emptyRow.style.display = (visibleCount === 0) ? '' : 'none';
                 }
             }
 
@@ -542,17 +608,178 @@
 
             function toggleKategoriForm(kat) {
                 const boxHarian = document.getElementById('boxPekerjaHarian');
-                if (kat === 'Pekerja Harian') {
-                    boxHarian.classList.remove('hidden');
-                } else {
-                    boxHarian.classList.add('hidden');
+                if (boxHarian) {
+                    if (kat === 'Pekerja Harian') {
+                        boxHarian.classList.remove('hidden');
+                    } else {
+                        boxHarian.classList.add('hidden');
+                    }
                 }
             }
+            window.pilihKategoriForm = toggleKategoriForm;
 
             function isiUidOtomatis() {
                 const hex = Math.floor(Math.random() * 0xFFFFFFFF).toString(16).toUpperCase().padStart(8, '0');
                 document.getElementById('inputUidRfid').value = hex;
             }
+
+            function tampilkanToast(pesan, tipe = 'success') {
+                const toast = document.createElement('div');
+                toast.className = `fixed bottom-5 right-5 z-50 px-6 py-4 rounded-xl shadow-2xl text-white font-bold flex items-center gap-3 transition-all duration-300 transform translate-y-10 opacity-0 ${
+                    tipe === 'success' ? 'bg-teal-600' : 'bg-rose-600'
+                }`;
+                toast.innerHTML = `<i class="fas ${tipe === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle'} text-xl"></i> <span>${pesan}</span>`;
+                document.body.appendChild(toast);
+                setTimeout(() => { toast.classList.remove('translate-y-10', 'opacity-0'); }, 50);
+                setTimeout(() => {
+                    toast.classList.add('opacity-0', 'translate-y-10');
+                    setTimeout(() => toast.remove(), 300);
+                }, 3500);
+            }
+
+            function simpanKaryawanPreview(e) {
+                if (location.protocol === 'file:' || location.pathname.includes('preview')) {
+                    e.preventDefault();
+                    const form = e.target;
+                    const nama = form.nama.value.trim();
+                    const kategori = form.kategori.value;
+                    const projek = (kategori === 'Pekerja Harian') ? (form.projek?.value || 'Projek A') : '-';
+                    const uid = form.uid_rfid.value.trim().toUpperCase();
+                    const noHp = form.no_hp.value.trim() || '-';
+                    const upah = form.upah_harian?.value ? parseInt(form.upah_harian.value).toLocaleString('id-ID') : '120.000';
+
+                    const tbody = document.querySelector('tbody');
+                    const rows = tbody.querySelectorAll('tr.row-karyawan');
+                    const nextNo = rows.length + 1;
+
+                    const tr = document.createElement('tr');
+                    tr.id = `rowKaryawan_${nextNo}`;
+                    tr.className = 'hover:bg-slate-50 transition-colors row-karyawan';
+                    tr.setAttribute('data-status', 'Aktif');
+                    tr.setAttribute('data-projek', projek);
+
+                    tr.innerHTML = `
+                        <td class="px-5 py-4 text-base text-slate-500 font-medium">${nextNo}</td>
+                        <td class="px-5 py-4 text-base text-slate-900 font-bold">${nama}</td>
+                        <td class="px-4 py-4">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold ${
+                                kategori === 'Staff Kantor' ? 'bg-teal-100 text-teal-800' : 'bg-amber-100 text-amber-800'
+                            }">
+                                ${kategori}
+                            </span>
+                        </td>
+                        <td class="px-4 py-4 ${projek !== '-' ? 'bg-amber-50/50 text-amber-900' : 'bg-slate-50 text-slate-400 font-mono'} font-bold text-xs border-x border-slate-100">
+                            ${projek !== '-' ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-bold bg-amber-500 text-white shadow-sm"><i class="fas fa-hard-hat mr-1 text-[9px]"></i> ${projek}</span>` : '-'}
+                        </td>
+                        <td class="px-4 py-4 text-sm font-mono font-semibold text-slate-800">${uid}</td>
+                        <td class="px-4 py-4 text-sm text-slate-500">${noHp}</td>
+                        <td class="px-4 py-4 text-xs font-medium text-slate-600">
+                            ${kategori === 'Staff Kantor' ? 'Gaji Pokok Bulanan' : 'Rp ' + upah + ' / Hari'}
+                        </td>
+                        <td class="px-4 py-4 text-center">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Aktif
+                            </span>
+                        </td>
+                        <td class="px-4 py-4 text-center">
+                            <div class="flex items-center justify-center gap-2">
+                                <button onclick="alert('Edit data: ${nama}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors cursor-pointer">
+                                    <i class="fas fa-edit mr-1"></i> Edit
+                                </button>
+                                <button onclick="arsipkanKaryawan(event, ${nextNo}, '${nama}')" class="bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-semibold py-1.5 px-3 rounded-lg text-xs transition-colors flex items-center gap-1 cursor-pointer">
+                                    <i class="fas fa-archive"></i> Arsipkan
+                                </button>
+                            </div>
+                        </td>
+                    `;
+
+                    const emptyRow = document.getElementById('emptyKaryawanRow');
+                    if (emptyRow) {
+                        tbody.insertBefore(tr, emptyRow);
+                    } else {
+                        tbody.appendChild(tr);
+                    }
+
+                    form.reset();
+                    tutupModalTambah();
+                    updateTabBadges();
+                    gantiTabKaryawan(activeTab);
+                    tampilkanToast(`Karyawan ${nama} berhasil ditambahkan!`);
+                    return false;
+                }
+                return true;
+            }
+
+            function arsipkanKaryawan(e, id, nama) {
+                if (e && e.preventDefault) e.preventDefault();
+                const yakin = confirm(`PERINGATAN AMAN:\n\nKaryawan "${nama}" akan dipindahkan ke Arsip.\n\nApakah Anda yakin? Seluruh data laporan keuangan dan jam lembur masa lalu TETAP AMAN dan TIDAK AKAN HILANG.`);
+                if (!yakin) return false;
+
+                const row = document.getElementById(`rowKaryawan_${id}`) || (e?.target ? e.target.closest('tr') : null);
+                if (row) {
+                    row.setAttribute('data-status', 'Diarsipkan');
+                    const statusTd = row.querySelector('td:nth-last-child(2)');
+                    if (statusTd) {
+                        statusTd.innerHTML = `
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                                <i class="fas fa-archive text-[10px]"></i> Diarsipkan
+                            </span>
+                        `;
+                    }
+                    const aksiTd = row.querySelector('td:last-child');
+                    if (aksiTd) {
+                        aksiTd.innerHTML = `
+                            <button onclick="restoreKaryawan(${id}, '${nama}')" class="bg-teal-50 hover:bg-teal-100 text-teal-700 border border-teal-200 font-bold py-1.5 px-3 rounded-lg text-xs transition-colors flex items-center gap-1 cursor-pointer mx-auto">
+                                <i class="fas fa-undo"></i> Aktifkan Kembali
+                            </button>
+                        `;
+                    }
+                    updateTabBadges();
+                    gantiTabKaryawan(activeTab);
+                    tampilkanToast(`Karyawan ${nama} berhasil diarsipkan. Riwayat finansial tetap terjaga aman 100%.`);
+                }
+                return false;
+            }
+
+            function restoreKaryawan(id, nama) {
+                const row = document.getElementById(`rowKaryawan_${id}`);
+                if (row) {
+                    row.setAttribute('data-status', 'Aktif');
+                    const statusTd = row.querySelector('td:nth-last-child(2)');
+                    if (statusTd) {
+                        statusTd.innerHTML = `
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Aktif
+                            </span>
+                        `;
+                    }
+                    const aksiTd = row.querySelector('td:last-child');
+                    if (aksiTd) {
+                        aksiTd.innerHTML = `
+                            <div class="flex items-center justify-center gap-2">
+                                <button onclick="alert('Edit data: ${nama}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors cursor-pointer">
+                                    <i class="fas fa-edit mr-1"></i> Edit
+                                </button>
+                                <button onclick="arsipkanKaryawan(event, ${id}, '${nama}')" class="bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-semibold py-1.5 px-3 rounded-lg text-xs transition-colors flex items-center gap-1 cursor-pointer">
+                                    <i class="fas fa-archive"></i> Arsipkan
+                                </button>
+                            </div>
+                        `;
+                    }
+                    updateTabBadges();
+                    gantiTabKaryawan(activeTab);
+                    tampilkanToast(`Karyawan ${nama} berhasil diaktifkan kembali!`);
+                }
+            }
+
+            // Inisialisasi awal
+            document.querySelectorAll('tbody tr').forEach((r, idx) => {
+                if (!r.id && !r.id.startsWith('empty')) {
+                    r.id = `rowKaryawan_${idx + 1}`;
+                    r.classList.add('row-karyawan');
+                }
+            });
+            updateTabBadges();
         </script>
     
         </main>
