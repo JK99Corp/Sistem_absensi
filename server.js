@@ -1875,6 +1875,7 @@ function renderDevice(currentUser = null) {
 
 // Router
 const server = http.createServer((req, res) => {
+    console.log('DEBUG VERCEL REQ URL:', req.url, 'HEADERS:', JSON.stringify(req.headers));
     const parsedUrl = new URL(req.url, 'http://localhost:8000');
     const pathname = parsedUrl.pathname.replace(/\/$/, '') || '/';
     const query = Object.fromEntries(parsedUrl.searchParams.entries());
