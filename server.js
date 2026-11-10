@@ -1875,10 +1875,7 @@ function renderDevice(currentUser = null) {
 
 // Router
 const server = http.createServer((req, res) => {
-    const rawPath = (req.headers && (req.headers['x-matched-path'] || req.headers['x-invoke-path'])) 
-        ? req.headers['x-matched-path'] || req.headers['x-invoke-path']
-        : req.url;
-    const parsedUrl = new URL(rawPath, 'http://localhost:8000');
+    const parsedUrl = new URL(req.url, 'http://localhost:8000');
     const pathname = parsedUrl.pathname.replace(/\/$/, '') || '/';
     const query = Object.fromEntries(parsedUrl.searchParams.entries());
 
