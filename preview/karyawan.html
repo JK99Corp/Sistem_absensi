@@ -29,7 +29,12 @@
             <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
                 <i class="fas fa-chart-bar w-6 text-center text-lg"></i>
                 <span>Dashboard</span>
-                
+            </a>
+
+            <a href="proyek.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-hard-hat w-6 text-center text-lg text-amber-400"></i>
+                <span>Master Proyek</span>
+                <span class="bg-amber-400 text-slate-900 text-xs font-bold px-2 py-0.5 rounded-full uppercase ml-auto">Di Awal</span>
             </a>
         
             <a href="riwayat.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
@@ -402,8 +407,19 @@
 
                     <div id="boxPekerjaHarian" class="p-4 bg-amber-50/70 border border-amber-200 rounded-xl mb-5 space-y-4">
                         <p class="text-xs font-bold text-amber-900 uppercase tracking-wide">
-                            <i class="fas fa-coins text-amber-600 mr-1"></i> Ketentuan Upah Default (Pekerja Harian)
+                            <i class="fas fa-coins text-amber-600 mr-1"></i> Ketentuan Upah & Penugasan Proyek
                         </p>
+                        <div>
+                            <label class="block text-xs font-bold text-amber-950 uppercase mb-1">
+                                <i class="fas fa-hard-hat text-amber-600 mr-1"></i> Penugasan Bagian Proyek <span class="text-rose-500">*</span>
+                            </label>
+                            <select name="projek" id="selectProyekPekerja" class="w-full border-2 border-amber-400 bg-white rounded-lg px-3 py-2.5 text-sm font-bold text-amber-950 focus:outline-none focus:border-amber-600">
+                                <option value="Proyek Bagian A">Proyek Bagian A (Pembangunan Ruko & Struktur)</option>
+                                <option value="Proyek Bagian B">Proyek Bagian B (Renovasi Gudang Logistik)</option>
+                                <option value="Proyek Bagian C">Proyek Bagian C (Finishing & Pengecatan)</option>
+                            </select>
+                            <p class="text-[11px] text-amber-800 mt-1">*Pilih proyek bagian mana pekerja harian ini dialokasikan.</p>
+                        </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 mb-1">Upah Pokok / Hari (Rp)</label>
