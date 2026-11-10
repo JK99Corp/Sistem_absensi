@@ -1890,6 +1890,8 @@ const server = http.createServer((req, res) => {
     }
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('X-Debug-Pathname', pathname);
+    res.setHeader('X-Debug-ReqUrl', req.url);
 
     const currentUser = getCurrentUser(req);
     const clientIp = (req.socket && req.socket.remoteAddress) ? req.socket.remoteAddress : '127.0.0.1';
