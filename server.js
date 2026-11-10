@@ -1875,7 +1875,20 @@ function renderDevice(currentUser = null) {
 
 // Router
 const server = http.createServer((req, res) => {
-    const parsedUrl = new URL(req.url, 'http://localhost:8000');
+    let reqUrl = req.url;
+    if (reqUrl.includes('__url=')) {
+        try {
+            const u = new URL(reqUrl, 'http://localhost:8000');
+            const orig = u.searchParams.get('__url');
+            if (orig) {
+                u.searchParams.delete('__url');
+                const rem = u.searchParams.toString();
+                const cleanOrig = orig.startsWith('/') ? orig : '/' + orig;
+                reqUrl = cleanOrig + (rem ? '?' + rem : '');
+            }
+        } catch (_) {}
+    }
+    const parsedUrl = new URL(reqUrl, 'http://localhost:8000');
     const pathname = parsedUrl.pathname.replace(/\/$/, '') || '/';
     const query = Object.fromEntries(parsedUrl.searchParams.entries());
 
@@ -1890,8 +1903,6 @@ const server = http.createServer((req, res) => {
     }
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('X-Debug-Pathname', pathname);
-    res.setHeader('X-Debug-ReqUrl', req.url);
 
     const currentUser = getCurrentUser(req);
     const clientIp = (req.socket && req.socket.remoteAddress) ? req.socket.remoteAddress : '127.0.0.1';
