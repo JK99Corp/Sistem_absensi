@@ -61,7 +61,7 @@ CREATE TABLE devices (
     lokasi VARCHAR(100) NOT NULL,
     tipe VARCHAR(50) NOT NULL DEFAULT 'Dual ESP32 (RFID + Cam)',
     ip_address VARCHAR(45),
-    api_key VARCHAR(64) UNIQUE NOT NULL,
+    api_key VARCHAR(128) UNIQUE NOT NULL,
     status VARCHAR(20) NOT NULL DEFAULT 'Online' CHECK (status IN ('Online', 'Offline')),
     last_ping TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,

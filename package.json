@@ -1,0 +1,12 @@
+{
+  "name": "sistem-absensi-jaya-kedhaton",
+  "version": "1.0.0",
+  "description": "Prototype Website Absensi Digital Dual-ESP32 PT Jaya Kedhaton",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "pg": "^8.13.1"
+  }
+}

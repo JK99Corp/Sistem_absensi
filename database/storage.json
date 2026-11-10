@@ -2,20 +2,6 @@
   "hadirHariIni": 5,
   "karyawanAktif": [
     {
-      "id": 1,
-      "nama": "Dimas Arya Kedhaton",
-      "kategori": "Staff Kantor",
-      "uid": "53492607",
-      "noHp": "0812-3456-7890",
-      "status": "Aktif",
-      "upahHarian": 0,
-      "tarifLembur": 0,
-      "tglGabung": "01/01/2026",
-      "deletedAt": "9/11/2026, 14.13.19",
-      "keterangan": "Diarsipkan oleh admin. Data keuangan & riwayat absensi tetap aman 100%.",
-      "projek": "-"
-    },
-    {
       "id": 2,
       "nama": "Akmal Zaidan",
       "kategori": "Staff Kantor",
@@ -78,6 +64,20 @@
       "tarifLembur": 25000,
       "tglGabung": "10/07/2026",
       "projek": "Projek C"
+    },
+    {
+      "id": 1,
+      "nama": "Dimas Arya Kedhaton",
+      "kategori": "Staff Kantor",
+      "uid": "53492607",
+      "noHp": "0812-3456-7890",
+      "status": "Aktif",
+      "upahHarian": 0,
+      "tarifLembur": 0,
+      "tglGabung": "01/01/2026",
+      "deletedAt": "10/11/2026, 13.43.17",
+      "keterangan": "Diarsipkan oleh admin. Data keuangan & riwayat absensi tetap aman 100%.",
+      "projek": "-"
     }
   ],
   "deviceAktif": 1,
@@ -479,6 +479,306 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": 1794289397398,
+      "waktu": "2026-11-10 13:43:17",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "TAMBAH_KARYAWAN",
+      "keterangan": "Menambahkan karyawan baru: <script>alert(1)</script> (Staff Kantor, UID: EE112244)",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794289397394,
+      "waktu": "2026-11-10 13:43:17",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "TAMBAH_KARYAWAN",
+      "keterangan": "Menambahkan karyawan baru: MinusCheck (Pekerja Harian, UID: FF998877)",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794289397391,
+      "waktu": "2026-11-10 13:43:17",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "LOGIN",
+      "keterangan": "Berhasil login ke sistem melalui Portal Keamanan",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794289397389,
+      "waktu": "2026-11-10 13:43:17",
+      "username": "hacker",
+      "nama": "hacker",
+      "role": "Pengguna",
+      "aksi": "LOGIN_GAGAL",
+      "keterangan": "Percobaan login gagal dengan kata sandi salah",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794289397388,
+      "waktu": "2026-11-10 13:43:17",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "LOGIN",
+      "keterangan": "Berhasil login ke sistem melalui Portal Keamanan",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794289397387,
+      "waktu": "2026-11-10 13:43:17",
+      "username": "staf.hrd",
+      "nama": "Rendra Bagus",
+      "role": "Staf HRD & Personalia",
+      "aksi": "AKSES_DITOLAK",
+      "keterangan": "Mencoba mengakses halaman Log Audit Pimpinan tanpa izin",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794289397384,
+      "waktu": "2026-11-10 13:43:17",
+      "username": "staf.keuangan",
+      "nama": "Siti Aminah",
+      "role": "Staf Keuangan",
+      "aksi": "AKSES_DITOLAK",
+      "keterangan": "Mencoba mengakses halaman Log Audit Pimpinan tanpa izin",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794289397382,
+      "waktu": "2026-11-10 13:43:17",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "PULIHKAN_KARYAWAN",
+      "keterangan": "Memulihkan karyawan Dimas Arya Kedhaton (ID: 1) dari Arsip ke status Aktif",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794289397378,
+      "waktu": "2026-11-10 13:43:17",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "ARSIP_KARYAWAN",
+      "keterangan": "Memindahkan karyawan Dimas Arya Kedhaton (ID: 1) ke Arsip",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794289397375,
+      "waktu": "2026-11-10 13:43:17",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "TAMBAH_KARYAWAN",
+      "keterangan": "Menambahkan karyawan baru: Suryanto (Pekerja Harian, UID: CC112233)",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794289124595,
+      "waktu": "2026-11-10 13:38:44",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "TAMBAH_KARYAWAN",
+      "keterangan": "Menambahkan karyawan baru: <script>alert(1)</script> (Staff Kantor, UID: EE112244)",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794289124591,
+      "waktu": "2026-11-10 13:38:44",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "TAMBAH_KARYAWAN",
+      "keterangan": "Menambahkan karyawan baru: MinusCheck (Pekerja Harian, UID: FF998877)",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794289124589,
+      "waktu": "2026-11-10 13:38:44",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "LOGIN",
+      "keterangan": "Berhasil login ke sistem melalui Portal Keamanan",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794289124588,
+      "waktu": "2026-11-10 13:38:44",
+      "username": "hacker",
+      "nama": "hacker",
+      "role": "Pengguna",
+      "aksi": "LOGIN_GAGAL",
+      "keterangan": "Percobaan login gagal dengan kata sandi salah",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794289124586,
+      "waktu": "2026-11-10 13:38:44",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "LOGIN",
+      "keterangan": "Berhasil login ke sistem melalui Portal Keamanan",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794289124582,
+      "waktu": "2026-11-10 13:38:44",
+      "username": "staf.hrd",
+      "nama": "Rendra Bagus",
+      "role": "Staf HRD & Personalia",
+      "aksi": "AKSES_DITOLAK",
+      "keterangan": "Mencoba mengakses halaman Log Audit Pimpinan tanpa izin",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794289124580,
+      "waktu": "2026-11-10 13:38:44",
+      "username": "staf.keuangan",
+      "nama": "Siti Aminah",
+      "role": "Staf Keuangan",
+      "aksi": "AKSES_DITOLAK",
+      "keterangan": "Mencoba mengakses halaman Log Audit Pimpinan tanpa izin",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794289124578,
+      "waktu": "2026-11-10 13:38:44",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "PULIHKAN_KARYAWAN",
+      "keterangan": "Memulihkan karyawan Dimas Arya Kedhaton (ID: 1) dari Arsip ke status Aktif",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794289124576,
+      "waktu": "2026-11-10 13:38:44",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "ARSIP_KARYAWAN",
+      "keterangan": "Memindahkan karyawan Dimas Arya Kedhaton (ID: 1) ke Arsip",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794289124573,
+      "waktu": "2026-11-10 13:38:44",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "TAMBAH_KARYAWAN",
+      "keterangan": "Menambahkan karyawan baru: Suryanto (Pekerja Harian, UID: CC112233)",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794287385294,
+      "waktu": "2026-11-10 13:09:45",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "TAMBAH_KARYAWAN",
+      "keterangan": "Menambahkan karyawan baru: <script>alert(1)</script> (Staff Kantor, UID: EE112244)",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794287385277,
+      "waktu": "2026-11-10 13:09:45",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "TAMBAH_KARYAWAN",
+      "keterangan": "Menambahkan karyawan baru: MinusCheck (Pekerja Harian, UID: FF998877)",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794287385274,
+      "waktu": "2026-11-10 13:09:45",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "LOGIN",
+      "keterangan": "Berhasil login ke sistem melalui Portal Keamanan",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794287385272,
+      "waktu": "2026-11-10 13:09:45",
+      "username": "hacker",
+      "nama": "hacker",
+      "role": "Pengguna",
+      "aksi": "LOGIN_GAGAL",
+      "keterangan": "Percobaan login gagal dengan kata sandi salah",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794287385270,
+      "waktu": "2026-11-10 13:09:45",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "LOGIN",
+      "keterangan": "Berhasil login ke sistem melalui Portal Keamanan",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794287385263,
+      "waktu": "2026-11-10 13:09:45",
+      "username": "staf.hrd",
+      "nama": "Rendra Bagus",
+      "role": "Staf HRD & Personalia",
+      "aksi": "AKSES_DITOLAK",
+      "keterangan": "Mencoba mengakses halaman Log Audit Pimpinan tanpa izin",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794287385261,
+      "waktu": "2026-11-10 13:09:45",
+      "username": "staf.keuangan",
+      "nama": "Siti Aminah",
+      "role": "Staf Keuangan",
+      "aksi": "AKSES_DITOLAK",
+      "keterangan": "Mencoba mengakses halaman Log Audit Pimpinan tanpa izin",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794287385258,
+      "waktu": "2026-11-10 13:09:45",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "PULIHKAN_KARYAWAN",
+      "keterangan": "Memulihkan karyawan Dimas Arya Kedhaton (ID: 1) dari Arsip ke status Aktif",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794287385255,
+      "waktu": "2026-11-10 13:09:45",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "ARSIP_KARYAWAN",
+      "keterangan": "Memindahkan karyawan Dimas Arya Kedhaton (ID: 1) ke Arsip",
+      "ip": "127.0.0.1"
+    },
+    {
+      "id": 1794287385251,
+      "waktu": "2026-11-10 13:09:45",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "TAMBAH_KARYAWAN",
+      "keterangan": "Menambahkan karyawan baru: Suryanto (Pekerja Harian, UID: CC112233)",
+      "ip": "127.0.0.1"
+    },
     {
       "id": 1794204799114,
       "waktu": "2026-11-09 14:13:19",
@@ -976,7 +1276,7 @@
       "nama": "Direktur Utama",
       "role": "Super Admin (Direksi)",
       "aksi": "TAMBAH_KARYAWAN",
-      "keterangan": "Menambahkan karyawan baru: Budi Santoso \ud83d\udc68\u200d\ud83d\udd27 (Shift Pagi) (Pekerja Harian, UID: EMOJI01)",
+      "keterangan": "Menambahkan karyawan baru: Budi Santoso 👨‍🔧 (Shift Pagi) (Pekerja Harian, UID: EMOJI01)",
       "ip": "127.0.0.1"
     },
     {

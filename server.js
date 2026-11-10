@@ -2251,4 +2251,9 @@ server.on('error', (err) => {
     }
 });
 
-startListen(currentPort);
+module.exports = server;
+
+// Jalankan listener port hanya jika BUKAN di lingkungan Vercel Serverless
+if (!process.env.VERCEL) {
+    startListen(currentPort);
+}
