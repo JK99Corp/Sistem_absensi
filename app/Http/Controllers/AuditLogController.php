@@ -46,3 +46,4 @@ class AuditLogController extends Controller
         return view('audit-log', compact('logs'));
     }
 }
+

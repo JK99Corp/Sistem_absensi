@@ -108,7 +108,7 @@
                 <h2 class="text-2xl font-bold text-slate-800">Kartu RFID Terdaftar</h2>
                 <p class="text-base text-slate-500 mt-1">Daftar kartu RFID fisik staf kantor & pekerja harian terhubung ke Dual-ESP32</p>
             </div>
-            <button onclick="alert('Tap kartu baru di alat ESP32 untuk mendaftarkan UID')" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-6 rounded-lg text-base shadow inline-flex items-center cursor-pointer">
+            <button onclick="bukaModalKartu()" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-6 rounded-lg text-base shadow inline-flex items-center cursor-pointer">
                 <i class="fas fa-plus mr-2"></i> Daftarkan Kartu Baru
             </button>
         </div>
@@ -191,7 +191,7 @@
                     </thead>
                     <tbody class="divide-y divide-slate-100" id="tabelKartuBody">
                         
-        <tr class="row-kartu hover:bg-slate-50 transition-colors" data-kategori="Staff Kantor" data-projek="Kantor">
+        <tr class="row-kartu hover:bg-slate-50 transition-colors" data-kategori="Staff Kantor" data-projek="-">
             <td class="px-6 py-4 text-base text-slate-500">1</td>
             <td class="px-6 py-4 text-base font-mono font-bold text-slate-800">53492607</td>
             <td class="px-6 py-4 text-base font-semibold text-slate-800">Dimas Arya Kedhaton</td>
@@ -204,13 +204,13 @@
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700"><i class="fas fa-circle text-[8px] mr-1.5"></i> Aktif</span>
             </td>
             <td class="px-6 py-4 text-center">
-                <button class="bg-amber-50 hover:bg-amber-100 text-amber-700 font-medium py-1.5 px-3 rounded text-sm transition-colors cursor-pointer">
+                <button onclick="editKartu('53492607', 'Dimas Arya Kedhaton', 'Staff Kantor', '-')" class="bg-amber-50 hover:bg-amber-100 text-amber-700 font-medium py-1.5 px-3 rounded text-sm transition-colors cursor-pointer">
                     <i class="fas fa-edit mr-1"></i> Edit
                 </button>
             </td>
         </tr>
     
-        <tr class="row-kartu hover:bg-slate-50 transition-colors" data-kategori="Staff Kantor" data-projek="Kantor">
+        <tr class="row-kartu hover:bg-slate-50 transition-colors" data-kategori="Staff Kantor" data-projek="-">
             <td class="px-6 py-4 text-base text-slate-500">2</td>
             <td class="px-6 py-4 text-base font-mono font-bold text-slate-800">9491F306</td>
             <td class="px-6 py-4 text-base font-semibold text-slate-800">Akmal Zaidan</td>
@@ -223,13 +223,13 @@
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700"><i class="fas fa-circle text-[8px] mr-1.5"></i> Aktif</span>
             </td>
             <td class="px-6 py-4 text-center">
-                <button class="bg-amber-50 hover:bg-amber-100 text-amber-700 font-medium py-1.5 px-3 rounded text-sm transition-colors cursor-pointer">
+                <button onclick="editKartu('9491F306', 'Akmal Zaidan', 'Staff Kantor', '-')" class="bg-amber-50 hover:bg-amber-100 text-amber-700 font-medium py-1.5 px-3 rounded text-sm transition-colors cursor-pointer">
                     <i class="fas fa-edit mr-1"></i> Edit
                 </button>
             </td>
         </tr>
     
-        <tr class="row-kartu hover:bg-slate-50 transition-colors" data-kategori="Staff Kantor" data-projek="Kantor">
+        <tr class="row-kartu hover:bg-slate-50 transition-colors" data-kategori="Staff Kantor" data-projek="-">
             <td class="px-6 py-4 text-base text-slate-500">3</td>
             <td class="px-6 py-4 text-base font-mono font-bold text-slate-800">A3B7C901</td>
             <td class="px-6 py-4 text-base font-semibold text-slate-800">Anom Arya</td>
@@ -242,7 +242,7 @@
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700"><i class="fas fa-circle text-[8px] mr-1.5"></i> Aktif</span>
             </td>
             <td class="px-6 py-4 text-center">
-                <button class="bg-amber-50 hover:bg-amber-100 text-amber-700 font-medium py-1.5 px-3 rounded text-sm transition-colors cursor-pointer">
+                <button onclick="editKartu('A3B7C901', 'Anom Arya', 'Staff Kantor', '-')" class="bg-amber-50 hover:bg-amber-100 text-amber-700 font-medium py-1.5 px-3 rounded text-sm transition-colors cursor-pointer">
                     <i class="fas fa-edit mr-1"></i> Edit
                 </button>
             </td>
@@ -309,6 +309,59 @@
                 </table>
             </div>
         </div>
+
+        <!-- MODAL DAFTARKAN / EDIT KARTU RFID -->
+        <div id="modalFormKartu" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-slate-800 relative">
+                <button onclick="tutupModalKartu()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 text-2xl font-bold cursor-pointer">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="mb-5 pb-3 border-b border-slate-200">
+                    <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2" id="modalKartuTitle">
+                        <i class="fas fa-id-card-clip text-teal-600"></i> Daftarkan Kartu RFID Baru
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-1">Hubungkan fisik kartu RFID dengan data karyawan di sistem</p>
+                </div>
+                <form onsubmit="event.preventDefault(); simpanKartu();" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nama Pemilik / Karyawan <span class="text-rose-500">*</span></label>
+                        <input type="text" id="kartuNama" required placeholder="Contoh: Dimas Arya / Joko Susilo" class="w-full border-2 border-slate-300 rounded-xl px-3.5 py-2.5 text-sm font-bold text-slate-800 focus:outline-none focus:border-teal-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Kategori Karyawan <span class="text-rose-500">*</span></label>
+                        <select id="kartuKategori" onchange="toggleKategoriKartu(this.value)" class="w-full border-2 border-slate-300 rounded-xl px-3.5 py-2.5 text-sm font-bold text-slate-800 focus:outline-none focus:border-teal-500">
+                            <option value="Staff Kantor">Staff Kantor (Pusat)</option>
+                            <option value="Pekerja Harian" selected>Pekerja Harian (Projek)</option>
+                        </select>
+                    </div>
+                    <div id="boxKartuProjek">
+                        <label class="block text-xs font-bold text-amber-900 uppercase mb-1">Bagian Projek <span class="text-rose-500">*</span></label>
+                        <select id="kartuProjek" class="w-full border-2 border-amber-300 rounded-xl px-3.5 py-2.5 text-sm font-bold text-amber-950 focus:outline-none focus:border-amber-500 bg-amber-50/40">
+                            <option value="Projek A">Projek A</option>
+                            <option value="Projek B">Projek B</option>
+                            <option value="Projek C">Projek C</option>
+                        </select>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="block text-xs font-bold text-slate-700 uppercase">UID Kartu Fisik <span class="text-rose-500">*</span></label>
+                            <button type="button" onclick="isiUidKartuOtomatis()" class="text-xs text-teal-600 font-bold hover:underline cursor-pointer">
+                                <i class="fas fa-wifi"></i> Simulasi Tap Mesin
+                            </button>
+                        </div>
+                        <input type="text" id="kartuUid" required placeholder="Contoh: 83A192B4" class="w-full border-2 border-slate-300 rounded-xl px-3.5 py-2.5 text-sm font-mono font-bold uppercase text-slate-800 focus:outline-none focus:border-teal-500">
+                    </div>
+                    <div class="flex gap-3 pt-3">
+                        <button type="submit" class="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-xl text-sm shadow transition-colors flex items-center justify-center gap-2 cursor-pointer">
+                            <i class="fas fa-save"></i> Simpan Kartu
+                        </button>
+                        <button type="button" onclick="tutupModalKartu()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-4 rounded-xl text-sm transition-colors cursor-pointer">
+                            Batal
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     
         </main>
     </div>
@@ -317,6 +370,100 @@
     <script>
         let filterKartuKategoriAktif = '';
         let filterKartuProjekAktif = '';
+
+        function tampilkanToast(pesan, tipe = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-5 right-5 z-50 px-6 py-4 rounded-xl shadow-2xl text-white font-bold flex items-center gap-3 transition-all duration-300 transform translate-y-10 opacity-0 ${
+                tipe === 'success' ? 'bg-teal-600' : 'bg-rose-600'
+            }`;
+            toast.innerHTML = `<i class="fas ${tipe === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle'} text-xl"></i> <span>${pesan}</span>`;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.classList.remove('translate-y-10', 'opacity-0'); }, 50);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-10');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        function bukaModalKartu() {
+            document.getElementById('modalKartuTitle').innerHTML = '<i class="fas fa-id-card-clip text-teal-600"></i> Daftarkan Kartu RFID Baru';
+            document.getElementById('kartuNama').value = '';
+            document.getElementById('kartuUid').value = '';
+            document.getElementById('kartuKategori').value = 'Pekerja Harian';
+            toggleKategoriKartu('Pekerja Harian');
+            document.getElementById('modalFormKartu').classList.remove('hidden');
+        }
+
+        function tutupModalKartu() {
+            document.getElementById('modalFormKartu').classList.add('hidden');
+        }
+
+        function toggleKategoriKartu(kat) {
+            const box = document.getElementById('boxKartuProjek');
+            if (kat === 'Staff Kantor') {
+                box.classList.add('hidden');
+            } else {
+                box.classList.remove('hidden');
+            }
+        }
+
+        function isiUidKartuOtomatis() {
+            const hex = Math.floor(Math.random() * 0xFFFFFFFF).toString(16).toUpperCase().padStart(8, '0');
+            document.getElementById('kartuUid').value = hex;
+        }
+
+        function simpanKartu() {
+            const nama = document.getElementById('kartuNama').value.trim();
+            const uid = document.getElementById('kartuUid').value.trim().toUpperCase();
+            const kat = document.getElementById('kartuKategori').value;
+            const prj = (kat === 'Staff Kantor') ? '-' : (document.getElementById('kartuProjek').value || 'Projek A');
+
+            const tbody = document.getElementById('tabelKartuBody');
+            const count = tbody.querySelectorAll('tr.row-kartu').length + 1;
+            const nowStr = new Date().toISOString().slice(0, 16).replace('T', ' ');
+
+            const tr = document.createElement('tr');
+            tr.className = 'row-kartu hover:bg-slate-50 transition-colors';
+            tr.setAttribute('data-kategori', kat);
+            tr.setAttribute('data-projek', prj);
+            tr.innerHTML = `
+                <td class="px-6 py-4 text-base text-slate-500">${count}</td>
+                <td class="px-6 py-4 text-base font-mono font-bold text-slate-800">${uid}</td>
+                <td class="px-6 py-4 text-base font-semibold text-slate-800">${nama}</td>
+                <td class="px-5 py-4 text-base text-slate-600">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold ${kat === 'Staff Kantor' ? 'bg-blue-100 text-blue-800' : 'bg-amber-100 text-amber-800'}">${kat}</span>
+                </td>
+                <td class="px-4 py-4 ${prj !== '-' ? 'bg-amber-50/50 text-amber-900' : 'bg-slate-50 text-slate-400 font-mono'} font-bold text-xs border-x border-slate-100 text-center">
+                    ${prj !== '-' ? `<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-500 text-white"><i class="fas fa-hard-hat mr-1 text-[9px]"></i> ${prj}</span>` : '-'}
+                </td>
+                <td class="px-6 py-4 text-base text-slate-600">${nowStr}</td>
+                <td class="px-6 py-4 text-center">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700"><i class="fas fa-circle text-[8px] mr-1.5"></i> Aktif</span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                    <button onclick="editKartu('${uid}', '${nama}', '${kat}', '${prj}')" class="bg-amber-50 hover:bg-amber-100 text-amber-700 font-medium py-1.5 px-3 rounded text-sm transition-colors cursor-pointer">
+                        <i class="fas fa-edit mr-1"></i> Edit
+                    </button>
+                </td>
+            `;
+
+            tbody.appendChild(tr);
+            tutupModalKartu();
+            jalankanFilterKartu();
+            tampilkanToast(`Kartu RFID UID ${uid} milik ${nama} berhasil disimpan!`);
+        }
+
+        function editKartu(uid, nama, kat, prj) {
+            document.getElementById('modalKartuTitle').innerHTML = '<i class="fas fa-edit text-teal-600"></i> Edit Kartu RFID';
+            document.getElementById('kartuNama').value = nama;
+            document.getElementById('kartuUid').value = uid;
+            document.getElementById('kartuKategori').value = kat;
+            toggleKategoriKartu(kat);
+            if (prj && prj !== '-') {
+                document.getElementById('kartuProjek').value = prj;
+            }
+            document.getElementById('modalFormKartu').classList.remove('hidden');
+        }
 
         function setFilterKartuKategori(kat) {
             filterKartuKategoriAktif = kat;

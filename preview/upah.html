@@ -9,6 +9,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        @media print {
+            aside, header, #boxFilterProjek, #boxFilterKategori, .no-print, button, input {
+                display: none !important;
+            }
+            .ml-64 { margin-left: 0 !important; }
+            body { background: white !important; }
+            body.slip-open main > div:not(#modalSlip) { display: none !important; }
+            body.slip-open #modalSlip {
+                position: static !important;
+                background: white !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                display: block !important;
+            }
+            body.slip-open #modalSlip > div {
+                box-shadow: none !important;
+                border: 2px solid #0f766e !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -948,10 +969,12 @@
                 document.getElementById('slipTotalGaji').innerText = formatRupiah(totalGaji);
 
                 document.getElementById('modalSlip').classList.remove('hidden');
+                document.body.classList.add('slip-open');
             }
 
             function tutupSlip() {
                 document.getElementById('modalSlip').classList.add('hidden');
+                document.body.classList.remove('slip-open');
             }
         </script>
     

@@ -230,6 +230,12 @@
                                 <td class="px-5 py-4 text-sm text-rose-900 font-semibold">Percobaan akses tidak sah ke Log Audit Pimpinan (Otomatis ditolak sistem proteksi)</td>
                                 <td class="px-4 py-4 text-xs font-mono text-slate-500">192.168.1.28</td>
                             </tr>
+                            <tr id="emptyAuditRow" style="display: none;">
+                                <td colspan="6" class="px-6 py-12 text-center text-slate-400 text-base">
+                                    <i class="fas fa-search text-3xl mb-2 block text-slate-300"></i>
+                                    Tidak ada rekaman log aktivitas yang cocok dengan pencarian.
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -252,6 +258,7 @@
             const keyword = (document.getElementById('filterAuditKeyword')?.value || '').toLowerCase();
             const aksi = document.getElementById('filterAuditAksi')?.value;
             const rows = document.querySelectorAll('#tabelAuditBody tr.row-audit');
+            let visibleCount = 0;
 
             rows.forEach(tr => {
                 const rowAksi = tr.getAttribute('data-aksi');
@@ -263,10 +270,16 @@
 
                 if (matchAksi && matchKeyword) {
                     tr.style.display = '';
+                    visibleCount++;
                 } else {
                     tr.style.display = 'none';
                 }
             });
+
+            const emptyRow = document.getElementById('emptyAuditRow');
+            if (emptyRow) {
+                emptyRow.style.display = (visibleCount === 0) ? '' : 'none';
+            }
         }
 
         function resetFilterAudit() {
