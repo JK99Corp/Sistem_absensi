@@ -3,347 +3,955 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Absensi Jaya Kedhaton - Dashboard</title>
-    <link rel="icon" type="image/png" href="images/logo.png">
+    <title>Sistem Absensi & Proyek - PT Jaya Kedhaton</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+        }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-slate-100 text-slate-800 min-h-screen">
 
-    <!-- SIDEBAR -->
-    <aside class="fixed top-0 left-0 w-64 h-full bg-slate-800 text-white flex flex-col z-50 shadow-xl">
-        <div class="px-5 py-5 border-b border-slate-700 flex items-center gap-3">
-            <img src="images/logo.png" alt="Logo Jaya Kedhaton" 
-                 class="w-12 h-12 object-contain shrink-0">
-            <div class="overflow-hidden">
-                <h1 class="text-base font-bold tracking-wide text-white leading-tight truncate">Jaya Kedhaton</h1>
-                <p class="text-xs text-slate-400 mt-0.5 truncate">Sistem Absensi Digital</p>
-            </div>
-        </div>
-
-        <nav class="flex-1 px-4 py-5 space-y-1.5 overflow-y-auto">
-            
-            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 bg-teal-600 text-white shadow-md">
-                <i class="fas fa-chart-bar w-6 text-center text-lg"></i>
-                <span>Dashboard</span>
-                
-            </a>
-        
-            <a href="riwayat.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-clipboard-list w-6 text-center text-lg"></i>
-                <span>Riwayat Absensi</span>
-                
-            </a>
-        
-            <a href="rekap.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-calendar-week w-6 text-center text-lg"></i>
-                <span>Rekap Mingguan</span>
-                
-            </a>
-        
-            <a href="upah.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-money-bill-wave w-6 text-center text-lg"></i>
-                <span>Upah & Lembur</span>
-                <span class="bg-amber-400 text-slate-900 text-xs font-bold px-2 py-0.5 rounded-full uppercase ml-auto">Baru</span>
-            </a>
-        
-            <a href="karyawan.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-users w-6 text-center text-lg"></i>
-                <span>Karyawan</span>
-                
-            </a>
-        
-            <a href="kartu-rfid.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-id-card-clip w-6 text-center text-lg"></i>
-                <span>Kartu RFID</span>
-                
-            </a>
-        
-            <a href="device.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-desktop w-6 text-center text-lg"></i>
-                <span>Device</span>
-                
-            </a>
-        
-        </nav>
-
-        <div class="px-6 py-4 border-t border-slate-700 text-xs text-slate-400">
-            &copy; 2026 Sistem Absensi Jaya Kedhaton — Dual-ESP32
-        </div>
-    </aside>
-
-    <!-- MAIN CONTENT -->
-    <div class="ml-64 min-h-screen flex flex-col">
-        <!-- Top Bar -->
-        <header class="bg-white shadow-sm px-8 py-4 flex items-center justify-between sticky top-0 z-40">
-            <div class="text-base text-slate-600">
-                Login sebagai <span class="font-semibold text-slate-800">Admin Keuangan & Absensi</span> - admin
-            </div>
+    <!-- HEADER SIMPEL & JELAS -->
+    <header class="bg-slate-900 text-white shadow-md border-b-4 border-teal-600 no-print">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-4">
             <div class="flex items-center gap-3">
-                <a href="javascript:location.reload()"
-                   class="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2 px-4 rounded-lg transition-colors text-sm">
-                    <i class="fas fa-sync-alt"></i> Refresh
-                </a>
-                <a href="login.html"
-                   class="inline-flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 font-medium py-2 px-4 rounded-lg transition-colors text-sm">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
+                <img src="images/logo.png" alt="Logo" class="w-10 h-10 object-contain rounded bg-white p-1">
+                <div>
+                    <h1 class="text-xl font-bold leading-tight tracking-wide">PT JAYA KEDHATON</h1>
+                    <p class="text-xs text-slate-400">Sistem Absensi & Alokasi Proyek Pekerja Harian</p>
+                </div>
             </div>
-        </header>
 
-        <!-- Page Content -->
-        <main class="flex-1 p-8">
+            <!-- Jam & Tanggal -->
+            <div class="text-right bg-slate-800 px-4 py-2 rounded-lg border border-slate-700">
+                <div id="clockDisplay" class="text-lg font-bold text-teal-400 font-mono">00:00:00</div>
+                <div id="dateDisplay" class="text-xs text-slate-300">Memuat tanggal...</div>
+            </div>
+        </div>
+
+        <!-- MENU UTAMA SIMPEL (HANYA 4 TAB) -->
+        <div class="max-w-7xl mx-auto px-4 flex gap-2 overflow-x-auto">
+            <button onclick="switchTab('absensi')" id="tabBtn-absensi"
+                    class="tab-btn px-5 py-3 font-semibold text-sm border-b-2 border-teal-500 text-white bg-slate-800 flex items-center gap-2 transition-all">
+                <i class="fas fa-clipboard-check text-teal-400"></i>
+                <span>1. Absensi Hari Ini</span>
+            </button>
+            <button onclick="switchTab('proyek')" id="tabBtn-proyek"
+                    class="tab-btn px-5 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-400 hover:text-white flex items-center gap-2 transition-all">
+                <i class="fas fa-hard-hat text-amber-400"></i>
+                <span>2. Master Proyek</span>
+                <span id="badgeJumlahProyek" class="bg-amber-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">3</span>
+            </button>
+            <button onclick="switchTab('pekerja')" id="tabBtn-pekerja"
+                    class="tab-btn px-5 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-400 hover:text-white flex items-center gap-2 transition-all">
+                <i class="fas fa-users text-blue-400"></i>
+                <span>3. Data Pekerja</span>
+                <span id="badgeJumlahPekerja" class="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">6</span>
+            </button>
+            <button onclick="switchTab('upah')" id="tabBtn-upah"
+                    class="tab-btn px-5 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-400 hover:text-white flex items-center gap-2 transition-all">
+                <i class="fas fa-coins text-emerald-400"></i>
+                <span>4. Rekap Upah Per Proyek</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-6">
+
+        <!-- ========================================== -->
+        <!-- TAB 1: ABSENSI HARI INI                     -->
+        <!-- ========================================== -->
+        <section id="view-absensi" class="tab-content space-y-6">
             
-        <div class="mb-6">
-            <h2 class="text-2xl font-bold text-slate-800">Dashboard</h2>
-            <p class="text-base text-slate-500 mt-0.5">Ringkasan absensi masuk & pulang karyawan Jaya Kedhaton</p>
-        </div>
-
-        <!-- Ketentuan Jam Kerja (Rapi & Simpel) -->
-        <div class="bg-white border border-slate-200 rounded-xl px-6 py-4 mb-6 shadow-sm">
-            <div class="flex flex-wrap items-center justify-between gap-4 text-sm">
-                <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                    <span class="text-slate-600">Pekerja Harian: <strong class="text-slate-800">Masuk maks. 07:30</strong></span>
+            <!-- KARTU RINGKASAN CEPAT -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 no-print">
+                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-teal-600">
+                    <p class="text-xs font-bold text-slate-500 uppercase">Hadir Hari Ini</p>
+                    <p id="statTotalHadir" class="text-3xl font-extrabold text-slate-900 mt-1">5</p>
+                    <p class="text-xs text-teal-700 mt-1 font-medium">Semua Bagian</p>
                 </div>
-                <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-                    <span class="text-slate-600">Staff Kantor: <strong class="text-slate-800">Masuk maks. 08:30</strong></span>
+                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-amber-500">
+                    <p class="text-xs font-bold text-slate-500 uppercase">Pekerja Harian</p>
+                    <p id="statPekerjaHarian" class="text-3xl font-extrabold text-amber-600 mt-1">3</p>
+                    <p class="text-xs text-slate-500 mt-1">Tersebar di Proyek</p>
                 </div>
-                <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
-                    <span class="text-slate-600">Pulang Normal: <strong class="text-slate-800">17:00 – 17:30</strong></span>
+                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-500">
+                    <p class="text-xs font-bold text-slate-500 uppercase">Staff Kantor</p>
+                    <p id="statStaffKantor" class="text-3xl font-extrabold text-blue-600 mt-1">2</p>
+                    <p class="text-xs text-slate-500 mt-1">Kantor Pusat</p>
                 </div>
-                <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                    <span class="text-slate-600">Lembur: <strong class="text-slate-800">Tap pulang > 17:30</strong> (Staff & Harian)</span>
+                <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-emerald-500">
+                    <p class="text-xs font-bold text-slate-500 uppercase">Estimasi Upah Hari Ini</p>
+                    <p id="statTotalUpahHariIni" class="text-2xl font-extrabold text-emerald-600 mt-1">Rp 400.000</p>
+                    <p class="text-xs text-slate-500 mt-1">Biaya Harian Berjalan</p>
                 </div>
             </div>
-        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-teal-500">
-                <p class="text-sm font-medium text-slate-500 uppercase tracking-wide">Hadir pada filter ini</p>
-                <p class="text-5xl font-extrabold text-slate-800 mt-2" id="countHadirDisplay">5</p>
-                <p class="text-xs text-slate-400 mt-2" id="countHadirSubtext">2 Staff Kantor + 3 Pekerja Harian</p>
+            <!-- FILTER PROYEK (1-KLIK) & TOMBOL AKSI -->
+            <div class="bg-white p-4 rounded-lg shadow-sm no-print space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <span class="text-xs font-bold text-slate-500 uppercase block mb-1">Filter Berdasarkan Proyek:</span>
+                        <div id="filterButtonGroup" class="flex flex-wrap gap-2">
+                            <!-- Diisi dinamis via JS -->
+                        </div>
+                    </div>
+                    <button onclick="openModalAbsen()"
+                            class="bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm px-4 py-2.5 rounded-lg flex items-center gap-2 shadow transition-colors">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>+ Catat Absen Baru</span>
+                    </button>
+                </div>
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-blue-500">
-                <p class="text-sm font-medium text-slate-500 uppercase tracking-wide">Karyawan aktif</p>
-                <p class="text-5xl font-extrabold text-slate-800 mt-2">6</p>
-                <p class="text-xs text-slate-400 mt-2">Terbagi dalam 2 Kategori Kerja</p>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-amber-500">
-                <p class="text-sm font-medium text-slate-500 uppercase tracking-wide">Device aktif</p>
-                <p class="text-5xl font-extrabold text-slate-800 mt-2">1</p>
-                <p class="text-xs text-slate-400 mt-2">KANTORJK_01 (Online Standalone)</p>
-            </div>
-        </div>
-
-        <!-- Form Filter Kategori & Device Aktif Berfungsi Penuh -->
-        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
-            <form id="formFilterDashboard" class="flex flex-wrap items-end gap-4" onsubmit="event.preventDefault(); jalankanFilterDashboard();">
-                <div class="flex-1 min-w-[200px]">
-                    <label class="block text-sm font-semibold text-slate-600 mb-1">Tanggal</label>
-                    <input type="text" value="03 - Aug - 2026" readonly
-                           class="w-full border border-slate-300 rounded-lg px-4 py-3 text-base text-slate-700 bg-slate-50 font-medium">
+            <!-- TABEL ABSENSI -->
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-slate-200">
+                <div class="px-5 py-3.5 bg-slate-800 text-white flex items-center justify-between">
+                    <h2 class="text-base font-bold flex items-center gap-2">
+                        <i class="fas fa-list-ul text-teal-400"></i>
+                        <span>Daftar Kehadiran Hari Ini</span>
+                        <span id="labelFilterAktif" class="text-xs bg-slate-700 px-2 py-0.5 rounded text-teal-300 ml-2 font-normal">Semua Proyek</span>
+                    </h2>
+                    <span class="text-xs text-slate-300">Pekerja harian maks. 07:30 • Lembur pulang > 17:30</span>
                 </div>
 
-                <div class="flex-1 min-w-[200px]">
-                    <label class="block text-sm font-semibold text-slate-600 mb-1">
-                        Kategori Karyawan <span class="text-xs text-teal-600 font-bold">(Pilih untuk Memfilter)</span>
-                    </label>
-                    <select id="filterKategori" onchange="jalankanFilterDashboard()"
-                            class="w-full border-2 border-slate-300 rounded-lg px-4 py-3 text-base text-slate-800 bg-white font-semibold focus:border-teal-600 focus:outline-none cursor-pointer hover:border-teal-400 transition-colors">
-                        <option value="" selected>Semua (2 Kategori)</option>
-                        <option value="Staff Kantor" >Staff Kantor</option>
-                        <option value="Pekerja Harian" >Pekerja Harian</option>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider border-b border-slate-200">
+                                <th class="p-3.5 text-center w-12">No</th>
+                                <th class="p-3.5">Nama Pekerja</th>
+                                <th class="p-3.5">Kategori</th>
+                                <th class="p-3.5 bg-amber-50 text-amber-900 border-x border-amber-200">Proyek / Bagian</th>
+                                <th class="p-3.5 text-center">Jam Masuk</th>
+                                <th class="p-3.5 text-center">Jam Pulang</th>
+                                <th class="p-3.5 text-center">Status Kehadiran</th>
+                                <th class="p-3.5 text-center">Lembur</th>
+                                <th class="p-3.5 text-center w-28 no-print">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelAbsensiBody" class="divide-y divide-slate-100 text-sm">
+                            <!-- Diisi dinamis via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 2: MASTER PROYEK (DIINPUT DI AWAL)       -->
+        <!-- ========================================== -->
+        <section id="view-proyek" class="tab-content hidden space-y-6">
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                <h3 class="font-bold text-blue-900 text-sm flex items-center gap-2">
+                    <i class="fas fa-info-circle text-blue-600"></i>
+                    <span>Tentukan Daftar Proyek di Awal</span>
+                </h3>
+                <p class="text-xs text-blue-800 mt-1">
+                    Masukkan bagian proyek yang sedang berlangsung (contoh: <strong>Proyek Bagian A</strong>, <strong>Proyek Bagian B</strong>, atau <strong>Proyek Bagian C</strong>). Proyek yang didaftarkan di sini akan otomatis muncul sebagai pilihan saat mendaftarkan pekerja harian.
+                </p>
+            </div>
+
+            <!-- FORM TAMBAH PROYEK SIMPEL -->
+            <div class="bg-white p-5 rounded-lg shadow-sm border border-slate-200">
+                <h3 class="font-bold text-slate-900 text-base mb-3 flex items-center gap-2">
+                    <i class="fas fa-plus-circle text-teal-600"></i>
+                    <span>Tambah Proyek / Bagian Baru</span>
+                </h3>
+                <form id="formTambahProyek" onsubmit="event.preventDefault(); simpanProyekBaru();" class="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Nama Proyek / Bagian <span class="text-rose-500">*</span></label>
+                        <input type="text" id="inputNamaProyek" required placeholder="Contoh: Proyek Bagian D"
+                               class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:border-teal-600 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Keterangan / Lokasi Kerja</label>
+                        <input type="text" id="inputKetProyek" placeholder="Contoh: Pengecoran Lantai 2"
+                               class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:border-teal-600 focus:outline-none">
+                    </div>
+                    <div>
+                        <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded text-sm flex items-center justify-center gap-2">
+                            <i class="fas fa-save"></i>
+                            <span>Simpan Proyek</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- DAFTAR PROYEK AKTIF -->
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-slate-200">
+                <div class="px-5 py-3 bg-slate-800 text-white font-bold text-sm">
+                    Daftar Proyek Aktif
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 text-xs font-bold uppercase border-b border-slate-200">
+                                <th class="p-3.5 text-center w-12">No</th>
+                                <th class="p-3.5">Nama Proyek / Bagian</th>
+                                <th class="p-3.5">Keterangan</th>
+                                <th class="p-3.5 text-center">Jumlah Pekerja Bertugas</th>
+                                <th class="p-3.5 text-center">Status</th>
+                                <th class="p-3.5 text-center w-24">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelProyekBody" class="divide-y divide-slate-100 text-sm">
+                            <!-- Diisi dinamis via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 3: DATA PEKERJA                         -->
+        <!-- ========================================== -->
+        <section id="view-pekerja" class="tab-content hidden space-y-6">
+            <div class="flex items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Data Pekerja & Penugasan Proyek</h2>
+                    <p class="text-xs text-slate-500">Kelola pekerja harian dan tetapkan bagian proyek masing-masing.</p>
+                </div>
+                <button onclick="openModalPekerja()"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm px-4 py-2 rounded-lg flex items-center gap-2 shadow">
+                    <i class="fas fa-user-plus"></i>
+                    <span>+ Tambah Pekerja Baru</span>
+                </button>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-slate-200">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 text-xs font-bold uppercase border-b border-slate-200">
+                                <th class="p-3.5 text-center w-12">No</th>
+                                <th class="p-3.5">Nama Pekerja</th>
+                                <th class="p-3.5">Kategori</th>
+                                <th class="p-3.5 bg-amber-50 text-amber-900 border-x border-amber-200">Penugasan Proyek</th>
+                                <th class="p-3.5 text-right">Upah Pokok / Gaji</th>
+                                <th class="p-3.5 text-center">UID RFID</th>
+                                <th class="p-3.5 text-center">No. HP</th>
+                                <th class="p-3.5 text-center w-28">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelPekerjaBody" class="divide-y divide-slate-100 text-sm">
+                            <!-- Diisi dinamis via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 4: REKAP UPAH PER PROYEK                -->
+        <!-- ========================================== -->
+        <section id="view-upah" class="tab-content hidden space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4 no-print">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Rekapitulasi Upah Berdasarkan Proyek</h2>
+                    <p class="text-xs text-slate-500">Perhitungan biaya upah harian yang teralokasi ke masing-masing proyek.</p>
+                </div>
+                <button onclick="window.print()"
+                        class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-sm px-4 py-2 rounded-lg flex items-center gap-2 shadow">
+                    <i class="fas fa-print"></i>
+                    <span>Cetak / Print Laporan</span>
+                </button>
+            </div>
+
+            <!-- KARTU BIAYA PER PROYEK -->
+            <div id="containerRingkasanUpahProyek" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Diisi dinamis via JS -->
+            </div>
+
+            <!-- TABEL RINCIAN UPAH -->
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-slate-200">
+                <div class="px-5 py-3 bg-slate-800 text-white font-bold text-sm flex items-center justify-between">
+                    <span>Rincian Upah Pekerja Harian</span>
+                    <span class="text-xs font-normal text-slate-300">Periode: Minggu Ini (03 - 08 Agustus 2026)</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 text-xs font-bold uppercase border-b border-slate-200">
+                                <th class="p-3.5 text-center w-12">No</th>
+                                <th class="p-3.5">Nama Pekerja</th>
+                                <th class="p-3.5 bg-amber-50 text-amber-900 border-x border-amber-200">Proyek</th>
+                                <th class="p-3.5 text-center">Hari Hadir</th>
+                                <th class="p-3.5 text-right">Tarif Harian</th>
+                                <th class="p-3.5 text-right">Subtotal Upah</th>
+                                <th class="p-3.5 text-center">Lembur</th>
+                                <th class="p-3.5 text-right font-bold text-emerald-800 bg-emerald-50">Total Upah Diterima</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelUpahBody" class="divide-y divide-slate-100 text-sm">
+                            <!-- Diisi dinamis via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- MODAL 1: CATAT ABSENSI MANUAL              -->
+    <!-- ========================================== -->
+    <div id="modalAbsen" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 space-y-4">
+            <div class="flex items-center justify-between border-b pb-3">
+                <h3 class="font-bold text-slate-900 text-base">Catat Absensi / Kehadiran</h3>
+                <button onclick="closeModalAbsen()" class="text-slate-400 hover:text-slate-600 text-lg">&times;</button>
+            </div>
+            <form id="formAbsenManual" onsubmit="event.preventDefault(); simpanAbsensiManual();" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Pilih Pekerja <span class="text-rose-500">*</span></label>
+                    <select id="modalAbsenPekerjaSelect" required onchange="updateModalProyekOtomatis()"
+                            class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:border-teal-600 focus:outline-none">
+                        <!-- Diisi via JS -->
                     </select>
                 </div>
-
-                <div class="flex-1 min-w-[200px]">
-                    <label class="block text-sm font-semibold text-slate-600 mb-1">Device</label>
-                    <select id="filterDevice" onchange="jalankanFilterDashboard()"
-                            class="w-full border-2 border-slate-300 rounded-lg px-4 py-3 text-base text-slate-800 bg-white font-semibold focus:border-teal-600 focus:outline-none cursor-pointer hover:border-teal-400 transition-colors">
-                        <option value="" selected>Semua Device</option>
-                        <option value="KANTORJK_01" >KANTORJK_01</option>
-                        <option value="KANTORJK_02" >KANTORJK_02</option>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Proyek / Bagian Kerja</label>
+                    <input type="text" id="modalAbsenProyekDisplay" readonly
+                           class="w-full border border-slate-200 bg-slate-100 rounded px-3 py-2 text-sm font-semibold text-slate-700">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Jam Masuk</label>
+                        <input type="time" id="modalAbsenJamMasuk" value="07:15" required
+                               class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:border-teal-600 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Jam Pulang (Opsional)</label>
+                        <input type="time" id="modalAbsenJamPulang"
+                               class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:border-teal-600 focus:outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Status Lembur</label>
+                    <select id="modalAbsenLembur" class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:border-teal-600 focus:outline-none">
+                        <option value="Normal (0 Jam)">Normal (Tidak Lembur)</option>
+                        <option value="Lembur 1 Jam">Lembur 1 Jam</option>
+                        <option value="Lembur 2 Jam">Lembur 2 Jam</option>
+                        <option value="Lembur 3 Jam">Lembur 3 Jam</option>
                     </select>
                 </div>
-
-                <div class="flex items-center gap-2">
-                    <button type="button" onclick="jalankanFilterDashboard()"
-                            class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-8 rounded-lg text-base transition-colors shadow flex items-center gap-2 cursor-pointer">
-                        <i class="fas fa-filter"></i> Filter
-                    </button>
-                    <button type="button" onclick="resetFilterDashboard()"
-                            class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold py-3 px-4 rounded-lg text-base transition-colors cursor-pointer" title="Reset Filter">
-                        <i class="fas fa-rotate-left"></i>
-                    </button>
+                <div class="flex gap-2 pt-2">
+                    <button type="button" onclick="closeModalAbsen()" class="flex-1 bg-slate-100 text-slate-700 py-2 rounded text-sm font-bold hover:bg-slate-200">Batal</button>
+                    <button type="submit" class="flex-1 bg-teal-600 text-white py-2 rounded text-sm font-bold hover:bg-teal-700">Simpan Absen</button>
                 </div>
             </form>
         </div>
+    </div>
 
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-            <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
-                <h3 class="text-base font-bold text-slate-800">Data Absensi Masuk & Pulang Hari Ini</h3>
-                <span class="text-xs text-slate-500">Pekerja Harian maks. <strong>07:30</strong> | Staff Kantor maks. <strong>08:30</strong> | Lembur: tap pulang &gt; 17:30</span>
+    <!-- ========================================== -->
+    <!-- MODAL 2: TAMBAH / EDIT PEKERJA             -->
+    <!-- ========================================== -->
+    <div id="modalPekerja" class="fixed inset-0 bg-slate-900/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 space-y-4">
+            <div class="flex items-center justify-between border-b pb-3">
+                <h3 class="font-bold text-slate-900 text-base">Tambah / Edit Data Pekerja</h3>
+                <button onclick="closeModalPekerja()" class="text-slate-400 hover:text-slate-600 text-lg">&times;</button>
             </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead>
-                        <tr class="bg-slate-700 text-white text-xs uppercase tracking-wider">
-                            <th class="px-5 py-4 text-left">NAMA KARYAWAN</th>
-                            <th class="px-4 py-4 text-left">KATEGORI</th>
-                            <th class="px-4 py-4 text-left">BATAS MASUK</th>
-                            <th class="px-4 py-4 text-left">JAM MASUK</th>
-                            <th class="px-4 py-4 text-left">JAM PULANG</th>
-                            <th class="px-4 py-4 text-left">STATUS MASUK</th>
-                            <th class="px-4 py-4 text-left">STATUS LEMBUR</th>
-                            <th class="px-4 py-4 text-left">UID</th>
-                            <th class="px-4 py-4 text-left">DEVICE</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableAbsensiBody" class="divide-y divide-slate-100">
-                        
-            <tr class="row-absensi hover:bg-slate-50 transition-colors" data-kategori="Pekerja Harian" data-device="KANTORJK_01">
-                <td class="px-5 py-4 font-bold text-slate-900 text-base">Joko Susilo</td>
-                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-800"><i class="fas fa-hammer mr-1 text-[10px]"></i> Pekerja Harian</span></td>
-                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-amber-50 text-amber-900 border border-amber-200">Maks. 07:30</span></td>
-                <td class="px-4 py-4 text-base font-semibold text-slate-800">07:15:20</td>
-                <td class="px-4 py-4 text-base font-semibold text-slate-800">19:35:10</td>
-                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700"><i class="fas fa-check-circle mr-1 text-[10px]"></i> Tepat Waktu</span></td>
-                <td class="px-4 py-4"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 shadow-sm"><i class="fas fa-clock mr-1 text-[10px]"></i> Lembur 2 Jam</span></td>
-                <td class="px-4 py-4 text-sm font-mono text-slate-500">83A192B4</td>
-                <td class="px-4 py-4 text-sm text-slate-600">KANTORJK_01</td>
-            </tr>
-        
-            <tr class="row-absensi hover:bg-slate-50 transition-colors" data-kategori="Pekerja Harian" data-device="KANTORJK_01">
-                <td class="px-5 py-4 font-bold text-slate-900 text-base">Slamet Riyadi</td>
-                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-800"><i class="fas fa-hammer mr-1 text-[10px]"></i> Pekerja Harian</span></td>
-                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-amber-50 text-amber-900 border border-amber-200">Maks. 07:30</span></td>
-                <td class="px-4 py-4 text-base font-semibold text-slate-800">07:22:14</td>
-                <td class="px-4 py-4 text-base font-semibold text-slate-800">18:32:00</td>
-                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700"><i class="fas fa-check-circle mr-1 text-[10px]"></i> Tepat Waktu</span></td>
-                <td class="px-4 py-4"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 shadow-sm"><i class="fas fa-clock mr-1 text-[10px]"></i> Lembur 1 Jam</span></td>
-                <td class="px-4 py-4 text-sm font-mono text-slate-500">47C201F8</td>
-                <td class="px-4 py-4 text-sm text-slate-600">KANTORJK_01</td>
-            </tr>
-        
-            <tr class="row-absensi hover:bg-slate-50 transition-colors" data-kategori="Staff Kantor" data-device="KANTORJK_01">
-                <td class="px-5 py-4 font-bold text-slate-900 text-base">Dimas Arya Kedhaton</td>
-                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-blue-100 text-blue-800"><i class="fas fa-briefcase mr-1 text-[10px]"></i> Staff Kantor</span></td>
-                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-blue-50 text-blue-900 border border-blue-200">Maks. 08:30</span></td>
-                <td class="px-4 py-4 text-base font-semibold text-slate-800">08:22:45</td>
-                <td class="px-4 py-4 text-base font-semibold text-slate-800">17:15:30</td>
-                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700"><i class="fas fa-check-circle mr-1 text-[10px]"></i> Tepat Waktu</span></td>
-                <td class="px-4 py-4"><span class="text-xs text-slate-400 font-medium">Normal (0 Jam)</span></td>
-                <td class="px-4 py-4 text-sm font-mono text-slate-500">53492607</td>
-                <td class="px-4 py-4 text-sm text-slate-600">KANTORJK_01</td>
-            </tr>
-        
-            <tr class="row-absensi hover:bg-slate-50 transition-colors" data-kategori="Staff Kantor" data-device="KANTORJK_01">
-                <td class="px-5 py-4 font-bold text-slate-900 text-base">Akmal Zaidan</td>
-                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-blue-100 text-blue-800"><i class="fas fa-briefcase mr-1 text-[10px]"></i> Staff Kantor</span></td>
-                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-blue-50 text-blue-900 border border-blue-200">Maks. 08:30</span></td>
-                <td class="px-4 py-4 text-base font-semibold text-slate-800">08:42:10</td>
-                <td class="px-4 py-4 text-base font-semibold text-slate-800">17:25:00</td>
-                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-700"><i class="fas fa-exclamation-triangle mr-1 text-[10px]"></i> Terlambat 12 Mnt</span></td>
-                <td class="px-4 py-4"><span class="text-xs text-slate-400 font-medium">Normal (0 Jam)</span></td>
-                <td class="px-4 py-4 text-sm font-mono text-slate-500">9491F306</td>
-                <td class="px-4 py-4 text-sm text-slate-600">KANTORJK_01</td>
-            </tr>
-        
-            <tr class="row-absensi hover:bg-slate-50 transition-colors" data-kategori="Pekerja Harian" data-device="KANTORJK_01">
-                <td class="px-5 py-4 font-bold text-slate-900 text-base">Bambang Triyono</td>
-                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-800"><i class="fas fa-hammer mr-1 text-[10px]"></i> Pekerja Harian</span></td>
-                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-amber-50 text-amber-900 border border-amber-200">Maks. 07:30</span></td>
-                <td class="px-4 py-4 text-base font-semibold text-slate-800">07:45:00</td>
-                <td class="px-4 py-4 text-base font-semibold text-slate-800">19:30:15</td>
-                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-700"><i class="fas fa-exclamation-triangle mr-1 text-[10px]"></i> Terlambat 15 Mnt</span></td>
-                <td class="px-4 py-4"><span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 shadow-sm"><i class="fas fa-clock mr-1 text-[10px]"></i> Lembur 2 Jam</span></td>
-                <td class="px-4 py-4 text-sm font-mono text-slate-500">19E873A2</td>
-                <td class="px-4 py-4 text-sm text-slate-600">KANTORJK_01</td>
-            </tr>
-        
-                        <tr id="emptyAbsensiRow" style="display: none;">
-                            <td colspan="9" class="px-6 py-12 text-center text-slate-400 text-base">
-                                <i class="fas fa-search text-3xl mb-2 block text-slate-300"></i>
-                                Tidak ada data absensi untuk filter ini.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <form id="formPekerjaBaru" onsubmit="event.preventDefault(); simpanPekerja();" class="space-y-3">
+                <input type="hidden" id="editPekerjaId">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Nama Lengkap Pekerja <span class="text-rose-500">*</span></label>
+                    <input type="text" id="pekerjaNama" required placeholder="Contoh: Budi Santoso"
+                           class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:border-teal-600 focus:outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Kategori Pekerja <span class="text-rose-500">*</span></label>
+                        <select id="pekerjaKategori" onchange="toggleKategoriForm(this.value)" class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:border-teal-600 focus:outline-none font-semibold">
+                            <option value="Pekerja Harian" selected>Pekerja Harian</option>
+                            <option value="Staff Kantor">Staff Kantor</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-amber-900 mb-1">Penugasan Proyek <span class="text-rose-500">*</span></label>
+                        <select id="pekerjaProyekSelect" required class="w-full border-2 border-amber-400 bg-amber-50/50 rounded px-3 py-2 text-sm focus:border-amber-600 focus:outline-none font-bold text-amber-950">
+                            <!-- Diisi via JS -->
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Upah Pokok / Harian (Rp)</label>
+                        <input type="number" id="pekerjaUpah" value="120000" required
+                               class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:border-teal-600 focus:outline-none font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Tarif Lembur / Jam (Rp)</label>
+                        <input type="number" id="pekerjaLembur" value="25000" required
+                               class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:border-teal-600 focus:outline-none font-mono">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Nomor UID RFID (Opsional)</label>
+                        <input type="text" id="pekerjaUid" placeholder="Contoh: 83A192B4"
+                               class="w-full border border-slate-300 rounded px-3 py-2 text-sm font-mono focus:border-teal-600 focus:outline-none uppercase">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">No. WhatsApp / HP</label>
+                        <input type="text" id="pekerjaNoHp" placeholder="Contoh: 0812-xxxx-xxxx"
+                               class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:border-teal-600 focus:outline-none">
+                    </div>
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button type="button" onclick="closeModalPekerja()" class="flex-1 bg-slate-100 text-slate-700 py-2 rounded text-sm font-bold hover:bg-slate-200">Batal</button>
+                    <button type="submit" class="flex-1 bg-blue-600 text-white py-2 rounded text-sm font-bold hover:bg-blue-700">Simpan Pekerja</button>
+                </div>
+            </form>
         </div>
+    </div>
 
-        <script>
-            function jalankanFilterDashboard() {
-                const selectKat = document.getElementById('filterKategori');
-                const selectDev = document.getElementById('filterDevice');
-                if (!selectKat) return;
+    <!-- LOGIKA JAVASCRIPT LENGKAP & SIMPEL -->
+    <script>
+        // State default
+        const DEFAULT_PROYEK = [
+            { id: 'PRJ-A', nama: 'Proyek Bagian A', deskripsi: 'Pembangunan Ruko & Struktur', status: 'Aktif' },
+            { id: 'PRJ-B', nama: 'Proyek Bagian B', deskripsi: 'Renovasi Gudang Logistik', status: 'Aktif' },
+            { id: 'PRJ-C', nama: 'Proyek Bagian C', deskripsi: 'Finishing & Pengecatan', status: 'Aktif' }
+        ];
 
-                const kat = selectKat.value;
-                const dev = selectDev ? selectDev.value : '';
-                const rows = document.querySelectorAll('#tableAbsensiBody tr.row-absensi');
-                let visibleCount = 0;
-                let harianCount = 0;
-                let staffCount = 0;
+        const DEFAULT_PEKERJA = [
+            { id: 1, nama: 'Dimas Arya Kedhaton', kategori: 'Staff Kantor', projek: 'Kantor Pusat', upahHarian: 0, tarifLembur: 0, uid: '53492607', noHp: '0812-3456-7890' },
+            { id: 2, nama: 'Akmal Zaidan', kategori: 'Staff Kantor', projek: 'Kantor Pusat', upahHarian: 0, tarifLembur: 0, uid: '9491F306', noHp: '0812-9876-5432' },
+            { id: 3, nama: 'Anom Arya', kategori: 'Staff Kantor', projek: 'Kantor Pusat', upahHarian: 0, tarifLembur: 0, uid: 'A3B7C901', noHp: '0813-1122-3344' },
+            { id: 4, nama: 'Joko Susilo', kategori: 'Pekerja Harian', projek: 'Proyek Bagian A', upahHarian: 120000, tarifLembur: 25000, uid: '83A192B4', noHp: '0857-1234-5678' },
+            { id: 5, nama: 'Slamet Riyadi', kategori: 'Pekerja Harian', projek: 'Proyek Bagian B', upahHarian: 120000, tarifLembur: 25000, uid: '47C201F8', noHp: '0858-8765-4321' },
+            { id: 6, nama: 'Bambang Triyono', kategori: 'Pekerja Harian', projek: 'Proyek Bagian C', upahHarian: 110000, tarifLembur: 25000, uid: '19E873A2', noHp: '0878-9988-7766' }
+        ];
 
-                rows.forEach(tr => {
-                    const rowKat = tr.getAttribute('data-kategori');
-                    const rowDev = tr.getAttribute('data-device');
-                    
-                    const matchKat = (!kat || kat === 'Semua (2 Kategori)') ? true : (rowKat === kat);
-                    const matchDev = (!dev || dev === 'Semua Device') ? true : (rowDev === dev);
+        const DEFAULT_ABSENSI = [
+            { id: 1, nama: 'Joko Susilo', kategori: 'Pekerja Harian', projek: 'Proyek Bagian A', jamMasuk: '07:15:20', jamPulang: '19:35:10', statusMasuk: 'Tepat Waktu', lembur: 'Lembur 2 Jam' },
+            { id: 2, nama: 'Slamet Riyadi', kategori: 'Pekerja Harian', projek: 'Proyek Bagian B', jamMasuk: '07:22:14', jamPulang: '18:32:00', statusMasuk: 'Tepat Waktu', lembur: 'Lembur 1 Jam' },
+            { id: 3, nama: 'Bambang Triyono', kategori: 'Pekerja Harian', projek: 'Proyek Bagian C', jamMasuk: '07:45:00', jamPulang: '19:30:15', statusMasuk: 'Terlambat 15 Mnt', lembur: 'Lembur 2 Jam' },
+            { id: 4, nama: 'Dimas Arya Kedhaton', kategori: 'Staff Kantor', projek: 'Kantor Pusat', jamMasuk: '08:22:45', jamPulang: '17:15:30', statusMasuk: 'Tepat Waktu', lembur: 'Normal (0 Jam)' },
+            { id: 5, nama: 'Akmal Zaidan', kategori: 'Staff Kantor', projek: 'Kantor Pusat', jamMasuk: '08:42:10', jamPulang: '17:25:00', statusMasuk: 'Terlambat 12 Mnt', lembur: 'Normal (0 Jam)' }
+        ];
 
-                    if (matchKat && matchDev) {
-                        tr.style.display = '';
-                        visibleCount++;
-                        if (rowKat === 'Pekerja Harian') harianCount++;
-                        if (rowKat === 'Staff Kantor') staffCount++;
-                    } else {
-                        tr.style.display = 'none';
+        // Muat dari localStorage atau default
+        let state = {
+            proyekList: JSON.parse(localStorage.getItem('jk_proyekList')) || DEFAULT_PROYEK,
+            pekerjaList: JSON.parse(localStorage.getItem('jk_pekerjaList')) || DEFAULT_PEKERJA,
+            absensiHariIni: JSON.parse(localStorage.getItem('jk_absensiHariIni')) || DEFAULT_ABSENSI,
+            filterProyek: 'Semua'
+        };
+
+        function simpanKeStorage() {
+            localStorage.setItem('jk_proyekList', JSON.stringify(state.proyekList));
+            localStorage.setItem('jk_pekerjaList', JSON.stringify(state.pekerjaList));
+            localStorage.setItem('jk_absensiHariIni', JSON.stringify(state.absensiHariIni));
+        }
+
+        // JAM DIGITAL
+        function updateClock() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const dateStr = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('clockDisplay').textContent = timeStr + ' WITA';
+            document.getElementById('dateDisplay').textContent = dateStr;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // GANTI TAB
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('border-teal-500', 'text-white', 'bg-slate-800');
+                btn.classList.add('border-transparent', 'text-slate-400');
+            });
+
+            document.getElementById('view-' + tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('tabBtn-' + tabId);
+            activeBtn.classList.remove('border-transparent', 'text-slate-400');
+            activeBtn.classList.add('border-teal-500', 'text-white', 'bg-slate-800');
+
+            if (tabId === 'absensi') renderAbsensi();
+            if (tabId === 'proyek') renderProyek();
+            if (tabId === 'pekerja') renderPekerja();
+            if (tabId === 'upah') renderUpah();
+        }
+
+        // RENDER FILTER PROYEK TOMBOL CEPAT
+        function renderFilterButtons() {
+            const container = document.getElementById('filterButtonGroup');
+            let html = `
+                <button onclick="setFilterProyek('Semua')"
+                        class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${state.filterProyek === 'Semua' ? 'bg-slate-900 text-white shadow' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
+                    Semua (${state.absensiHariIni.length})
+                </button>
+            `;
+
+            state.proyekList.forEach(p => {
+                const count = state.absensiHariIni.filter(a => a.projek === p.nama).length;
+                const isSelected = state.filterProyek === p.nama;
+                html += `
+                    <button onclick="setFilterProyek('${p.nama}')"
+                            class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${isSelected ? 'bg-amber-600 text-white shadow' : 'bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100'}">
+                        <i class="fas fa-hard-hat mr-1"></i> ${p.nama} (${count})
+                    </button>
+                `;
+            });
+
+            const countKantor = state.absensiHariIni.filter(a => a.projek === 'Kantor Pusat').length;
+            const isKantor = state.filterProyek === 'Kantor Pusat';
+            html += `
+                <button onclick="setFilterProyek('Kantor Pusat')"
+                        class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${isKantor ? 'bg-blue-600 text-white shadow' : 'bg-blue-50 text-blue-900 border border-blue-200 hover:bg-blue-100'}">
+                    <i class="fas fa-building mr-1"></i> Staff Kantor (${countKantor})
+                </button>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function setFilterProyek(namaProyek) {
+            state.filterProyek = namaProyek;
+            renderFilterButtons();
+            renderAbsensi();
+        }
+
+        // RENDER TAB 1: ABSENSI
+        function renderAbsensi() {
+            renderFilterButtons();
+            document.getElementById('labelFilterAktif').textContent = 'Filter: ' + state.filterProyek;
+
+            // Update stats
+            const totalHadir = state.absensiHariIni.length;
+            const harian = state.absensiHariIni.filter(a => a.kategori === 'Pekerja Harian').length;
+            const kantor = state.absensiHariIni.filter(a => a.kategori === 'Staff Kantor').length;
+
+            let totalEstimasiUpah = 0;
+            state.absensiHariIni.forEach(a => {
+                const p = state.pekerjaList.find(x => x.nama === a.nama);
+                if (p && p.upahHarian) totalEstimasiUpah += p.upahHarian;
+            });
+
+            document.getElementById('statTotalHadir').textContent = totalHadir;
+            document.getElementById('statPekerjaHarian').textContent = harian;
+            document.getElementById('statStaffKantor').textContent = kantor;
+            document.getElementById('statTotalUpahHariIni').textContent = 'Rp ' + totalEstimasiUpah.toLocaleString('id-ID');
+
+            const tbody = document.getElementById('tabelAbsensiBody');
+            let data = state.absensiHariIni;
+            if (state.filterProyek !== 'Semua') {
+                data = data.filter(a => a.projek === state.filterProyek);
+            }
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-slate-400">Tidak ada pekerja hadir pada filter ini</td></tr>`;
+                return;
+            }
+
+            let html = '';
+            data.forEach((row, idx) => {
+                const isHarian = row.kategori === 'Pekerja Harian';
+                const badgeKat = isHarian 
+                    ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-800"><i class="fas fa-hammer mr-1"></i> Harian</span>'
+                    : '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-800"><i class="fas fa-user-tie mr-1"></i> Kantor</span>';
+
+                const badgeProjek = row.projek === 'Kantor Pusat'
+                    ? '<span class="inline-flex items-center px-2.5 py-1 rounded text-xs font-bold bg-slate-100 text-slate-700">Kantor Pusat</span>'
+                    : `<span class="inline-flex items-center px-2.5 py-1 rounded text-xs font-bold bg-amber-500 text-white shadow-sm"><i class="fas fa-hard-hat mr-1"></i> ${row.projek}</span>`;
+
+                const badgeStatus = row.statusMasuk === 'Tepat Waktu'
+                    ? '<span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded">Tepat Waktu</span>'
+                    : `<span class="text-xs font-bold text-rose-700 bg-rose-100 px-2.5 py-0.5 rounded">${row.statusMasuk}</span>`;
+
+                const badgeLembur = row.lembur && row.lembur.includes('Lembur')
+                    ? `<span class="text-xs font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded">${row.lembur}</span>`
+                    : '<span class="text-xs text-slate-400">Normal</span>';
+
+                const btnPulang = !row.jamPulang 
+                    ? `<button onclick="catatPulang('${row.nama}')" class="text-xs bg-slate-800 hover:bg-slate-900 text-white px-2.5 py-1 rounded font-semibold">Absen Pulang</button>`
+                    : '<span class="text-xs text-emerald-600 font-bold">✓ Selesai</span>';
+
+                html += `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="p-3.5 text-center text-slate-400 font-mono text-xs">${idx + 1}</td>
+                        <td class="p-3.5 font-bold text-slate-900">${row.nama}</td>
+                        <td class="p-3.5">${badgeKat}</td>
+                        <td class="p-3.5 bg-amber-50/50 border-x border-amber-100">${badgeProjek}</td>
+                        <td class="p-3.5 text-center font-mono font-semibold text-slate-700">${row.jamMasuk}</td>
+                        <td class="p-3.5 text-center font-mono text-slate-700">${row.jamPulang || '<span class="text-amber-500 font-semibold italic">Belum Pulang</span>'}</td>
+                        <td class="p-3.5 text-center">${badgeStatus}</td>
+                        <td class="p-3.5 text-center">${badgeLembur}</td>
+                        <td class="p-3.5 text-center no-print">${btnPulang}</td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // RENDER TAB 2: PROYEK
+        function renderProyek() {
+            document.getElementById('badgeJumlahProyek').textContent = state.proyekList.length;
+            const tbody = document.getElementById('tabelProyekBody');
+            let html = '';
+
+            state.proyekList.forEach((p, idx) => {
+                const jumlahPekerja = state.pekerjaList.filter(k => k.projek === p.nama).length;
+                html += `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-3.5 text-center text-slate-400 font-mono text-xs">${idx + 1}</td>
+                        <td class="p-3.5 font-bold text-slate-900 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                            <span>${p.nama}</span>
+                        </td>
+                        <td class="p-3.5 text-slate-600">${p.deskripsi || '-'}</td>
+                        <td class="p-3.5 text-center">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800">
+                                ${jumlahPekerja} Orang Pekerja
+                            </span>
+                        </td>
+                        <td class="p-3.5 text-center">
+                            <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">Aktif</span>
+                        </td>
+                        <td class="p-3.5 text-center">
+                            <button onclick="hapusProyek('${p.id}')" class="text-xs text-rose-600 hover:text-rose-800 font-bold">Hapus</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function simpanProyekBaru() {
+            const nama = document.getElementById('inputNamaProyek').value.trim();
+            const deskripsi = document.getElementById('inputKetProyek').value.trim();
+            if (!nama) return;
+
+            const newId = 'PRJ-' + Date.now();
+            state.proyekList.push({ id: newId, nama, deskripsi, status: 'Aktif' });
+            simpanKeStorage();
+
+            document.getElementById('inputNamaProyek').value = '';
+            document.getElementById('inputKetProyek').value = '';
+            renderProyek();
+            alert('Proyek "' + nama + '" berhasil ditambahkan di awal!');
+        }
+
+        function hapusProyek(id) {
+            const p = state.proyekList.find(x => x.id === id);
+            if (!p) return;
+            if (confirm('Hapus proyek "' + p.nama + '"? Pekerja di proyek ini akan dialihkan ke Proyek A.')) {
+                state.proyekList = state.proyekList.filter(x => x.id !== id);
+                state.pekerjaList.forEach(k => {
+                    if (k.projek === p.nama) k.projek = 'Proyek Bagian A';
+                });
+                simpanKeStorage();
+                renderProyek();
+            }
+        }
+
+        // RENDER TAB 3: DATA PEKERJA
+        function renderPekerja() {
+            document.getElementById('badgeJumlahPekerja').textContent = state.pekerjaList.length;
+            const tbody = document.getElementById('tabelPekerjaBody');
+            let html = '';
+
+            state.pekerjaList.forEach((k, idx) => {
+                const isHarian = k.kategori === 'Pekerja Harian';
+                const badgeKat = isHarian
+                    ? '<span class="text-xs font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded">Pekerja Harian</span>'
+                    : '<span class="text-xs font-bold text-blue-800 bg-blue-100 px-2 py-0.5 rounded">Staff Kantor</span>';
+
+                const badgeProjek = k.projek === 'Kantor Pusat'
+                    ? '<span class="text-xs font-medium text-slate-500">Kantor Pusat</span>'
+                    : `<span class="text-xs font-bold text-amber-900 bg-amber-100 border border-amber-300 px-2.5 py-1 rounded"><i class="fas fa-hard-hat mr-1"></i> ${k.projek}</span>`;
+
+                const upahStr = k.upahHarian > 0 
+                    ? 'Rp ' + k.upahHarian.toLocaleString('id-ID') + ' /hari'
+                    : 'Gaji Bulanan Tetap';
+
+                html += `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-3.5 text-center text-slate-400 font-mono text-xs">${idx + 1}</td>
+                        <td class="p-3.5 font-bold text-slate-900">${k.nama}</td>
+                        <td class="p-3.5">${badgeKat}</td>
+                        <td class="p-3.5 bg-amber-50/50 border-x border-amber-100">${badgeProjek}</td>
+                        <td class="p-3.5 text-right font-mono font-semibold text-slate-800">${upahStr}</td>
+                        <td class="p-3.5 text-center font-mono text-xs text-slate-600">${k.uid || '-'}</td>
+                        <td class="p-3.5 text-center text-xs text-slate-600">${k.noHp || '-'}</td>
+                        <td class="p-3.5 text-center">
+                            <button onclick="editPekerja(${k.id})" class="text-xs text-blue-600 hover:text-blue-800 font-bold mr-2">Edit</button>
+                            <button onclick="hapusPekerja(${k.id})" class="text-xs text-rose-600 hover:text-rose-800 font-bold">Hapus</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // RENDER TAB 4: REKAP UPAH PER PROYEK
+        function renderUpah() {
+            const containerRingkasan = document.getElementById('containerRingkasanUpahProyek');
+            let ringkasanHtml = '';
+
+            let totalSemuaUpah = 0;
+
+            state.proyekList.forEach(p => {
+                const pekerjaDiProyek = state.pekerjaList.filter(k => k.projek === p.nama && k.kategori === 'Pekerja Harian');
+                const hadirCount = state.absensiHariIni.filter(a => a.projek === p.nama).length;
+
+                let totalUpahProyek = 0;
+                pekerjaDiProyek.forEach(pk => {
+                    // Cek absensi
+                    const abs = state.absensiHariIni.find(a => a.nama === pk.nama);
+                    if (abs) {
+                        totalUpahProyek += (pk.upahHarian || 120000);
+                        if (abs.lembur && abs.lembur.includes('1 Jam')) totalUpahProyek += (pk.tarifLembur || 25000);
+                        if (abs.lembur && abs.lembur.includes('2 Jam')) totalUpahProyek += (pk.tarifLembur || 25000) * 2;
                     }
                 });
 
-                const displayEl = document.getElementById('countHadirDisplay');
-                if (displayEl) displayEl.textContent = visibleCount;
+                totalSemuaUpah += totalUpahProyek;
 
-                const subtextEl = document.getElementById('countHadirSubtext');
-                if (subtextEl) {
-                    if (!kat || kat === 'Semua (2 Kategori)') {
-                        subtextEl.textContent = staffCount + ' Staff Kantor + ' + harianCount + ' Pekerja Harian';
-                    } else if (kat === 'Pekerja Harian') {
-                        subtextEl.textContent = harianCount + ' Pekerja Harian';
-                    } else {
-                        subtextEl.textContent = staffCount + ' Staff Kantor';
-                    }
+                ringkasanHtml += `
+                    <div class="bg-white p-5 rounded-lg border-t-4 border-amber-500 shadow-sm">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-slate-500 uppercase">Beban Biaya Upah</span>
+                            <span class="text-xs bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded">${hadirCount} Hadir</span>
+                        </div>
+                        <h4 class="text-base font-bold text-slate-900 mt-1">${p.nama}</h4>
+                        <p class="text-2xl font-extrabold text-amber-700 mt-2 font-mono">Rp ${totalUpahProyek.toLocaleString('id-ID')}</p>
+                        <p class="text-xs text-slate-400 mt-1">${pekerjaDiProyek.length} Pekerja terdaftar di bagian ini</p>
+                    </div>
+                `;
+            });
+
+            containerRingkasan.innerHTML = ringkasanHtml;
+
+            // Rincian per orang
+            const tbody = document.getElementById('tabelUpahBody');
+            let html = '';
+            const pekerjaHarian = state.pekerjaList.filter(k => k.kategori === 'Pekerja Harian');
+
+            pekerjaHarian.forEach((pk, idx) => {
+                const abs = state.absensiHariIni.find(a => a.nama === pk.nama);
+                const hadirHariIni = abs ? 1 : 0;
+                const tarif = pk.upahHarian || 120000;
+                let lemburNominal = 0;
+                let lemburText = '-';
+
+                if (abs && abs.lembur && abs.lembur.includes('1 Jam')) {
+                    lemburNominal = pk.tarifLembur || 25000;
+                    lemburText = '1 Jam (+Rp ' + lemburNominal.toLocaleString('id-ID') + ')';
+                } else if (abs && abs.lembur && abs.lembur.includes('2 Jam')) {
+                    lemburNominal = (pk.tarifLembur || 25000) * 2;
+                    lemburText = '2 Jam (+Rp ' + lemburNominal.toLocaleString('id-ID') + ')';
                 }
 
-                const emptyRow = document.getElementById('emptyAbsensiRow');
-                if (emptyRow) emptyRow.style.display = (visibleCount === 0) ? '' : 'none';
+                const subtotal = hadirHariIni * tarif;
+                const totalDiterima = subtotal + lemburNominal;
+
+                html += `
+                    <tr class="hover:bg-slate-50">
+                        <td class="p-3.5 text-center text-slate-400 font-mono text-xs">${idx + 1}</td>
+                        <td class="p-3.5 font-bold text-slate-900">${pk.nama}</td>
+                        <td class="p-3.5 bg-amber-50/50 border-x border-amber-100 font-bold text-amber-900">${pk.projek}</td>
+                        <td class="p-3.5 text-center font-bold ${hadirHariIni ? 'text-emerald-700' : 'text-slate-400'}">${hadirHariIni ? '1 Hari (Hadir)' : '0 (Tidak Hadir)'}</td>
+                        <td class="p-3.5 text-right font-mono">Rp ${tarif.toLocaleString('id-ID')}</td>
+                        <td class="p-3.5 text-right font-mono">Rp ${subtotal.toLocaleString('id-ID')}</td>
+                        <td class="p-3.5 text-center text-xs">${lemburText}</td>
+                        <td class="p-3.5 text-right font-mono font-bold text-emerald-700 bg-emerald-50">Rp ${totalDiterima.toLocaleString('id-ID')}</td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // MODAL ABSENSI
+        function openModalAbsen() {
+            const select = document.getElementById('modalAbsenPekerjaSelect');
+            let opt = '<option value="">-- Pilih Pekerja --</option>';
+            state.pekerjaList.forEach(p => {
+                opt += `<option value="${p.nama}">${p.nama} (${p.kategori} - ${p.projek})</option>`;
+            });
+            select.innerHTML = opt;
+            document.getElementById('modalAbsenProyekDisplay').value = '';
+            document.getElementById('modalAbsen').classList.remove('hidden');
+        }
+
+        function closeModalAbsen() {
+            document.getElementById('modalAbsen').classList.add('hidden');
+        }
+
+        function updateModalProyekOtomatis() {
+            const nama = document.getElementById('modalAbsenPekerjaSelect').value;
+            const p = state.pekerjaList.find(x => x.nama === nama);
+            if (p) {
+                document.getElementById('modalAbsenProyekDisplay').value = p.projek;
+            }
+        }
+
+        function simpanAbsensiManual() {
+            const nama = document.getElementById('modalAbsenPekerjaSelect').value;
+            if (!nama) return alert('Pilih nama pekerja');
+
+            const p = state.pekerjaList.find(x => x.nama === nama);
+            const jamMasuk = document.getElementById('modalAbsenJamMasuk').value + ':00';
+            const jamPulang = document.getElementById('modalAbsenJamPulang').value ? document.getElementById('modalAbsenJamPulang').value + ':00' : null;
+            const lembur = document.getElementById('modalAbsenLembur').value;
+
+            // Cek apakah sudah absen hari ini
+            const adaIndex = state.absensiHariIni.findIndex(a => a.nama === nama);
+            const record = {
+                id: Date.now(),
+                nama: nama,
+                kategori: p.kategori,
+                projek: p.projek,
+                jamMasuk: jamMasuk,
+                jamPulang: jamPulang,
+                statusMasuk: 'Tepat Waktu',
+                lembur: lembur
+            };
+
+            if (adaIndex >= 0) {
+                state.absensiHariIni[adaIndex] = record;
+            } else {
+                state.absensiHariIni.push(record);
             }
 
-            function resetFilterDashboard() {
-                const selectKat = document.getElementById('filterKategori');
-                const selectDev = document.getElementById('filterDevice');
-                if (selectKat) selectKat.value = '';
-                if (selectDev) selectDev.value = '';
-                jalankanFilterDashboard();
+            simpanKeStorage();
+            closeModalAbsen();
+            renderAbsensi();
+            alert('Kehadiran ' + nama + ' (' + p.projek + ') berhasil dicatat!');
+        }
+
+        function catatPulang(nama) {
+            const a = state.absensiHariIni.find(x => x.nama === nama);
+            if (!a) return;
+            const now = new Date();
+            a.jamPulang = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(/\./g, ':');
+            if (now.getHours() >= 18) {
+                a.lembur = 'Lembur 1 Jam';
+            }
+            simpanKeStorage();
+            renderAbsensi();
+            alert('Absen pulang ' + nama + ' tercatat pukul ' + a.jamPulang);
+        }
+
+        // MODAL PEKERJA
+        function openModalPekerja(id = null) {
+            // Update dropdown proyek di form pekerja
+            const select = document.getElementById('pekerjaProyekSelect');
+            let opt = '';
+            state.proyekList.forEach(p => {
+                opt += `<option value="${p.nama}">${p.nama} (${p.deskripsi || 'Proyek Lapangan'})</option>`;
+            });
+            opt += `<option value="Kantor Pusat">Kantor Pusat (Khusus Staff Kantor)</option>`;
+            select.innerHTML = opt;
+
+            if (id) {
+                const k = state.pekerjaList.find(x => x.id === id);
+                document.getElementById('editPekerjaId').value = k.id;
+                document.getElementById('pekerjaNama').value = k.nama;
+                document.getElementById('pekerjaKategori').value = k.kategori;
+                document.getElementById('pekerjaProyekSelect').value = k.projek;
+                document.getElementById('pekerjaUpah').value = k.upahHarian || 0;
+                document.getElementById('pekerjaLembur').value = k.tarifLembur || 0;
+                document.getElementById('pekerjaUid').value = k.uid || '';
+                document.getElementById('pekerjaNoHp').value = k.noHp || '';
+            } else {
+                document.getElementById('editPekerjaId').value = '';
+                document.getElementById('pekerjaNama').value = '';
+                document.getElementById('pekerjaKategori').value = 'Pekerja Harian';
+                document.getElementById('pekerjaProyekSelect').selectedIndex = 0;
+                document.getElementById('pekerjaUpah').value = '120000';
+                document.getElementById('pekerjaLembur').value = '25000';
+                document.getElementById('pekerjaUid').value = '';
+                document.getElementById('pekerjaNoHp').value = '';
+            }
+            document.getElementById('modalPekerja').classList.remove('hidden');
+        }
+
+        function closeModalPekerja() {
+            document.getElementById('modalPekerja').classList.add('hidden');
+        }
+
+        function toggleKategoriForm(kat) {
+            const selectProyek = document.getElementById('pekerjaProyekSelect');
+            if (kat === 'Staff Kantor') {
+                selectProyek.value = 'Kantor Pusat';
+                document.getElementById('pekerjaUpah').value = '0';
+            } else {
+                if (selectProyek.value === 'Kantor Pusat') {
+                    selectProyek.selectedIndex = 0;
+                }
+                document.getElementById('pekerjaUpah').value = '120000';
+            }
+        }
+
+        function simpanPekerja() {
+            const id = document.getElementById('editPekerjaId').value;
+            const nama = document.getElementById('pekerjaNama').value.trim();
+            const kategori = document.getElementById('pekerjaKategori').value;
+            const projek = document.getElementById('pekerjaProyekSelect').value;
+            const upahHarian = parseInt(document.getElementById('pekerjaUpah').value) || 0;
+            const tarifLembur = parseInt(document.getElementById('pekerjaLembur').value) || 0;
+            const uid = document.getElementById('pekerjaUid').value.trim();
+            const noHp = document.getElementById('pekerjaNoHp').value.trim();
+
+            if (!nama) return alert('Nama pekerja harus diisi');
+
+            if (id) {
+                const k = state.pekerjaList.find(x => x.id == id);
+                if (k) {
+                    k.nama = nama;
+                    k.kategori = kategori;
+                    k.projek = projek;
+                    k.upahHarian = upahHarian;
+                    k.tarifLembur = tarifLembur;
+                    k.uid = uid;
+                    k.noHp = noHp;
+                }
+            } else {
+                const newId = Date.now();
+                state.pekerjaList.push({
+                    id: newId,
+                    nama,
+                    kategori,
+                    projek,
+                    upahHarian,
+                    tarifLembur,
+                    uid,
+                    noHp
+                });
             }
 
-            // Jalankan filter saat render
-            jalankanFilterDashboard();
-        </script>
-    
-        </main>
-    </div>
+            simpanKeStorage();
+            closeModalPekerja();
+            renderPekerja();
+            alert('Data pekerja ' + nama + ' berhasil disimpan dengan penugasan ke: ' + projek);
+        }
 
+        function editPekerja(id) {
+            openModalPekerja(id);
+        }
+
+        function hapusPekerja(id) {
+            const k = state.pekerjaList.find(x => x.id === id);
+            if (!k) return;
+            if (confirm('Hapus pekerja "' + k.nama + '"?')) {
+                state.pekerjaList = state.pekerjaList.filter(x => x.id !== id);
+                simpanKeStorage();
+                renderPekerja();
+            }
+        }
+
+        // INISIALISASI
+        renderAbsensi();
+    </script>
 </body>
 </html>
