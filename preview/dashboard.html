@@ -17,7 +17,7 @@
     <aside class="fixed top-0 left-0 w-64 h-full bg-slate-800 text-white flex flex-col z-50 shadow-xl">
         <div class="px-5 py-5 border-b border-slate-700 flex items-center gap-3">
             <img src="images/logo.png" alt="Logo Jaya Kedhaton" 
-                 class="w-12 h-12 object-contain shrink-0 bg-white p-1 rounded">
+                 class="w-12 h-12 object-contain shrink-0">
             <div class="overflow-hidden">
                 <h1 class="text-base font-bold tracking-wide text-white leading-tight truncate">Jaya Kedhaton</h1>
                 <p class="text-xs text-slate-400 mt-0.5 truncate">Sistem Absensi Digital</p>
@@ -394,23 +394,9 @@
                     return;
                 }
 
-                // Update styling tombol Projek
-                const prjButtons = [
-                    { id: 'btnPrjAll', val: '' },
-                    { id: 'btnPrjA', val: 'Projek A' },
-                    { id: 'btnPrjB', val: 'Projek B' },
-                    { id: 'btnPrjC', val: 'Projek C' }
-                ];
-
-                prjButtons.forEach(btn => {
-                    const el = document.getElementById(btn.id);
-                    if (!el) return;
-                    if (btn.val === prj) {
-                        el.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-amber-700 text-white shadow';
-                    } else {
-                        el.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-amber-900 border border-amber-300 hover:bg-amber-100';
-                    }
-                });
+                if (typeof renderFilterProjekButtons === 'function') {
+                    renderFilterProjekButtons('#boxFilterProjek', filterAktif.projek, 'setFilterProjek');
+                }
 
                 updateTabelFilter();
             }
@@ -475,5 +461,6 @@
 
         </main>
     </div>
+<script src="projek-manager.js"></script>
 </body>
 </html>

@@ -7,17 +7,14 @@
     <link rel="icon" type="image/png" href="images/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    </style>
+    <style>body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }</style>
 </head>
 <body class="bg-gray-100 min-h-screen">
 
     <!-- SIDEBAR -->
     <aside class="fixed top-0 left-0 w-64 h-full bg-slate-800 text-white flex flex-col z-50 shadow-xl">
         <div class="px-5 py-5 border-b border-slate-700 flex items-center gap-3">
-            <img src="images/logo.png" alt="Logo Jaya Kedhaton" 
-                 class="w-12 h-12 object-contain shrink-0">
+            <img src="images/logo.png" alt="Logo Jaya Kedhaton" class="w-12 h-12 object-contain shrink-0">
             <div class="overflow-hidden">
                 <h1 class="text-base font-bold tracking-wide text-white leading-tight truncate">Jaya Kedhaton</h1>
                 <p class="text-xs text-slate-400 mt-0.5 truncate">Sistem Absensi Digital</p>
@@ -25,49 +22,40 @@
         </div>
 
         <nav class="flex-1 px-4 py-5 space-y-1.5 overflow-y-auto">
-            
-            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
+            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors text-slate-300 hover:bg-slate-700 hover:text-white">
                 <i class="fas fa-chart-bar w-6 text-center text-lg"></i>
                 <span>Dashboard</span>
-                
             </a>
-        
-            <a href="riwayat.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
+            <a href="riwayat.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors text-slate-300 hover:bg-slate-700 hover:text-white">
                 <i class="fas fa-clipboard-list w-6 text-center text-lg"></i>
                 <span>Riwayat Absensi</span>
-                
             </a>
-        
-            <a href="rekap.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
+            <a href="rekap.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors text-slate-300 hover:bg-slate-700 hover:text-white">
                 <i class="fas fa-calendar-week w-6 text-center text-lg"></i>
                 <span>Rekap Mingguan</span>
-                
             </a>
-        
-            <a href="upah.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
+            <a href="upah.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors text-slate-300 hover:bg-slate-700 hover:text-white">
                 <i class="fas fa-money-bill-wave w-6 text-center text-lg"></i>
                 <span>Upah & Lembur</span>
                 <span class="bg-amber-400 text-slate-900 text-xs font-bold px-2 py-0.5 rounded-full uppercase ml-auto">Baru</span>
             </a>
-        
-            <a href="karyawan.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
+            <a href="karyawan.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors text-slate-300 hover:bg-slate-700 hover:text-white">
                 <i class="fas fa-users w-6 text-center text-lg"></i>
                 <span>Karyawan</span>
-                
             </a>
-        
-            <a href="kartu-rfid.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
+            <a href="kartu-rfid.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors text-slate-300 hover:bg-slate-700 hover:text-white">
                 <i class="fas fa-id-card-clip w-6 text-center text-lg"></i>
                 <span>Kartu RFID</span>
-                
             </a>
-        
-            <a href="device.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 bg-teal-600 text-white shadow-md">
+            <a href="device.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors bg-teal-600 text-white shadow-md">
                 <i class="fas fa-desktop w-6 text-center text-lg"></i>
                 <span>Device</span>
-                
             </a>
-        
+            <a href="audit-log.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-shield-halved w-6 text-center text-lg"></i>
+                <span>Log Aktivitas</span>
+                <span class="bg-rose-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ml-auto tracking-wider">Admin</span>
+            </a>
         </nav>
 
         <div class="px-6 py-4 border-t border-slate-700 text-xs text-slate-400">
@@ -78,17 +66,24 @@
     <!-- MAIN CONTENT -->
     <div class="ml-64 min-h-screen flex flex-col">
         <!-- Top Bar -->
-        <header class="bg-white shadow-sm px-8 py-4 flex items-center justify-between sticky top-0 z-40">
-            <div class="text-base text-slate-600">
-                Login sebagai <span class="font-semibold text-slate-800">Admin Keuangan & Absensi</span> - admin
+        <header class="bg-white shadow-sm px-8 py-3.5 flex items-center justify-between sticky top-0 z-40">
+            <div class="flex items-center gap-3 text-sm text-slate-600">
+                <div class="w-9 h-9 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                    A
+                </div>
+                <div>
+                    <div class="font-bold text-slate-800 leading-tight">Admin Keuangan & Absensi</div>
+                    <div class="text-xs text-slate-500">Staf Operasional &bull; <span class="font-mono text-slate-400">@admin</span></div>
+                </div>
+                <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-teal-100 text-teal-800 border border-teal-200">
+                    <i class="fas fa-clock mr-1 text-teal-600"></i> <span id="waktuRealtime">--:--:-- WIB</span>
+                </span>
             </div>
             <div class="flex items-center gap-3">
-                <a href="javascript:location.reload()"
-                   class="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+                <a href="javascript:location.reload()" class="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2 px-4 rounded-lg transition-colors text-sm">
                     <i class="fas fa-sync-alt"></i> Refresh
                 </a>
-                <a href="login.html"
-                   class="inline-flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+                <a href="login.html" class="inline-flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 font-medium py-2 px-4 rounded-lg transition-colors text-sm">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
             </div>
@@ -96,116 +91,393 @@
 
         <!-- Page Content -->
         <main class="flex-1 p-8">
-            
-        <div class="flex items-center justify-between mb-8">
-            <div>
-                <h2 class="text-2xl font-bold text-slate-800">Device Absensi</h2>
-                <p class="text-base text-slate-500 mt-1">Kelola perangkat keras alat absensi Dual-ESP32 (RFID + Kamera)</p>
-            </div>
-            <button onclick="alert('Tambah device baru')" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-6 rounded-lg text-base shadow inline-flex items-center cursor-pointer">
-                <i class="fas fa-plus mr-2"></i> Tambah Device
-            </button>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-teal-500">
-                <p class="text-sm font-medium text-slate-500 uppercase">Total Device</p>
-                <p class="text-3xl font-bold text-slate-800 mt-1">2 Unit</p>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-green-500">
-                <p class="text-sm font-medium text-slate-500 uppercase">Device Online</p>
-                <p class="text-3xl font-bold text-green-700 mt-1">1 Unit</p>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-slate-400">
-                <p class="text-sm font-medium text-slate-500 uppercase">Device Offline</p>
-                <p class="text-3xl font-bold text-slate-600 mt-1">1 Unit</p>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead>
-                        <tr class="bg-slate-700 text-white text-xs uppercase">
-                            <th class="px-6 py-4 text-left">No</th>
-                            <th class="px-6 py-4 text-left">Kode Device</th>
-                            <th class="px-6 py-4 text-left">Lokasi</th>
-                            <th class="px-6 py-4 text-left">Tipe Hardware</th>
-                            <th class="px-6 py-4 text-left">IP Address</th>
-                            <th class="px-6 py-4 text-left">Terakhir Aktif</th>
-                            <th class="px-6 py-4 text-center">Status</th>
-                            <th class="px-6 py-4 text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100">
-                        
-        <tr class="hover:bg-slate-50 transition-colors">
-            <td class="px-6 py-4 text-base text-slate-500">1</td>
-            <td class="px-6 py-4 text-base font-bold text-slate-800">
-                <span class="bg-slate-100 px-3 py-1 rounded font-mono">KANTORJK_01</span>
-            </td>
-            <td class="px-6 py-4 text-base text-slate-700">Pintu Masuk Utama</td>
-            <td class="px-6 py-4 text-base text-slate-600">
-                <span class="inline-flex items-center text-sm bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md font-medium">
-                    <i class="fas fa-camera mr-1.5 text-xs"></i> Dual ESP32 (RFID + Cam)
-                </span>
-            </td>
-            <td class="px-6 py-4 text-sm font-mono text-slate-600">192.168.1.100</td>
-            <td class="px-6 py-4 text-sm text-slate-500">2026-08-03 19:35:10</td>
-            <td class="px-6 py-4 text-center">
-                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-green-100 text-green-700"><span class="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></span> Online</span>
-            </td>
-            <td class="px-6 py-4 text-center">
-                <div class="flex items-center justify-center gap-2">
-                    <button onclick="alert('Live Stream Kamera ESP32-S3 (OV5640) aktif di IP: 192.168.1.100:81/stream')"
-                            class="bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium py-1.5 px-3 rounded text-sm transition-colors inline-flex items-center cursor-pointer">
-                        <i class="fas fa-video mr-1"></i> Live Cam
-                    </button>
-                    <button onclick="alert('Pengaturan parameter ESP32 Master & UART')"
-                            class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded text-sm transition-colors cursor-pointer">
-                        <i class="fas fa-cog mr-1"></i> Setting
-                    </button>
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800">Device Absensi Mesin</h2>
+                    <p class="text-base text-slate-500 mt-1">Monitoring status perangkat Dual-ESP32 (RFID RC522 + Kamera OV5640) secara real-time</p>
                 </div>
-            </td>
-        </tr>
-    
-        <tr class="hover:bg-slate-50 transition-colors">
-            <td class="px-6 py-4 text-base text-slate-500">2</td>
-            <td class="px-6 py-4 text-base font-bold text-slate-800">
-                <span class="bg-slate-100 px-3 py-1 rounded font-mono">KANTORJK_02</span>
-            </td>
-            <td class="px-6 py-4 text-base text-slate-700">Pintu Belakang</td>
-            <td class="px-6 py-4 text-base text-slate-600">
-                <span class="inline-flex items-center text-sm bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md font-medium">
-                    <i class="fas fa-camera mr-1.5 text-xs"></i> Dual ESP32 (RFID Only)
-                </span>
-            </td>
-            <td class="px-6 py-4 text-sm font-mono text-slate-600">192.168.1.101</td>
-            <td class="px-6 py-4 text-sm text-slate-500">2026-07-30 17:00:00</td>
-            <td class="px-6 py-4 text-center">
-                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-slate-100 text-slate-600"><span class="w-2 h-2 rounded-full bg-slate-400 mr-2"></span> Offline</span>
-            </td>
-            <td class="px-6 py-4 text-center">
-                <div class="flex items-center justify-center gap-2">
-                    <button onclick="alert('Live Stream Kamera ESP32-S3 (OV5640) aktif di IP: 192.168.1.101:81/stream')"
-                            class="bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium py-1.5 px-3 rounded text-sm transition-colors inline-flex items-center cursor-pointer">
-                        <i class="fas fa-video mr-1"></i> Live Cam
-                    </button>
-                    <button onclick="alert('Pengaturan parameter ESP32 Master & UART')"
-                            class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded text-sm transition-colors cursor-pointer">
-                        <i class="fas fa-cog mr-1"></i> Setting
-                    </button>
-                </div>
-            </td>
-        </tr>
-    
-                    </tbody>
-                </table>
+                <button onclick="bukaModalTambahDevice()" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-xl text-base shadow-md inline-flex items-center gap-2 cursor-pointer transition-colors">
+                    <i class="fas fa-plus"></i> Tambah Device Baru
+                </button>
             </div>
-        </div>
-    
+
+            <!-- Kartu Status Device -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-teal-500">
+                    <p class="text-sm font-medium text-slate-500 uppercase">Total Device Terpasang</p>
+                    <p class="text-4xl font-extrabold text-slate-800 mt-2" id="countTotalDevice">2 Unit</p>
+                    <p class="text-xs text-slate-400 mt-1">Dual-ESP32 Standalone System</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-green-500">
+                    <p class="text-sm font-medium text-slate-500 uppercase">Device Online & Aktif</p>
+                    <p class="text-4xl font-extrabold text-green-700 mt-2" id="countOnlineDevice">1 Unit</p>
+                    <p class="text-xs text-emerald-600 font-semibold mt-1"><i class="fas fa-wifi mr-1"></i> Terkoneksi WiFi Kantor (Heartbeat OK)</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-slate-400">
+                    <p class="text-sm font-medium text-slate-500 uppercase">Device Offline / Siaga</p>
+                    <p class="text-4xl font-extrabold text-slate-600 mt-2" id="countOfflineDevice">1 Unit</p>
+                    <p class="text-xs text-slate-400 mt-1">Perangkat cadangan pintu belakang</p>
+                </div>
+            </div>
+
+            <!-- Tabel Device -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-slate-200">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-slate-700 text-white text-xs uppercase tracking-wider">
+                                <th class="px-6 py-4">No</th>
+                                <th class="px-6 py-4">Kode Device</th>
+                                <th class="px-6 py-4">Lokasi Penempatan</th>
+                                <th class="px-6 py-4">Tipe Hardware</th>
+                                <th class="px-6 py-4">IP Jaringan</th>
+                                <th class="px-6 py-4">Terakhir Ping</th>
+                                <th class="px-6 py-4 text-center">Status</th>
+                                <th class="px-6 py-4 text-center">Aksi Live & Setting</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100" id="tabelDeviceBody">
+                            <tr class="hover:bg-slate-50 transition-colors row-device">
+                                <td class="px-6 py-4 text-slate-500 font-medium">1</td>
+                                <td class="px-6 py-4">
+                                    <span class="bg-slate-100 border border-slate-200 px-3 py-1 rounded font-mono font-bold text-slate-800">KANTORJK_01</span>
+                                </td>
+                                <td class="px-6 py-4 text-slate-800 font-semibold">Pintu Masuk Utama Kantor</td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center text-xs bg-teal-50 text-teal-800 border border-teal-200 px-2.5 py-1 rounded-md font-bold">
+                                        <i class="fas fa-camera mr-1.5 text-xs text-teal-600"></i> Dual-ESP32 (RFID + Cam OV5640)
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-sm font-mono text-slate-600">192.168.1.100</td>
+                                <td class="px-6 py-4 text-xs font-mono text-slate-500">2026-08-03 19:35:10</td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
+                                        <span class="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></span> Online
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <button onclick="bukaModalLiveCam('KANTORJK_01', 'Pintu Masuk Utama', '192.168.1.100')" class="bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 font-bold py-1.5 px-3 rounded-lg text-xs transition-colors inline-flex items-center gap-1 cursor-pointer">
+                                            <i class="fas fa-video text-teal-600"></i> Live Cam
+                                        </button>
+                                        <button onclick="bukaModalSettingDevice('KANTORJK_01', 'Pintu Masuk Utama', '192.168.1.100', 'Dual-ESP32 (RFID + Cam)')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors cursor-pointer">
+                                            <i class="fas fa-cog mr-1"></i> Setting
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition-colors row-device">
+                                <td class="px-6 py-4 text-slate-500 font-medium">2</td>
+                                <td class="px-6 py-4">
+                                    <span class="bg-slate-100 border border-slate-200 px-3 py-1 rounded font-mono font-bold text-slate-800">KANTORJK_02</span>
+                                </td>
+                                <td class="px-6 py-4 text-slate-800 font-semibold">Pintu Belakang & Gudang</td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center text-xs bg-slate-100 text-slate-700 border border-slate-200 px-2.5 py-1 rounded-md font-bold">
+                                        <i class="fas fa-id-card mr-1.5 text-xs text-slate-500"></i> Dual-ESP32 (RFID Only)
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-sm font-mono text-slate-600">192.168.1.101</td>
+                                <td class="px-6 py-4 text-xs font-mono text-slate-500">2026-07-30 17:00:00</td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                                        <span class="w-2 h-2 rounded-full bg-slate-400 mr-2"></span> Offline
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <button onclick="bukaModalLiveCam('KANTORJK_02', 'Pintu Belakang & Gudang', '192.168.1.101', false)" class="bg-slate-100 hover:bg-slate-200 text-slate-500 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors inline-flex items-center gap-1 cursor-pointer">
+                                            <i class="fas fa-video-slash"></i> Live Cam
+                                        </button>
+                                        <button onclick="bukaModalSettingDevice('KANTORJK_02', 'Pintu Belakang & Gudang', '192.168.1.101', 'Dual-ESP32 (RFID Only)')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors cursor-pointer">
+                                            <i class="fas fa-cog mr-1"></i> Setting
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </main>
     </div>
 
+    <!-- MODAL LIVE CAM STREAM ESP32-S3 OV5640 -->
+    <div id="modalLiveCam" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-950 border border-slate-700 rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden text-white relative">
+            <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900">
+                <div class="flex items-center gap-3">
+                    <span class="flex h-3 w-3 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                    </span>
+                    <h3 class="font-bold text-base tracking-wide" id="liveCamTitle">Live Stream ESP32-S3 Cam</h3>
+                    <span class="text-[11px] bg-slate-800 border border-slate-700 text-slate-300 px-2 py-0.5 rounded font-mono" id="liveCamIp">-</span>
+                </div>
+                <button onclick="tutupModalLiveCam()" class="text-slate-400 hover:text-white text-xl cursor-pointer">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Viewport Kamera -->
+            <div class="relative bg-slate-900 aspect-video flex items-center justify-center overflow-hidden border-b border-slate-800">
+                <!-- Simulasi Feed Video -->
+                <div id="liveCamViewport" class="w-full h-full relative flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950">
+                    <div class="text-center p-6 space-y-3" id="liveCamPlaceholder">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-800 text-teal-400 text-2xl border border-slate-700 animate-pulse">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <p class="text-base font-bold text-slate-200">Koneksi Stream RTSP / MJPEG Aktif</p>
+                        <p class="text-xs text-slate-400 font-mono">Resolusi: 1920x1080 FHD | Frame Rate: 30 FPS | Sensor: OV5640</p>
+                    </div>
+
+                    <!-- Overlay Target Box -->
+                    <div class="absolute inset-8 border border-teal-500/30 rounded-lg pointer-events-none flex flex-col justify-between p-3">
+                        <div class="flex justify-between text-[11px] font-mono text-teal-400/80">
+                            <span>ESP32-S3_CAM_JK01</span>
+                            <span id="liveCamTimer">2026-08-03 10:20:00 WIB</span>
+                        </div>
+                        <div class="flex justify-between text-[10px] font-mono text-slate-400">
+                            <span>FPS: 29.8</span>
+                            <span>BITRATE: 4.2 Mbps</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shutter Flash Effect -->
+                <div id="shutterFlash" class="absolute inset-0 bg-white opacity-0 pointer-events-none transition-opacity duration-150"></div>
+            </div>
+
+            <div class="p-5 flex items-center justify-between bg-slate-900/90 text-sm">
+                <div class="text-xs text-slate-400">
+                    <i class="fas fa-info-circle text-teal-400 mr-1"></i> Kamera otomatis memotret wajah karyawan saat kartu RFID di-tap
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="ambilSnapshotTest()" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-lg text-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow">
+                        <i class="fas fa-camera-retro"></i> Test Snapshot
+                    </button>
+                    <button onclick="tutupModalLiveCam()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium py-2 px-4 rounded-lg text-xs transition-colors cursor-pointer">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TAMBAH DEVICE -->
+    <div id="modalTambahDevice" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 text-slate-800 relative">
+            <button onclick="tutupModalTambahDevice()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 text-2xl font-bold cursor-pointer">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="mb-6 pb-4 border-b border-slate-200">
+                <h3 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fas fa-desktop text-teal-600"></i> Tambah Device Mesin Baru
+                </h3>
+                <p class="text-sm text-slate-500 mt-1">Daftarkan mikrokontroler Dual-ESP32 ke jaringan backend Jaya Kedhaton</p>
+            </div>
+            <form onsubmit="event.preventDefault(); simpanDeviceBaru();" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Kode Device <span class="text-rose-500">*</span></label>
+                    <input type="text" id="devKode" required placeholder="Contoh: KANTORJK_03" class="w-full border-2 border-slate-300 rounded-xl px-4 py-2.5 text-sm font-mono font-bold uppercase focus:outline-none focus:border-teal-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Lokasi Pemasangan <span class="text-rose-500">*</span></label>
+                    <input type="text" id="devLokasi" required placeholder="Contoh: Pintu Workshop / Gudang" class="w-full border-2 border-slate-300 rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-none focus:border-teal-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Tipe Hardware <span class="text-rose-500">*</span></label>
+                    <select id="devTipe" class="w-full border-2 border-slate-300 rounded-xl px-4 py-2.5 text-sm font-bold focus:outline-none focus:border-teal-500">
+                        <option value="Dual-ESP32 (RFID + Cam OV5640)">Dual-ESP32 (RFID + Cam OV5640 5MP)</option>
+                        <option value="Dual-ESP32 (RFID Only)">Dual-ESP32 (RFID Only Tanpa Kamera)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">IP Address Lokal</label>
+                    <input type="text" id="devIp" value="192.168.1.102" class="w-full border-2 border-slate-300 rounded-xl px-4 py-2.5 text-sm font-mono focus:outline-none focus:border-teal-500">
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="submit" class="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 rounded-xl text-sm transition-colors shadow cursor-pointer">
+                        <i class="fas fa-save mr-1.5"></i> Daftarkan Device
+                    </button>
+                    <button type="button" onclick="tutupModalTambahDevice()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-5 rounded-xl text-sm transition-colors cursor-pointer">
+                        Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL SETTING PARAMETER DEVICE -->
+    <div id="modalSettingDevice" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 text-slate-800 relative">
+            <button onclick="tutupModalSettingDevice()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 text-2xl font-bold cursor-pointer">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="mb-5 pb-4 border-b border-slate-200">
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fas fa-sliders text-teal-600"></i> Pengaturan Firmware: <span id="settingKodeDev" class="font-mono text-teal-700">KANTORJK_01</span>
+                </h3>
+                <p class="text-xs text-slate-500 mt-1">Konfigurasi komunikasi UART antara ESP32 Master dan ESP32-S3 Cam</p>
+            </div>
+            <form onsubmit="event.preventDefault(); simpanSettingDevice();" class="space-y-4 text-xs font-semibold">
+                <div>
+                    <label class="block text-slate-700 mb-1">Kecepatan Komunikasi UART (Baudrate)</label>
+                    <select class="w-full border-2 border-slate-300 rounded-lg px-3 py-2 text-sm font-mono font-bold">
+                        <option value="115200" selected>115200 bps (Standar Stabil ESP32)</option>
+                        <option value="9600">9600 bps</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-slate-700 mb-1">Wi-Fi SSID Jaringan Mesin</label>
+                    <input type="text" value="JayaKedhaton_IoT_Secure" class="w-full border-2 border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-800">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-700 mb-1">Heartbeat Interval (detik)</label>
+                        <input type="number" value="5" class="w-full border-2 border-slate-300 rounded-lg px-3 py-2 text-sm font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 mb-1">Volume Audio Buzzer (%)</label>
+                        <input type="number" value="80" class="w-full border-2 border-slate-300 rounded-lg px-3 py-2 text-sm font-mono">
+                    </div>
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="submit" class="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2.5 rounded-lg text-sm transition-colors shadow cursor-pointer">
+                        <i class="fas fa-check mr-1"></i> Simpan ke Firmware
+                    </button>
+                    <button type="button" onclick="tutupModalSettingDevice()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 px-4 rounded-lg text-sm transition-colors cursor-pointer">
+                        Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFIKASI -->
+    <div id="toastNotif" class="fixed bottom-6 right-6 z-50 transform transition-all duration-300 translate-y-24 opacity-0 pointer-events-none flex items-center gap-3 bg-slate-900 text-white px-5 py-3.5 rounded-xl shadow-2xl border border-slate-700 text-sm">
+        <div id="toastIcon"><i class="fas fa-check-circle text-emerald-400 text-lg"></i></div>
+        <div id="toastMessage" class="font-medium">Pesan notifikasi</div>
+    </div>
+
+    <script>
+        function updateClock() {
+            const el = document.getElementById('waktuRealtime');
+            if (el) {
+                const now = new Date();
+                el.innerText = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB';
+            }
+            const timer = document.getElementById('liveCamTimer');
+            if (timer) {
+                const now = new Date();
+                timer.innerText = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + now.toLocaleTimeString('id-ID') + ' WIB';
+            }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function tampilkanToast(pesan, tipe = 'success') {
+            const toast = document.getElementById('toastNotif');
+            const msg = document.getElementById('toastMessage');
+            if (!toast || !msg) return;
+            msg.innerText = pesan;
+            toast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        function bukaModalLiveCam(kode, lokasi, ip, isOnline = true) {
+            document.getElementById('liveCamTitle').innerText = 'Live Stream: ' + kode + ' (' + lokasi + ')';
+            document.getElementById('liveCamIp').innerText = ip + ':81/stream';
+            document.getElementById('modalLiveCam').classList.remove('hidden');
+        }
+
+        function tutupModalLiveCam() {
+            document.getElementById('modalLiveCam').classList.add('hidden');
+        }
+
+        function ambilSnapshotTest() {
+            const flash = document.getElementById('shutterFlash');
+            if (flash) {
+                flash.classList.remove('opacity-0');
+                flash.classList.add('opacity-90');
+                setTimeout(() => {
+                    flash.classList.remove('opacity-90');
+                    flash.classList.add('opacity-0');
+                }, 180);
+            }
+            tampilkanToast('Snapshot berhasil diambil dari kamera ESP32-S3 (OV5640)!');
+        }
+
+        function bukaModalTambahDevice() {
+            document.getElementById('modalTambahDevice').classList.remove('hidden');
+        }
+
+        function tutupModalTambahDevice() {
+            document.getElementById('modalTambahDevice').classList.add('hidden');
+        }
+
+        function simpanDeviceBaru() {
+            const kode = document.getElementById('devKode').value.trim();
+            const lokasi = document.getElementById('devLokasi').value.trim();
+            const tipe = document.getElementById('devTipe').value;
+            const ip = document.getElementById('devIp').value.trim();
+
+            const tbody = document.getElementById('tabelDeviceBody');
+            const count = tbody.querySelectorAll('tr').length + 1;
+
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-slate-50 transition-colors row-device';
+            tr.innerHTML = `
+                <td class="px-6 py-4 text-slate-500 font-medium">${count}</td>
+                <td class="px-6 py-4">
+                    <span class="bg-slate-100 border border-slate-200 px-3 py-1 rounded font-mono font-bold text-slate-800">${kode}</span>
+                </td>
+                <td class="px-6 py-4 text-slate-800 font-semibold">${lokasi}</td>
+                <td class="px-6 py-4">
+                    <span class="inline-flex items-center text-xs bg-teal-50 text-teal-800 border border-teal-200 px-2.5 py-1 rounded-md font-bold">
+                        <i class="fas fa-camera mr-1.5 text-xs text-teal-600"></i> ${tipe}
+                    </span>
+                </td>
+                <td class="px-6 py-4 text-sm font-mono text-slate-600">${ip}</td>
+                <td class="px-6 py-4 text-xs font-mono text-slate-500">Baru saja</td>
+                <td class="px-6 py-4 text-center">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
+                        <span class="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></span> Online
+                    </span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                    <div class="flex items-center justify-center gap-2">
+                        <button onclick="bukaModalLiveCam('${kode}', '${lokasi}', '${ip}')" class="bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 font-bold py-1.5 px-3 rounded-lg text-xs transition-colors inline-flex items-center gap-1 cursor-pointer">
+                            <i class="fas fa-video text-teal-600"></i> Live Cam
+                        </button>
+                        <button onclick="bukaModalSettingDevice('${kode}', '${lokasi}', '${ip}', '${tipe}')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors cursor-pointer">
+                            <i class="fas fa-cog mr-1"></i> Setting
+                        </button>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(tr);
+
+            document.getElementById('countTotalDevice').innerText = count + ' Unit';
+            tutupModalTambahDevice();
+            tampilkanToast(`Device ${kode} berhasil didaftarkan dan terhubung ke backend!`);
+        }
+
+        function bukaModalSettingDevice(kode, lokasi, ip, tipe) {
+            document.getElementById('settingKodeDev').innerText = kode;
+            document.getElementById('modalSettingDevice').classList.remove('hidden');
+        }
+
+        function tutupModalSettingDevice() {
+            document.getElementById('modalSettingDevice').classList.add('hidden');
+        }
+
+        function simpanSettingDevice() {
+            tutupModalSettingDevice();
+            tampilkanToast('Parameter firmware Dual-ESP32 berhasil disinkronkan via WiFi!');
+        }
+    </script>
 </body>
 </html>

@@ -138,14 +138,14 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div class="bg-white rounded-xl shadow-sm p-5 border border-slate-200">
-                <p class="text-sm font-medium text-slate-500">Total Karyawan</p>
-                <p class="text-3xl font-extrabold text-slate-800 mt-1">6 Orang</p>
-                <p class="text-xs text-slate-400 mt-1">Staff Kantor & Pekerja Harian</p>
+                <p class="text-sm font-medium text-slate-500">Total Karyawan (Filter)</p>
+                <p class="text-3xl font-extrabold text-slate-800 mt-1" id="totalKaryawanDisplay">6 Orang</p>
+                <p class="text-xs text-slate-400 mt-1" id="totalKaryawanSubtext">Staff Kantor & Pekerja Harian</p>
             </div>
 
             <div class="bg-white rounded-xl shadow-sm p-5 border border-slate-200">
                 <p class="text-sm font-medium text-slate-500">Total Jam Lembur Terakumulasi</p>
-                <p class="text-3xl font-extrabold text-amber-600 mt-1">
+                <p class="text-3xl font-extrabold text-amber-600 mt-1" id="totalLemburDisplay">
                     26 Jam
                 </p>
                 <p class="text-xs text-slate-400 mt-1">Otomatis dari jam tap pulang > 17:30</p>
@@ -160,20 +160,65 @@
             </div>
         </div>
 
-        <!-- Filter Tab Kategori -->
-        <div class="flex items-center gap-2 mb-4">
-            <a href="/upah" 
-               class="px-4 py-2 rounded-lg text-sm font-semibold transition-colors bg-slate-800 text-white">
-                Semua (6)
-            </a>
-            <a href="/upah?kategori=Staff+Kantor" 
-               class="px-4 py-2 rounded-lg text-sm font-semibold transition-colors bg-white border border-slate-200 text-slate-600 hover:bg-slate-50">
-                <i class="fas fa-briefcase mr-1 text-xs"></i> Staff Kantor
-            </a>
-            <a href="/upah?kategori=Pekerja+Harian" 
-               class="px-4 py-2 rounded-lg text-sm font-semibold transition-colors bg-white border border-slate-200 text-slate-600 hover:bg-slate-50">
-                <i class="fas fa-hammer mr-1 text-xs"></i> Pekerja Harian
-            </a>
+        <!-- ============================================== -->
+        <!-- FILTER KATEGORI & FILTER PROJEK TERPISAH        -->
+        <!-- ============================================== -->
+        <div class="bg-white rounded-xl shadow-sm p-5 mb-6 border border-slate-200 space-y-4">
+            <!-- TINGKAT 1: SUB-TAB KATEGORI UTAMA -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="text-xs font-bold uppercase text-slate-500 mr-2 flex items-center gap-1.5">
+                        <i class="fas fa-users text-teal-600"></i>
+                        <span>1. Pilih Kategori:</span>
+                    </span>
+                    <button onclick="setFilterUpahKategori('')" id="btnKatAll"
+                            class="px-4 py-2 rounded-lg text-xs font-bold transition-all bg-slate-800 text-white shadow">
+                        Semua Karyawan (6)
+                    </button>
+                    <button onclick="setFilterUpahKategori('Staff Kantor')" id="btnKatStaff"
+                            class="px-4 py-2 rounded-lg text-xs font-bold transition-all bg-blue-50 text-blue-900 border border-blue-200 hover:bg-blue-100">
+                        <i class="fas fa-briefcase text-[10px] mr-1 text-blue-600"></i> Staff Kantor (3)
+                    </button>
+                    <button onclick="setFilterUpahKategori('Pekerja Harian')" id="btnKatHarian"
+                            class="px-4 py-2 rounded-lg text-xs font-bold transition-all bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100">
+                        <i class="fas fa-hammer text-[10px] mr-1 text-amber-600"></i> Pekerja Harian (3)
+                    </button>
+                </div>
+
+                <div class="text-xs font-semibold text-slate-500" id="infoKategoriAktif">
+                    Menampilkan seluruh karyawan (6 orang)
+                </div>
+            </div>
+
+            <!-- TINGKAT 2: SUB-TAB FILTER PROJEK (KHUSUS PEKERJA HARIAN) -->
+            <div id="boxFilterProjek" class="flex flex-wrap items-center justify-between gap-3 p-3 bg-amber-50/70 border border-amber-200 rounded-lg">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="text-xs font-bold uppercase text-amber-900 mr-2 flex items-center gap-1.5">
+                        <i class="fas fa-hard-hat text-amber-600"></i>
+                        <span>2. Filter Bagian Projek (Pekerja Harian):</span>
+                    </span>
+                    <button onclick="setFilterUpahProjek('')" id="btnPrjAll"
+                            class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-amber-700 text-white shadow">
+                        Semua Projek (3)
+                    </button>
+                    <button onclick="setFilterUpahProjek('Projek A')" id="btnPrjA"
+                            class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-amber-900 border border-amber-300 hover:bg-amber-100">
+                        Projek A (1)
+                    </button>
+                    <button onclick="setFilterUpahProjek('Projek B')" id="btnPrjB"
+                            class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-amber-900 border border-amber-300 hover:bg-amber-100">
+                        Projek B (1)
+                    </button>
+                    <button onclick="setFilterUpahProjek('Projek C')" id="btnPrjC"
+                            class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-amber-900 border border-amber-300 hover:bg-amber-100">
+                        Projek C (1)
+                    </button>
+                </div>
+
+                <div class="text-xs font-semibold text-amber-900" id="infoProjekAktif">
+                    Semua Bagian Projek Aktif
+                </div>
+            </div>
         </div>
 
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-8">
@@ -193,6 +238,7 @@
                         <tr class="bg-slate-700 text-white text-xs uppercase tracking-wider">
                             <th class="px-5 py-4 text-left">Nama Karyawan</th>
                             <th class="px-4 py-4 text-left">Kategori</th>
+                            <th class="px-4 py-4 text-left bg-amber-600/30 text-amber-200 border-x border-slate-600">Bagian Projek</th>
                             <th class="px-4 py-4 text-center">Kehadiran</th>
                             <th class="px-4 py-4 text-center">Jam Lembur</th>
                             <th class="px-5 py-4 text-left">Gaji / Upah Pokok</th>
@@ -202,18 +248,21 @@
                             <th class="px-4 py-4 text-center">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody class="divide-y divide-slate-100" id="tabelUpahBody">
                         
             <tr class="hover:bg-slate-50 transition-colors row-pekerja" 
                 data-id="1" 
                 data-tipe="bulanan"
-                data-kategori="Staff Kantor">
+                data-kategori="Staff Kantor"
+                data-projek="Kantor">
                 <td class="px-5 py-4">
                     <p class="text-base font-bold text-slate-900">Dimas Arya Kedhaton</p>
                     <span class="text-xs font-mono text-slate-400">UID: 53492607</span>
                 </td>
 
                 <td class="px-4 py-4"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-800">Staff Kantor</span></td>
+
+                <td class="px-4 py-4 bg-slate-50 text-slate-400 font-mono text-xs text-center">-</td>
 
                 <td class="px-4 py-4 text-center">
                     <span class="inline-flex items-center justify-center px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 font-semibold text-sm">
@@ -263,7 +312,7 @@
 
                 <td class="px-4 py-4 text-center">
                     <button type="button"
-                            onclick="bukaSlip('Dimas Arya Kedhaton', '53492607', 'Staff Kantor', this)"
+                            onclick="bukaSlip('Dimas Arya Kedhaton', '53492607', 'Staff Kantor', '-', this)"
                             class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors inline-flex items-center gap-1 cursor-pointer">
                         <i class="fas fa-file-invoice"></i> Slip
                     </button>
@@ -273,13 +322,16 @@
             <tr class="hover:bg-slate-50 transition-colors row-pekerja" 
                 data-id="2" 
                 data-tipe="bulanan"
-                data-kategori="Staff Kantor">
+                data-kategori="Staff Kantor"
+                data-projek="Kantor">
                 <td class="px-5 py-4">
                     <p class="text-base font-bold text-slate-900">Akmal Zaidan</p>
                     <span class="text-xs font-mono text-slate-400">UID: 9491F306</span>
                 </td>
 
                 <td class="px-4 py-4"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-800">Staff Kantor</span></td>
+
+                <td class="px-4 py-4 bg-slate-50 text-slate-400 font-mono text-xs text-center">-</td>
 
                 <td class="px-4 py-4 text-center">
                     <span class="inline-flex items-center justify-center px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 font-semibold text-sm">
@@ -329,7 +381,7 @@
 
                 <td class="px-4 py-4 text-center">
                     <button type="button"
-                            onclick="bukaSlip('Akmal Zaidan', '9491F306', 'Staff Kantor', this)"
+                            onclick="bukaSlip('Akmal Zaidan', '9491F306', 'Staff Kantor', '-', this)"
                             class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors inline-flex items-center gap-1 cursor-pointer">
                         <i class="fas fa-file-invoice"></i> Slip
                     </button>
@@ -339,13 +391,16 @@
             <tr class="hover:bg-slate-50 transition-colors row-pekerja" 
                 data-id="3" 
                 data-tipe="bulanan"
-                data-kategori="Staff Kantor">
+                data-kategori="Staff Kantor"
+                data-projek="Kantor">
                 <td class="px-5 py-4">
                     <p class="text-base font-bold text-slate-900">Anom Arya</p>
                     <span class="text-xs font-mono text-slate-400">UID: A3B7C901</span>
                 </td>
 
                 <td class="px-4 py-4"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-800">Staff Kantor</span></td>
+
+                <td class="px-4 py-4 bg-slate-50 text-slate-400 font-mono text-xs text-center">-</td>
 
                 <td class="px-4 py-4 text-center">
                     <span class="inline-flex items-center justify-center px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 font-semibold text-sm">
@@ -395,7 +450,7 @@
 
                 <td class="px-4 py-4 text-center">
                     <button type="button"
-                            onclick="bukaSlip('Anom Arya', 'A3B7C901', 'Staff Kantor', this)"
+                            onclick="bukaSlip('Anom Arya', 'A3B7C901', 'Staff Kantor', '-', this)"
                             class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors inline-flex items-center gap-1 cursor-pointer">
                         <i class="fas fa-file-invoice"></i> Slip
                     </button>
@@ -405,13 +460,16 @@
             <tr class="hover:bg-slate-50 transition-colors row-pekerja" 
                 data-id="4" 
                 data-tipe="harian"
-                data-kategori="Pekerja Harian">
+                data-kategori="Pekerja Harian"
+                data-projek="Projek A">
                 <td class="px-5 py-4">
                     <p class="text-base font-bold text-slate-900">Joko Susilo</p>
                     <span class="text-xs font-mono text-slate-400">UID: 83A192B4</span>
                 </td>
 
                 <td class="px-4 py-4"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-800">Pekerja Harian</span></td>
+
+                <td class="px-4 py-4 bg-amber-50/40 border-x border-amber-100 text-center"><span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-extrabold bg-amber-500 text-white shadow-sm"><i class="fas fa-hard-hat mr-1 text-[9px]"></i> Projek A</span></td>
 
                 <td class="px-4 py-4 text-center">
                     <span class="inline-flex items-center justify-center px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 font-semibold text-sm">
@@ -461,7 +519,7 @@
 
                 <td class="px-4 py-4 text-center">
                     <button type="button"
-                            onclick="bukaSlip('Joko Susilo', '83A192B4', 'Pekerja Harian', this)"
+                            onclick="bukaSlip('Joko Susilo', '83A192B4', 'Pekerja Harian', 'Projek A', this)"
                             class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors inline-flex items-center gap-1 cursor-pointer">
                         <i class="fas fa-file-invoice"></i> Slip
                     </button>
@@ -471,13 +529,16 @@
             <tr class="hover:bg-slate-50 transition-colors row-pekerja" 
                 data-id="5" 
                 data-tipe="harian"
-                data-kategori="Pekerja Harian">
+                data-kategori="Pekerja Harian"
+                data-projek="Projek B">
                 <td class="px-5 py-4">
                     <p class="text-base font-bold text-slate-900">Slamet Riyadi</p>
                     <span class="text-xs font-mono text-slate-400">UID: 47C201F8</span>
                 </td>
 
                 <td class="px-4 py-4"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-800">Pekerja Harian</span></td>
+
+                <td class="px-4 py-4 bg-amber-50/40 border-x border-amber-100 text-center"><span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-extrabold bg-amber-500 text-white shadow-sm"><i class="fas fa-hard-hat mr-1 text-[9px]"></i> Projek B</span></td>
 
                 <td class="px-4 py-4 text-center">
                     <span class="inline-flex items-center justify-center px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 font-semibold text-sm">
@@ -527,7 +588,7 @@
 
                 <td class="px-4 py-4 text-center">
                     <button type="button"
-                            onclick="bukaSlip('Slamet Riyadi', '47C201F8', 'Pekerja Harian', this)"
+                            onclick="bukaSlip('Slamet Riyadi', '47C201F8', 'Pekerja Harian', 'Projek B', this)"
                             class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors inline-flex items-center gap-1 cursor-pointer">
                         <i class="fas fa-file-invoice"></i> Slip
                     </button>
@@ -537,13 +598,16 @@
             <tr class="hover:bg-slate-50 transition-colors row-pekerja" 
                 data-id="6" 
                 data-tipe="harian"
-                data-kategori="Pekerja Harian">
+                data-kategori="Pekerja Harian"
+                data-projek="Projek C">
                 <td class="px-5 py-4">
                     <p class="text-base font-bold text-slate-900">Bambang Triyono</p>
                     <span class="text-xs font-mono text-slate-400">UID: 19E873A2</span>
                 </td>
 
                 <td class="px-4 py-4"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-800">Pekerja Harian</span></td>
+
+                <td class="px-4 py-4 bg-amber-50/40 border-x border-amber-100 text-center"><span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-extrabold bg-amber-500 text-white shadow-sm"><i class="fas fa-hard-hat mr-1 text-[9px]"></i> Projek C</span></td>
 
                 <td class="px-4 py-4 text-center">
                     <span class="inline-flex items-center justify-center px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 font-semibold text-sm">
@@ -593,7 +657,7 @@
 
                 <td class="px-4 py-4 text-center">
                     <button type="button"
-                            onclick="bukaSlip('Bambang Triyono', '19E873A2', 'Pekerja Harian', this)"
+                            onclick="bukaSlip('Bambang Triyono', '19E873A2', 'Pekerja Harian', 'Projek C', this)"
                             class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors inline-flex items-center gap-1 cursor-pointer">
                         <i class="fas fa-file-invoice"></i> Slip
                     </button>
@@ -627,6 +691,10 @@
                     <div class="flex justify-between">
                         <span class="text-slate-500">Kategori:</span>
                         <span class="font-semibold text-slate-700" id="slipKategori">-</span>
+                    </div>
+                    <div class="flex justify-between" id="slipBoxProjek">
+                        <span class="text-slate-500">Bagian Projek:</span>
+                        <span class="font-bold text-amber-800" id="slipProjek">-</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-slate-500">UID Kartu:</span>
@@ -673,8 +741,123 @@
         </div>
 
         <script>
+            let filterUpahKategoriAktif = '';
+            let filterUpahProjekAktif = '';
+
             function formatRupiah(angka) {
                 return 'Rp ' + Number(angka).toLocaleString('id-ID');
+            }
+
+            function setFilterUpahKategori(kat) {
+                filterUpahKategoriAktif = kat;
+
+                const boxProjek = document.getElementById('boxFilterProjek');
+                if (kat === 'Staff Kantor') {
+                    filterUpahProjekAktif = '';
+                    boxProjek.classList.add('opacity-40', 'pointer-events-none');
+                } else {
+                    boxProjek.classList.remove('opacity-40', 'pointer-events-none');
+                }
+
+                updateUpahStyleButtons();
+                jalankanFilterUpah();
+            }
+
+            function setFilterUpahProjek(prj) {
+                filterUpahProjekAktif = prj;
+                if (typeof renderFilterProjekButtons === 'function') {
+                    renderFilterProjekButtons('#boxFilterProjek', filterUpahProjekAktif, 'setFilterUpahProjek');
+                }
+                updateUpahStyleButtons();
+                jalankanFilterUpah();
+            }
+
+            function updateUpahStyleButtons() {
+                // Button Kategori
+                const btnAll = document.getElementById('btnKatAll');
+                const btnStaff = document.getElementById('btnKatStaff');
+                const btnHarian = document.getElementById('btnKatHarian');
+
+                btnAll.className = (filterUpahKategoriAktif === '') 
+                    ? 'px-4 py-2 rounded-lg text-xs font-bold transition-all bg-slate-800 text-white shadow'
+                    : 'px-4 py-2 rounded-lg text-xs font-bold transition-all bg-white border border-slate-300 text-slate-700 hover:bg-slate-100';
+
+                btnStaff.className = (filterUpahKategoriAktif === 'Staff Kantor')
+                    ? 'px-4 py-2 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow'
+                    : 'px-4 py-2 rounded-lg text-xs font-bold transition-all bg-blue-50 text-blue-900 border border-blue-200 hover:bg-blue-100';
+
+                btnHarian.className = (filterUpahKategoriAktif === 'Pekerja Harian')
+                    ? 'px-4 py-2 rounded-lg text-xs font-bold transition-all bg-amber-600 text-white shadow'
+                    : 'px-4 py-2 rounded-lg text-xs font-bold transition-all bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100';
+
+                // Button Projek
+                const btnPrjAll = document.getElementById('btnPrjAll');
+                const btnPrjA = document.getElementById('btnPrjA');
+                const btnPrjB = document.getElementById('btnPrjB');
+                const btnPrjC = document.getElementById('btnPrjC');
+
+                btnPrjAll.className = (filterUpahProjekAktif === '')
+                    ? 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-amber-700 text-white shadow'
+                    : 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-amber-900 border border-amber-300 hover:bg-amber-100';
+
+                btnPrjA.className = (filterUpahProjekAktif === 'Projek A')
+                    ? 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-amber-600 text-white shadow'
+                    : 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-amber-900 border border-amber-300 hover:bg-amber-100';
+
+                btnPrjB.className = (filterUpahProjekAktif === 'Projek B')
+                    ? 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-amber-600 text-white shadow'
+                    : 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-amber-900 border border-amber-300 hover:bg-amber-100';
+
+                btnPrjC.className = (filterUpahProjekAktif === 'Projek C')
+                    ? 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-amber-600 text-white shadow'
+                    : 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-amber-900 border border-amber-300 hover:bg-amber-100';
+            }
+
+            function jalankanFilterUpah() {
+                const rows = document.querySelectorAll('#tabelUpahBody .row-pekerja');
+                let count = 0;
+
+                rows.forEach(row => {
+                    const kat = row.dataset.kategori;
+                    const prj = row.dataset.projek;
+
+                    let cocokKategori = (!filterUpahKategoriAktif || kat === filterUpahKategoriAktif);
+                    let cocokProjek = true;
+
+                    if (filterUpahProjekAktif) {
+                        cocokProjek = (prj === filterUpahProjekAktif);
+                    }
+
+                    if (cocokKategori && cocokProjek) {
+                        row.style.display = '';
+                        count++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                // Update teks info
+                const infoKat = document.getElementById('infoKategoriAktif');
+                const totalKaryawanSub = document.getElementById('totalKaryawanSubtext');
+                if (!filterUpahKategoriAktif) {
+                    infoKat.innerText = `Menampilkan seluruh karyawan (${count} orang)`;
+                    totalKaryawanSub.innerText = 'Staff Kantor & Pekerja Harian';
+                } else if (filterUpahKategoriAktif === 'Staff Kantor') {
+                    infoKat.innerText = `Menampilkan Staff Kantor (${count} orang)`;
+                    totalKaryawanSub.innerText = 'Khusus Staff Kantor (Gaji Bulanan)';
+                } else {
+                    infoKat.innerText = `Menampilkan Pekerja Harian (${count} orang)`;
+                    totalKaryawanSub.innerText = 'Khusus Pekerja Harian (Upah Harian)';
+                }
+
+                const infoPrj = document.getElementById('infoProjekAktif');
+                if (!filterUpahProjekAktif) {
+                    infoPrj.innerText = 'Semua Bagian Projek Aktif';
+                } else {
+                    infoPrj.innerText = `Hanya Bagian: ${filterUpahProjekAktif}`;
+                }
+
+                hitungGrandTotal();
             }
 
             function hitungBaris(el) {
@@ -697,21 +880,31 @@
 
             function hitungGrandTotal() {
                 let totalSemua = 0;
-                document.querySelectorAll('#tabelUpah .row-pekerja').forEach(row => {
-                    const tipe = row.dataset.tipe;
-                    const hariKerja = parseInt(row.querySelector('.hari-kerja').innerText.trim()) || 0;
-                    const jamLembur = parseInt(row.querySelector('.jam-lembur').innerText.trim()) || 0;
-                    const pokokInput = parseFloat(row.querySelector('.input-pokok').value) || 0;
-                    const tarifLembur = parseFloat(row.querySelector('.input-tarif-lembur').value) || 0;
+                let totalJamLembur = 0;
+                let totalKaryawanTampil = 0;
 
-                    const totalPokok = (tipe === 'harian') ? (hariKerja * pokokInput) : pokokInput;
-                    const totalLembur = jamLembur * tarifLembur;
-                    totalSemua += (totalPokok + totalLembur);
+                document.querySelectorAll('#tabelUpahBody .row-pekerja').forEach(row => {
+                    if (row.style.display !== 'none') {
+                        totalKaryawanTampil++;
+                        const tipe = row.dataset.tipe;
+                        const hariKerja = parseInt(row.querySelector('.hari-kerja').innerText.trim()) || 0;
+                        const jamLembur = parseInt(row.querySelector('.jam-lembur').innerText.trim()) || 0;
+                        const pokokInput = parseFloat(row.querySelector('.input-pokok').value) || 0;
+                        const tarifLembur = parseFloat(row.querySelector('.input-tarif-lembur').value) || 0;
+
+                        const totalPokok = (tipe === 'harian') ? (hariKerja * pokokInput) : pokokInput;
+                        const totalLembur = jamLembur * tarifLembur;
+                        totalSemua += (totalPokok + totalLembur);
+                        totalJamLembur += jamLembur;
+                    }
                 });
+
+                document.getElementById('totalKaryawanDisplay').innerText = totalKaryawanTampil + ' Orang';
+                document.getElementById('totalLemburDisplay').innerText = totalJamLembur + ' Jam';
                 document.getElementById('grandTotalDisplay').innerText = formatRupiah(totalSemua);
             }
 
-            function bukaSlip(nama, uid, kategori, btn) {
+            function bukaSlip(nama, uid, kategori, projek, btn) {
                 const row = btn.closest('tr');
                 const tipe = row.dataset.tipe;
                 const hariKerja = parseInt(row.querySelector('.hari-kerja').innerText.trim()) || 0;
@@ -726,6 +919,14 @@
                 document.getElementById('slipNama').innerText = nama;
                 document.getElementById('slipKategori').innerText = kategori;
                 document.getElementById('slipUid').innerText = uid;
+
+                const boxPrj = document.getElementById('slipBoxProjek');
+                if (projek && projek !== '-') {
+                    boxPrj.style.display = 'flex';
+                    document.getElementById('slipProjek').innerText = projek;
+                } else {
+                    boxPrj.style.display = 'none';
+                }
 
                 if (tipe === 'harian') {
                     document.getElementById('slipLabelPokok').innerText = 'Upah Pokok Harian:';
@@ -751,5 +952,6 @@
         </main>
     </div>
 
+<script src="projek-manager.js"></script>
 </body>
 </html>

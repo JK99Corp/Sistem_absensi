@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Absensi Jaya Kedhaton - Log Aktivitas (Audit)</title>
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }</style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <!-- SIDEBAR -->
+    <aside class="fixed top-0 left-0 w-64 h-full bg-slate-800 text-white flex flex-col z-50 shadow-xl">
+        <div class="px-5 py-5 border-b border-slate-700 flex items-center gap-3">
+            <img src="images/logo.png" alt="Logo Jaya Kedhaton" class="w-12 h-12 object-contain shrink-0">
+            <div class="overflow-hidden">
+                <h1 class="text-base font-bold tracking-wide text-white leading-tight truncate">Jaya Kedhaton</h1>
+                <p class="text-xs text-slate-400 mt-0.5 truncate">Sistem Absensi Digital</p>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-4 py-5 space-y-1.5 overflow-y-auto">
+            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-chart-bar w-6 text-center text-lg"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="riwayat.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-clipboard-list w-6 text-center text-lg"></i>
+                <span>Riwayat Absensi</span>
+            </a>
+            <a href="rekap.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-calendar-week w-6 text-center text-lg"></i>
+                <span>Rekap Mingguan</span>
+            </a>
+            <a href="upah.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-money-bill-wave w-6 text-center text-lg"></i>
+                <span>Upah & Lembur</span>
+                <span class="bg-amber-400 text-slate-900 text-xs font-bold px-2 py-0.5 rounded-full uppercase ml-auto">Baru</span>
+            </a>
+            <a href="karyawan.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-users w-6 text-center text-lg"></i>
+                <span>Karyawan</span>
+            </a>
+            <a href="kartu-rfid.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-id-card-clip w-6 text-center text-lg"></i>
+                <span>Kartu RFID</span>
+            </a>
+            <a href="device.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-desktop w-6 text-center text-lg"></i>
+                <span>Device</span>
+            </a>
+            <a href="audit-log.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors bg-teal-600 text-white shadow-md">
+                <i class="fas fa-shield-halved w-6 text-center text-lg"></i>
+                <span>Log Aktivitas</span>
+                <span class="bg-rose-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ml-auto tracking-wider">Admin</span>
+            </a>
+        </nav>
+
+        <div class="px-6 py-4 border-t border-slate-700 text-xs text-slate-400">
+            &copy; 2026 Sistem Absensi Jaya Kedhaton — Dual-ESP32
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="ml-64 min-h-screen flex flex-col">
+        <!-- Top Bar -->
+        <header class="bg-white shadow-sm px-8 py-3.5 flex items-center justify-between sticky top-0 z-40">
+            <div class="flex items-center gap-3 text-sm text-slate-600">
+                <div class="w-9 h-9 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                    S
+                </div>
+                <div>
+                    <div class="font-bold text-slate-800 leading-tight">Super Admin (Direksi Utama)</div>
+                    <div class="text-xs text-slate-500">Pimpinan &bull; <span class="font-mono text-slate-400">@superadmin</span></div>
+                </div>
+                <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-teal-100 text-teal-800 border border-teal-200">
+                    <i class="fas fa-clock mr-1 text-teal-600"></i> <span id="waktuRealtime">--:--:-- WIB</span>
+                </span>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="javascript:location.reload()" class="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </a>
+                <a href="login.html" class="inline-flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <main class="flex-1 p-8">
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <h2 class="text-2xl font-bold text-slate-800">Log Aktivitas & Audit Keamanan</h2>
+                        <span class="bg-rose-100 text-rose-800 border border-rose-200 text-xs font-bold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
+                            <i class="fas fa-lock"></i> Hak Akses Pimpinan
+                        </span>
+                    </div>
+                    <p class="text-base text-slate-500">
+                        Rekam jejak setiap aksi login, mutasi data karyawan, dan insiden akses tidak sah
+                    </p>
+                </div>
+            </div>
+
+            <!-- Ringkasan Metrik Audit -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-teal-500">
+                    <p class="text-sm font-medium text-slate-500 uppercase tracking-wide">Total Catatan Aktivitas</p>
+                    <p class="text-4xl font-extrabold text-slate-800 mt-2">6</p>
+                    <p class="text-xs text-slate-400 mt-1">Tersimpan rapi & tidak dapat diubah</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-blue-500">
+                    <p class="text-sm font-medium text-slate-500 uppercase tracking-wide">Mutasi Data Karyawan</p>
+                    <p class="text-4xl font-extrabold text-blue-700 mt-2">3</p>
+                    <p class="text-xs text-slate-400 mt-1">Penambahan, arsip, & pemulihan data</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-rose-500">
+                    <p class="text-sm font-medium text-slate-500 uppercase tracking-wide">Akses Ditolak / Insiden</p>
+                    <p class="text-4xl font-extrabold text-rose-700 mt-2">1</p>
+                    <p class="text-xs text-rose-500 mt-1 font-semibold">Percobaan akses tidak sah dicegah</p>
+                </div>
+            </div>
+
+            <!-- Filter & Pencarian Log -->
+            <div class="bg-white rounded-xl shadow-sm p-5 mb-6 border border-slate-200">
+                <div class="flex flex-wrap items-center gap-4">
+                    <div class="flex-1 min-w-[200px]">
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Cari Pengguna / Keterangan</label>
+                        <input type="text" id="filterAuditKeyword" oninput="jalankanFilterAudit()" placeholder="Ketik nama atau kata kunci..." class="w-full border-2 border-slate-300 rounded-lg px-3.5 py-2 text-sm text-slate-800 focus:outline-none focus:border-teal-500">
+                    </div>
+                    <div class="min-w-[180px]">
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Kategori Aksi</label>
+                        <select id="filterAuditAksi" onchange="jalankanFilterAudit()" class="w-full border-2 border-slate-300 rounded-lg px-3.5 py-2 text-sm text-slate-800 font-bold focus:outline-none focus:border-teal-500">
+                            <option value="">Semua Aksi</option>
+                            <option value="LOGIN">LOGIN</option>
+                            <option value="TAP_ABSENSI">TAP_ABSENSI</option>
+                            <option value="CETAK_REKAP">CETAK_REKAP</option>
+                            <option value="AKSES_DITOLAK">AKSES_DITOLAK</option>
+                        </select>
+                    </div>
+                    <div class="pt-5">
+                        <button onclick="resetFilterAudit()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg text-sm transition-colors cursor-pointer">
+                            <i class="fas fa-rotate-left mr-1"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabel Audit Log -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-8 border border-slate-200">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-slate-700 text-white text-xs uppercase tracking-wider">
+                                <th class="px-5 py-4">Waktu (WIB)</th>
+                                <th class="px-5 py-4">Pengguna / Akun</th>
+                                <th class="px-4 py-4">Peran</th>
+                                <th class="px-4 py-4">Aksi Keamanan</th>
+                                <th class="px-5 py-4">Keterangan Aktivitas</th>
+                                <th class="px-4 py-4">IP Address</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100" id="tabelAuditBody">
+                            <tr class="hover:bg-slate-50 transition-colors row-audit" data-aksi="LOGIN" data-user="Direktur Utama superadmin">
+                                <td class="px-5 py-4 text-xs font-mono font-medium text-slate-500 whitespace-nowrap">2026-08-03 07:10:00</td>
+                                <td class="px-5 py-4">
+                                    <p class="text-sm font-bold text-slate-900">Direktur Utama</p>
+                                    <span class="text-xs font-mono text-slate-400">@superadmin</span>
+                                </td>
+                                <td class="px-4 py-4 text-xs text-slate-600 font-semibold">Super Admin (Direksi)</td>
+                                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800"><i class="fas fa-sign-in-alt mr-1 text-[10px]"></i> LOGIN</span></td>
+                                <td class="px-5 py-4 text-sm text-slate-800 font-medium">Berhasil login ke sistem melalui Portal Keamanan</td>
+                                <td class="px-4 py-4 text-xs font-mono text-slate-500">192.168.1.10</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition-colors row-audit" data-aksi="TAP_ABSENSI" data-user="Perangkat Pintu Utama KANTORJK_01">
+                                <td class="px-5 py-4 text-xs font-mono font-medium text-slate-500 whitespace-nowrap">2026-08-03 07:15:20</td>
+                                <td class="px-5 py-4">
+                                    <p class="text-sm font-bold text-slate-900">Perangkat Pintu Utama</p>
+                                    <span class="text-xs font-mono text-slate-400">@KANTORJK_01</span>
+                                </td>
+                                <td class="px-4 py-4 text-xs text-slate-600 font-semibold">Perangkat IoT Dual-ESP32</td>
+                                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-teal-100 text-teal-800"><i class="fas fa-id-card mr-1 text-[10px]"></i> TAP_ABSENSI</span></td>
+                                <td class="px-5 py-4 text-sm text-slate-800 font-medium">Absensi masuk Joko Susilo (07:15:20) - Tepat Waktu (Foto Cam OV5640 Terverifikasi)</td>
+                                <td class="px-4 py-4 text-xs font-mono text-slate-500">192.168.1.100</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition-colors row-audit" data-aksi="LOGIN" data-user="Siti Aminah staf.keuangan">
+                                <td class="px-5 py-4 text-xs font-mono font-medium text-slate-500 whitespace-nowrap">2026-08-03 08:00:45</td>
+                                <td class="px-5 py-4">
+                                    <p class="text-sm font-bold text-slate-900">Siti Aminah</p>
+                                    <span class="text-xs font-mono text-slate-400">@staf.keuangan</span>
+                                </td>
+                                <td class="px-4 py-4 text-xs text-slate-600 font-semibold">Staf Keuangan</td>
+                                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800"><i class="fas fa-sign-in-alt mr-1 text-[10px]"></i> LOGIN</span></td>
+                                <td class="px-5 py-4 text-sm text-slate-800 font-medium">Berhasil login ke sistem untuk operasional harian</td>
+                                <td class="px-4 py-4 text-xs font-mono text-slate-500">192.168.1.25</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition-colors row-audit" data-aksi="CETAK_REKAP" data-user="Siti Aminah staf.keuangan">
+                                <td class="px-5 py-4 text-xs font-mono font-medium text-slate-500 whitespace-nowrap">2026-08-03 08:30:10</td>
+                                <td class="px-5 py-4">
+                                    <p class="text-sm font-bold text-slate-900">Siti Aminah</p>
+                                    <span class="text-xs font-mono text-slate-400">@staf.keuangan</span>
+                                </td>
+                                <td class="px-4 py-4 text-xs text-slate-600 font-semibold">Staf Keuangan</td>
+                                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800"><i class="fas fa-file-excel mr-1 text-[10px]"></i> CETAK_REKAP</span></td>
+                                <td class="px-5 py-4 text-sm text-slate-800 font-medium">Mencetak dan mengunduh laporan rekapitulasi upah mingguan ke Excel</td>
+                                <td class="px-4 py-4 text-xs font-mono text-slate-500">192.168.1.25</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition-colors row-audit" data-aksi="LOGIN" data-user="Rendra Bagus staf.hrd">
+                                <td class="px-5 py-4 text-xs font-mono font-medium text-slate-500 whitespace-nowrap">2026-08-03 09:15:00</td>
+                                <td class="px-5 py-4">
+                                    <p class="text-sm font-bold text-slate-900">Rendra Bagus</p>
+                                    <span class="text-xs font-mono text-slate-400">@staf.hrd</span>
+                                </td>
+                                <td class="px-4 py-4 text-xs text-slate-600 font-semibold">Staf HRD & Personalia</td>
+                                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800"><i class="fas fa-sign-in-alt mr-1 text-[10px]"></i> LOGIN</span></td>
+                                <td class="px-5 py-4 text-sm text-slate-800 font-medium">Berhasil login ke sistem presensi</td>
+                                <td class="px-4 py-4 text-xs font-mono text-slate-500">192.168.1.28</td>
+                            </tr>
+                            <tr class="bg-rose-50/70 hover:bg-rose-100/70 transition-colors row-audit" data-aksi="AKSES_DITOLAK" data-user="Rendra Bagus staf.hrd">
+                                <td class="px-5 py-4 text-xs font-mono font-medium text-slate-500 whitespace-nowrap">2026-08-03 09:20:30</td>
+                                <td class="px-5 py-4">
+                                    <p class="text-sm font-bold text-rose-900">Rendra Bagus</p>
+                                    <span class="text-xs font-mono text-slate-400">@staf.hrd</span>
+                                </td>
+                                <td class="px-4 py-4 text-xs text-slate-600 font-semibold">Staf HRD & Personalia</td>
+                                <td class="px-4 py-4"><span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-rose-200 text-rose-900 border border-rose-300 animate-pulse"><i class="fas fa-ban mr-1 text-[10px]"></i> AKSES DITOLAK</span></td>
+                                <td class="px-5 py-4 text-sm text-rose-900 font-semibold">Percobaan akses tidak sah ke Log Audit Pimpinan (Otomatis ditolak sistem proteksi)</td>
+                                <td class="px-4 py-4 text-xs font-mono text-slate-500">192.168.1.28</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function updateClock() {
+            const el = document.getElementById('waktuRealtime');
+            if (el) {
+                const now = new Date();
+                el.innerText = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB';
+            }
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function jalankanFilterAudit() {
+            const keyword = (document.getElementById('filterAuditKeyword')?.value || '').toLowerCase();
+            const aksi = document.getElementById('filterAuditAksi')?.value;
+            const rows = document.querySelectorAll('#tabelAuditBody tr.row-audit');
+
+            rows.forEach(tr => {
+                const rowAksi = tr.getAttribute('data-aksi');
+                const rowUser = tr.getAttribute('data-user').toLowerCase();
+                const rowText = tr.innerText.toLowerCase();
+
+                const matchAksi = (!aksi) ? true : (rowAksi === aksi);
+                const matchKeyword = (!keyword) ? true : (rowUser.includes(keyword) || rowText.includes(keyword));
+
+                if (matchAksi && matchKeyword) {
+                    tr.style.display = '';
+                } else {
+                    tr.style.display = 'none';
+                }
+            });
+        }
+
+        function resetFilterAudit() {
+            document.getElementById('filterAuditKeyword').value = '';
+            document.getElementById('filterAuditAksi').value = '';
+            jalankanFilterAudit();
+        }
+    </script>
+</body>
+</html>
