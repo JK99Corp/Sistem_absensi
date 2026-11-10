@@ -20,7 +20,7 @@ let defaultTemplateData = {
     deviceAktif: 1,
     tanggalHariIni: 'Senin, 03 Agustus 2026',
     periode: '03/08/2026 - 08/08/2026',
-    
+
     // Absensi hari ini dengan 2 Kategori & Status Lembur
     absensiHariIni: [
         { jamMasuk: '07:15:20', jamPulang: '19:35:10', nama: 'Joko Susilo', kategori: 'Pekerja Harian', uid: '83A192B4', device: 'KANTORJK_01', statusMasuk: 'Tepat Waktu', lembur: 'Lembur 2 Jam' },
@@ -29,7 +29,7 @@ let defaultTemplateData = {
         { jamMasuk: '08:42:10', jamPulang: '17:25:00', nama: 'Akmal Zaidan', kategori: 'Staff Kantor', uid: '9491F306', device: 'KANTORJK_01', statusMasuk: 'Terlambat 12 Mnt', lembur: 'Normal (0 Jam)' },
         { jamMasuk: '07:45:00', jamPulang: '19:30:15', nama: 'Bambang Triyono', kategori: 'Pekerja Harian', uid: '19E873A2', device: 'KANTORJK_01', statusMasuk: 'Terlambat 15 Mnt', lembur: 'Lembur 2 Jam' }
     ],
-    
+
     riwayat: [
         { tanggal: '2026-08-03', masuk: '07:15:20', pulang: '19:35:10', nama: 'Joko Susilo', kategori: 'Pekerja Harian', uid: '83A192B4', device: 'KANTORJK_01', lembur: 'Lembur 2 Jam', foto: 'https://ui-avatars.com/api/?name=Joko+Susilo&background=f59e0b&color=fff&size=96' },
         { tanggal: '2026-08-03', masuk: '07:22:14', pulang: '18:32:00', nama: 'Slamet Riyadi', kategori: 'Pekerja Harian', uid: '47C201F8', device: 'KANTORJK_01', lembur: 'Lembur 1 Jam', foto: 'https://ui-avatars.com/api/?name=Slamet+Riyadi&background=f59e0b&color=fff&size=96' },
@@ -173,8 +173,8 @@ function addAuditLog(username, aksi, keterangan, ip = '127.0.0.1') {
     const user = REGISTERED_USERS.find(u => u.username === username) || { nama: username, roleLabel: 'Pengguna' };
     const now = new Date();
     const pad = n => String(n).padStart(2, '0');
-    const waktu = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-    
+    const waktu = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+
     if (!dummyData.auditLogs) dummyData.auditLogs = [];
     const newLog = {
         id: Date.now(),
@@ -221,10 +221,10 @@ function renderLayout(title, activeMenu, content, currentUser = null) {
 
     // HANYA 2 AKUN SUPER ADMIN YANG BISA MELIHAT MENU LOG AKTIVITAS (AUDIT)
     if (isSuperAdmin) {
-        menus.push({ 
-            id: 'audit-log', 
-            href: '/audit-log', 
-            icon: 'fa-shield-halved', 
+        menus.push({
+            id: 'audit-log',
+            href: '/audit-log',
+            icon: 'fa-shield-halved',
             label: 'Log Aktivitas (Audit)',
             badge: 'Admin'
         });
@@ -232,8 +232,8 @@ function renderLayout(title, activeMenu, content, currentUser = null) {
 
     const menuHtml = menus.map(m => {
         const isActive = activeMenu === m.id;
-        const cls = isActive 
-            ? 'bg-teal-600 text-white shadow-md' 
+        const cls = isActive
+            ? 'bg-teal-600 text-white shadow-md'
             : 'text-slate-300 hover:bg-slate-700 hover:text-white';
         const badge = m.badge ? `<span class="bg-rose-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ml-auto tracking-wider">${m.badge}</span>` : '';
         return `
@@ -292,9 +292,9 @@ function renderLayout(title, activeMenu, content, currentUser = null) {
                     <div class="font-bold text-slate-800 leading-tight">${user.nama}</div>
                     <div class="text-xs text-slate-500">${user.roleLabel} &bull; <span class="font-mono text-slate-400">@${user.username}</span></div>
                 </div>
-                ${isSuperAdmin 
-                    ? '<span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-teal-100 text-teal-800 border border-teal-200"><i class="fas fa-lock-open mr-1"></i> Izin Audit Penuh</span>' 
-                    : '<span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-200"><i class="fas fa-lock mr-1"></i> Staf Operasional</span>'}
+                ${isSuperAdmin
+            ? '<span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-teal-100 text-teal-800 border border-teal-200"><i class="fas fa-lock-open mr-1"></i> Izin Audit Penuh</span>'
+            : '<span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-200"><i class="fas fa-lock mr-1"></i> Staf Operasional</span>'}
             </div>
             <div class="flex items-center gap-3">
                 <a href="javascript:location.reload()"
@@ -618,7 +618,7 @@ function renderDashboard(initKategori = '', initDevice = '', currentUser = null)
         const katBadge = isHarian
             ? '<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-800"><i class="fas fa-hammer mr-1 text-[10px]"></i> Pekerja Harian</span>'
             : '<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-blue-100 text-blue-800"><i class="fas fa-briefcase mr-1 text-[10px]"></i> Staff Kantor</span>';
-        
+
         const batasBadge = isHarian
             ? '<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-amber-50 text-amber-900 border border-amber-200">Maks. 07:30</span>'
             : '<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-blue-50 text-blue-900 border border-blue-200">Maks. 08:30</span>';
@@ -627,7 +627,7 @@ function renderDashboard(initKategori = '', initDevice = '', currentUser = null)
         const statusBadge = isTerlambat
             ? `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-700"><i class="fas fa-exclamation-triangle mr-1 text-[10px]"></i> ${row.statusMasuk}</span>`
             : `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700"><i class="fas fa-check-circle mr-1 text-[10px]"></i> ${row.statusMasuk}</span>`;
-        
+
         const isLembur = row.lembur.includes('Lembur');
         const lemburBadge = isLembur
             ? `<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 shadow-sm"><i class="fas fa-clock mr-1 text-[10px]"></i> ${row.lembur}</span>`
@@ -1649,14 +1649,14 @@ function renderRekap(currentUser = null) {
         <tr class="hover:bg-slate-50 transition-colors">
             <td class="px-6 py-4 text-base font-bold text-slate-800">${escapeHtml(r.nama)}</td>
             <td class="px-6 py-4 text-base text-slate-600">
-                ${r.kategori === 'Pekerja Harian' 
-                    ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-800">Pekerja Harian</span>'
-                    : '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-800">Staff Kantor</span>'}
+                ${r.kategori === 'Pekerja Harian'
+            ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-800">Pekerja Harian</span>'
+            : '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-800">Staff Kantor</span>'}
             </td>
             <td class="px-4 py-4 text-center">
-                ${r.senin === 'Hadir' 
-                    ? '<span class="inline-flex items-center px-3 py-1 rounded bg-green-100 text-green-700 font-bold text-sm">Hadir</span>' 
-                    : '<span class="text-slate-400 font-bold">-</span>'}
+                ${r.senin === 'Hadir'
+            ? '<span class="inline-flex items-center px-3 py-1 rounded bg-green-100 text-green-700 font-bold text-sm">Hadir</span>'
+            : '<span class="text-slate-400 font-bold">-</span>'}
             </td>
             <td class="px-4 py-4 text-center">
                 ${r.selasa === 'Hadir' ? '<span class="inline-flex items-center px-3 py-1 rounded bg-green-100 text-green-700 font-bold text-sm">Hadir</span>' : '<span class="text-slate-400 font-bold">-</span>'}
@@ -1732,15 +1732,15 @@ function renderKartuRfid(currentUser = null) {
             <td class="px-6 py-4 text-base font-mono font-bold text-slate-800">${escapeHtml(k.uid)}</td>
             <td class="px-6 py-4 text-base font-semibold text-slate-800">${escapeHtml(k.pemilik)}</td>
             <td class="px-6 py-4 text-base text-slate-600">
-                ${k.kategori === 'Pekerja Harian' 
-                    ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-800">Pekerja Harian</span>'
-                    : '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-800">Staff Kantor</span>'}
+                ${k.kategori === 'Pekerja Harian'
+            ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-800">Pekerja Harian</span>'
+            : '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-800">Staff Kantor</span>'}
             </td>
             <td class="px-6 py-4 text-base text-slate-600">${escapeHtml(k.tgl)}</td>
             <td class="px-6 py-4 text-center">
                 ${k.status === 'Aktif'
-                    ? '<span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700"><i class="fas fa-circle text-[8px] mr-1.5"></i> Aktif</span>'
-                    : '<span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-slate-100 text-slate-600">Nonaktif</span>'}
+            ? '<span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700"><i class="fas fa-circle text-[8px] mr-1.5"></i> Aktif</span>'
+            : '<span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-slate-100 text-slate-600">Nonaktif</span>'}
             </td>
             <td class="px-6 py-4 text-center">
                 <button class="bg-amber-50 hover:bg-amber-100 text-amber-700 font-medium py-1.5 px-3 rounded text-sm transition-colors cursor-pointer">
@@ -1803,8 +1803,8 @@ function renderDevice(currentUser = null) {
             <td class="px-6 py-4 text-sm text-slate-500">${d.aktif}</td>
             <td class="px-6 py-4 text-center">
                 ${d.status === 'Online'
-                    ? '<span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-green-100 text-green-700"><span class="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></span> Online</span>'
-                    : '<span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-slate-100 text-slate-600"><span class="w-2 h-2 rounded-full bg-slate-400 mr-2"></span> Offline</span>'}
+            ? '<span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-green-100 text-green-700"><span class="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></span> Online</span>'
+            : '<span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-slate-100 text-slate-600"><span class="w-2 h-2 rounded-full bg-slate-400 mr-2"></span> Offline</span>'}
             </td>
             <td class="px-6 py-4 text-center">
                 <div class="flex items-center justify-center gap-2">
@@ -1875,7 +1875,10 @@ function renderDevice(currentUser = null) {
 
 // Router
 const server = http.createServer((req, res) => {
-    const parsedUrl = new URL(req.url, 'http://localhost:8000');
+    const rawPath = (req.headers && (req.headers['x-matched-path'] || req.headers['x-invoke-path'])) 
+        ? req.headers['x-matched-path'] || req.headers['x-invoke-path']
+        : req.url;
+    const parsedUrl = new URL(rawPath, 'http://localhost:8000');
     const pathname = parsedUrl.pathname.replace(/\/$/, '') || '/';
     const query = Object.fromEntries(parsedUrl.searchParams.entries());
 
@@ -1903,7 +1906,7 @@ const server = http.createServer((req, res) => {
             const u = (params.get('username') || '').trim();
             const p = params.get('password') || '';
 
-            const userFound = REGISTERED_USERS.find(usr => 
+            const userFound = REGISTERED_USERS.find(usr =>
                 usr.username.toLowerCase() === u.toLowerCase() && usr.pass === p
             );
             if (userFound) {
@@ -2204,7 +2207,7 @@ const server = http.createServer((req, res) => {
             notif = 'Operasi dibatalkan: Data karyawan tidak ditemukan atau ID tidak valid.';
             notifType = 'warning';
         }
-        
+
         res.writeHead(200);
         res.end(renderKaryawan(query.tab || 'aktif', notif, currentUser, notifType));
     } else if (pathname === '/kartu-rfid') {

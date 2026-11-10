@@ -9,3 +9,5 @@ database/*.tmp
 Thumbs.db
 .agents/
 skills-lock.json
+.vercel
+.env*
