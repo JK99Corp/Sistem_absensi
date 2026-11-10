@@ -162,3 +162,4 @@ INSERT INTO absensi (karyawan_id, uid_rfid, device_id, tanggal, jam_masuk, jam_p
 -- 5. Catatan Audit Log Awal
 INSERT INTO audit_logs (user_username, action, target_entity, target_id, payload_lama, payload_baru, ip_address, user_agent) VALUES
 ('system', 'DATABASE_INITIALIZATION', 'System', 1, NULL, '{"status": "SUCCESS", "db": "PostgreSQL", "vendor": "Jaya Kedhaton Enterprise"}', '127.0.0.1', 'MigrationScript/PostgreSQL');
+
