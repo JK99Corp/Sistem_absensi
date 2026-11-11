@@ -3,319 +3,440 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Transaksi Upah Pekerja - PT Jaya Kedhaton</title>
+    <title>Form Transaksi - PT Jaya Kedhaton</title>
     <link rel="icon" type="image/png" href="images/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
         
-        /* Gaya tabel spreadsheet persis Excel tapi jauh lebih lega dan besar */
-        .excel-table th {
-            background-color: #15803d; /* Hijau Excel */
-            color: white;
-            font-weight: 700;
-            font-size: 14px;
-            padding: 14px 10px;
-            border: 1px solid #166534;
-            text-align: center;
-            letter-spacing: 0.02em;
+        /* Hilangkan spinner bawaan browser agar angka tidak tertutup */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
-        .excel-table td {
-            border: 1px solid #cbd5e1;
-            padding: 10px 8px;
-            font-size: 15px;
-            vertical-align: middle;
+        input[type=number] {
+            -moz-appearance: textfield;
         }
-        .excel-table tr:hover td {
-            background-color: #f0fdf4;
-        }
-        
-        /* Kotak input besar, jelas, dan sangat nyaman diketik */
-        .excel-input {
+
+        /* Kotak input besar, jelas, tebal, dan sangat nyaman diketik */
+        .form-input-lg {
             width: 100%;
-            padding: 9px 12px;
+            height: 48px;
+            padding: 10px 14px;
             border: 2px solid #cbd5e1;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 15px;
             font-weight: 700;
+            color: #0f172a;
             background: #ffffff;
             transition: all 0.15s ease-in-out;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+            box-sizing: border-box;
         }
-        .excel-input:focus {
+        .form-input-lg:focus {
             border-color: #16a34a;
-            outline: 3px solid #bbf7d0;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
             background: #ffffff;
         }
-        .excel-input-num {
+        .form-input-num {
             text-align: right;
             font-variant-numeric: tabular-nums;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
         }
 
-        /* Mode Cetak Slip */
+        /* Mode Cetak Slip & Rekap Sempurna (Tidak Terpotong) */
         @media print {
-            aside, header, #areaKontrol, .no-print { display: none !important; }
-            .ml-64, #mainContentWrapper { margin-left: 0 !important; }
-            body { background: white !important; }
-            body.slip-open main > div:not(#modalSlip) { display: none !important; }
+            @page {
+                size: A4 portrait;
+                margin: 8mm 10mm;
+            }
+            aside, header, #areaPetunjuk, #areaKalender, #areaInputForm, #areaTabelRekap, .no-print { 
+                display: none !important; 
+            }
+            .ml-64, #mainContentWrapper { 
+                margin-left: 0 !important; 
+                padding: 0 !important;
+                width: 100% !important; 
+                background: white !important;
+            }
+            body { 
+                background: white !important; 
+                color: #000000 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            body.slip-open main > div:not(#modalSlip) { 
+                display: none !important; 
+            }
             body.slip-open #modalSlip {
                 position: static !important;
                 background: white !important;
                 padding: 0 !important;
                 display: block !important;
+                width: 100% !important;
+                height: auto !important;
+                overflow: visible !important;
             }
             body.slip-open #modalSlip > div {
                 box-shadow: none !important;
-                border: 2px solid #334155 !important;
+                border: 2px solid #0f172a !important;
+                border-radius: 8px !important;
                 width: 100% !important;
                 max-width: 100% !important;
+                margin: 0 auto !important;
+                padding: 18px 24px !important;
+                page-break-inside: avoid !important;
             }
         }
     </style>
 </head>
-<body class="bg-slate-100 min-h-screen text-slate-800">
+<body class="bg-slate-100 min-h-screen text-slate-800 font-sans">
 
-    <!-- SIDEBAR DENGAN TOMBOL TUTUP SANGAT JELAS -->
+    <!-- SIDEBAR UTAMA (KONSISTEN & COLLAPSIBLE) -->
     <aside id="sidebarNav" class="fixed top-0 left-0 w-64 h-full bg-slate-800 text-white flex flex-col z-50 shadow-2xl transition-transform duration-300 ease-in-out no-print">
-        <!-- Header Sidebar -->
         <div class="px-5 py-4 border-b border-slate-700">
             <div class="flex items-center gap-3">
-                <img src="images/logo.png" alt="Logo" class="w-11 h-11 object-contain shrink-0">
+                <img src="images/logo.png" alt="Logo Jaya Kedhaton" class="w-11 h-11 object-contain shrink-0">
                 <div class="overflow-hidden">
                     <h1 class="text-sm font-bold tracking-wide text-white leading-tight truncate">Jaya Kedhaton</h1>
-                    <p class="text-xs text-slate-400 truncate">Sistem Absensi Digital</p>
+                    <p class="text-[10px] text-slate-400 mt-0.5 truncate">Sistem Absensi Digital</p>
                 </div>
             </div>
-
-            <!-- Tombol Sembunyikan Menu Sangat Jelas -->
+            <!-- Tombol Sembunyikan Menu -->
             <button type="button" onclick="toggleSidebar()" 
-                    class="w-full mt-3 bg-slate-700 hover:bg-rose-600 text-white font-bold py-2.5 px-3 rounded-lg text-xs flex items-center justify-center gap-2 border border-slate-600 shadow cursor-pointer transition-colors"
-                    title="Klik untuk menyembunyikan menu ini agar layar tabel lebih luas">
+                    class="w-full mt-3 bg-slate-700 hover:bg-rose-600 text-white font-bold py-2.5 px-3 rounded-xl text-xs flex items-center justify-center gap-2 border border-slate-600 shadow cursor-pointer transition-colors"
+                    title="Buka / Tutup Menu Samping">
                 <i class="fas fa-arrow-left"></i>
-                <span>Sembunyikan Menu (Biar Luas)</span>
+                <span>Sembunyikan Menu</span>
             </button>
         </div>
 
-        <!-- Menu Navigasi -->
         <nav class="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto">
-            <a href="dashboard.html" class="flex items-center gap-3 px-3.5 py-3 rounded-lg text-sm font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
-                <i class="fas fa-chart-bar w-5 text-center text-base"></i>
+            <a href="dashboard.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-700/70 hover:text-white transition-colors">
+                <i class="fas fa-chart-pie w-5 text-center text-base"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="riwayat.html" class="flex items-center gap-3 px-3.5 py-3 rounded-lg text-sm font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
+            <a href="riwayat.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-700/70 hover:text-white transition-colors">
                 <i class="fas fa-clipboard-list w-5 text-center text-base"></i>
                 <span>Riwayat Absensi</span>
             </a>
-            <a href="rekap.html" class="flex items-center gap-3 px-3.5 py-3 rounded-lg text-sm font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
+            <a href="rekap.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-700/70 hover:text-white transition-colors">
                 <i class="fas fa-calendar-week w-5 text-center text-base"></i>
                 <span>Rekap Kehadiran</span>
             </a>
-            <a href="upah.html" class="flex items-center gap-3 px-3.5 py-3 rounded-lg text-sm font-bold bg-green-700 text-white shadow">
-                <i class="fas fa-file-excel w-5 text-center text-lg"></i>
-                <span>Form Upah &amp; Lembur</span>
+            <a href="upah.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-bold bg-teal-600 text-white shadow-md">
+                <i class="fas fa-file-invoice-dollar w-5 text-center text-base"></i>
+                <span>Form Transaksi</span>
             </a>
-            <a href="karyawan.html" class="flex items-center gap-3 px-3.5 py-3 rounded-lg text-sm font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
+            <a href="karyawan.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-700/70 hover:text-white transition-colors">
                 <i class="fas fa-users w-5 text-center text-base"></i>
-                <span>Daftar Karyawan</span>
+                <span>Data Karyawan</span>
             </a>
-            <a href="kartu-rfid.html" class="flex items-center gap-3 px-3.5 py-3 rounded-lg text-sm font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
+            <a href="kartu-rfid.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-700/70 hover:text-white transition-colors">
                 <i class="fas fa-id-card w-5 text-center text-base"></i>
                 <span>Kartu RFID</span>
             </a>
-            <a href="audit-log.html" class="flex items-center gap-3 px-3.5 py-3 rounded-lg text-sm font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
-                <i class="fas fa-shield-alt w-5 text-center text-base"></i>
+            <a href="device.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-700/70 hover:text-white transition-colors">
+                <i class="fas fa-microchip w-5 text-center text-base"></i>
+                <span>Perangkat Dual-ESP32</span>
+            </a>
+            <a href="audit-log.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-700/70 hover:text-white transition-colors">
+                <i class="fas fa-shield-halved w-5 text-center text-base"></i>
                 <span>Log Aktivitas</span>
+                <span class="ml-auto bg-rose-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Admin</span>
             </a>
         </nav>
 
-        <div class="px-5 py-3.5 border-t border-slate-700 text-xs text-slate-400">
-            &copy; 2026 PT Jaya Kedhaton
+        <div class="px-5 py-3.5 border-t border-slate-700 text-[11px] text-slate-400 flex items-center justify-between">
+            <span>&copy; 2026 PT Jaya Kedhaton</span>
+            <span class="text-emerald-400 font-mono text-[10px]"><i class="fas fa-circle text-[8px] mr-1"></i>Online</span>
         </div>
     </aside>
 
     <!-- KONTEN UTAMA -->
-    <div id="mainContentWrapper" class="min-h-screen flex flex-col transition-all duration-300 ml-64">
-        <!-- Topbar Sederhana -->
-        <header class="bg-white border-b border-slate-200 px-6 py-3.5 flex items-center justify-between sticky top-0 z-40 no-print">
-            <div class="flex items-center gap-4">
-                <!-- TOMBOL BUKA/TUTUP MENU SAMPING (BESAR, JELAS & USER FRIENDLY) -->
+    <div id="mainContentWrapper" class="min-h-screen flex flex-col transition-all duration-300 ml-64 bg-slate-50">
+        <!-- Top Bar Konsisten -->
+        <header class="bg-white border-b border-slate-200 px-6 py-3.5 flex items-center justify-between sticky top-0 z-40 shadow-sm no-print">
+            <div class="flex items-center gap-3">
                 <button type="button" id="btnToggleMenu" onclick="toggleSidebar()" 
-                        class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs md:text-sm inline-flex items-center gap-2 cursor-pointer shadow-md transition-all"
-                        title="Klik untuk membuka / menutup menu samping">
+                        class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs inline-flex items-center gap-2 cursor-pointer shadow-sm transition-all"
+                        title="Buka / Tutup Menu Samping">
                     <i class="fas fa-bars text-sm"></i>
                     <span id="labelTombolMenu">Sembunyikan Menu</span>
                 </button>
 
-                <div class="h-6 w-px bg-slate-300 hidden sm:block"></div>
+                <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
 
                 <div>
-                    <h2 class="text-base font-bold text-slate-800 leading-tight">Form Transaksi Upah Pekerja</h2>
-                    <p class="text-xs text-slate-500">Format Spreadsheet Excel &bull; PT Jaya Kedhaton</p>
+                    <h2 class="text-sm md:text-base font-bold text-slate-800 leading-tight">Form Transaksi</h2>
+                    <p class="text-[11px] text-slate-500 hidden sm:block">Input Absensi, Lembur &amp; Cetak Slip Gaji</p>
                 </div>
             </div>
 
-            <div class="flex items-center gap-3 text-sm">
-                <div class="bg-slate-100 px-3.5 py-1.5 rounded-lg text-slate-700 font-semibold border border-slate-200 text-xs hidden md:inline-flex items-center">
-                    <i class="fas fa-user-circle mr-1.5 text-slate-500"></i> Admin Keuangan
+            <div class="flex items-center gap-2.5 text-sm">
+                <!-- Info Akun -->
+                <div class="hidden md:flex items-center gap-2.5 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700">
+                    <div class="w-6 h-6 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-[11px]">
+                        A
+                    </div>
+                    <span>Admin Keuangan &amp; Absensi</span>
                 </div>
-                <button onclick="location.reload()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-1.5 rounded-lg text-xs font-bold border border-slate-300 cursor-pointer">
-                    <i class="fas fa-sync-alt mr-1"></i> Refresh
-                </button>
+
+                <!-- Jam Realtime -->
+                <span class="hidden lg:inline-flex items-center px-2.5 py-1.5 rounded-xl text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200 font-mono">
+                    <i class="fas fa-clock mr-1.5 text-teal-600"></i><span id="waktuRealtime">--:--:-- WIB</span>
+                </span>
+
+                <!-- Tombol Refresh -->
+                <a href="javascript:location.reload()" 
+                   class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-300 inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm">
+                    <i class="fas fa-sync-alt"></i> <span class="hidden sm:inline">Refresh</span>
+                </a>
+
+                <!-- Tombol Logout -->
+                <a href="login.html" 
+                   class="bg-rose-50 hover:bg-rose-100 text-rose-700 px-3 py-1.5 rounded-xl text-xs font-bold border border-rose-200 inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm">
+                    <i class="fas fa-sign-out-alt"></i> <span class="hidden sm:inline">Logout</span>
+                </a>
             </div>
         </header>
 
-        <!-- Area Isi Halaman -->
-        <main class="flex-1 p-6">
+        <main class="flex-1 p-4 md:p-6 space-y-5">
 
-            <!-- KOTAK PETUNJUK SANGAT RAMAH IBU-IBU AWAM -->
-            <div class="bg-emerald-50 border-2 border-emerald-300 rounded-xl p-4 mb-5 shadow-sm no-print">
-                <div class="flex items-start gap-3">
-                    <span class="text-2xl text-emerald-600 mt-0.5">
-                        <i class="fas fa-lightbulb"></i>
-                    </span>
-                    <div class="text-sm text-emerald-950">
-                        <p class="font-bold text-base text-emerald-900 mb-1">
-                            Petunjuk Pengisian Form Upah:
-                        </p>
-                        <ol class="list-decimal list-inside space-y-1 text-emerald-800 text-xs md:text-sm font-medium">
-                            <li><strong>Pilih tanggal periode</strong> menggunakan kalender di bawah (klik ikon kalender untuk memilih tanggal).</li>
-                            <li><strong>Ketik angka</strong> pada kolom yang berkotak putih (Hari, Upah, Jam Lembur, Makan, Kasbon). Ukuran kolom sudah dibuat besar agar nyaman dibaca.</li>
-                            <li><strong>Upah lembur otomatis dihitung</strong>: <code class="bg-emerald-200/80 px-1.5 py-0.5 rounded font-mono font-bold text-emerald-950">Upah Harian ÷ 8 × Jam Lembur</code>. Tidak perlu kalkulator lagi.</li>
-                            <li><strong>Satu orang kerja di beberapa proyek?</strong> Klik tombol hijau <span class="bg-emerald-600 text-white font-bold px-2 py-0.5 rounded text-xs">+ Tambah Baris Pekerja</span> untuk menambahkan proyek lainnya bagi pekerja yang sama. Di slip gaji otomatis digabungkan.</li>
-                        </ol>
+            <!-- PERIODE GAJI -->
+            <div id="areaKalender" class="bg-white px-5 py-3.5 rounded-2xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-4 no-print">
+                <div class="flex flex-wrap items-center gap-3">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Periode:</span>
+                    <div class="flex items-center gap-2">
+                        <input type="date" id="tglMulai" value="2026-10-24" onchange="updatePeriodeKalender()"
+                               class="border-2 border-slate-300 bg-white rounded-lg px-3 py-1.5 text-xs md:text-sm font-bold text-slate-800 focus:border-green-600 focus:outline-none cursor-pointer">
+                        <span class="text-xs font-bold text-slate-400">s/d</span>
+                        <input type="date" id="tglSelesai" value="2026-11-06" onchange="updatePeriodeKalender()"
+                               class="border-2 border-slate-300 bg-white rounded-lg px-3 py-1.5 text-xs md:text-sm font-bold text-slate-800 focus:border-green-600 focus:outline-none cursor-pointer">
                     </div>
+                    <span id="labelPeriodeAktif" class="text-xs md:text-sm font-bold text-emerald-900 bg-emerald-100 px-3 py-1 rounded-lg">
+                        24 Oktober - 06 Nopember 2026
+                    </span>
+                </div>
+
+                <div class="text-xs text-slate-500 font-semibold flex items-center gap-1.5">
+                    <i class="fas fa-users text-emerald-600"></i>
+                    <span>252 Pekerja Terdaftar</span>
                 </div>
             </div>
 
-            <!-- PANEL KONTROL & FILTER ATAS DENGAN KALENDER -->
-            <div id="areaKontrol" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-5 flex flex-wrap items-center justify-between gap-4">
+            <!-- ============================================================ -->
+            <!-- FORM TRANSAKSI INPUT UPAH (BERSIH & RAPI)                    -->
+            <!-- ============================================================ -->
+            <div id="areaInputForm" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 md:p-6 no-print">
                 
-                <!-- BAGIAN KALENDER PERIODE GAJI (USER FRIENDLY KALENDER) -->
-                <div class="flex flex-wrap items-center gap-3">
-                    <div class="flex items-center gap-2 bg-emerald-50/70 border-2 border-emerald-300 rounded-xl px-4 py-2.5 shadow-sm">
-                        <i class="fas fa-calendar-alt text-emerald-700 text-base mr-1"></i>
-                        <span class="text-xs font-bold text-emerald-950 uppercase">Periode:</span>
-                        
-                        <!-- Kalender Dari -->
-                        <div class="flex items-center gap-1.5">
-                            <input type="date" id="tglMulai" value="2026-10-24" onchange="updatePeriodeKalender()"
-                                   class="border-2 border-slate-300 bg-white rounded-lg px-2.5 py-1.5 text-xs md:text-sm font-bold text-slate-800 focus:border-green-600 focus:outline-none cursor-pointer shadow-inner">
-                            <span class="text-xs font-bold text-slate-500">s/d</span>
-                            <!-- Kalender Sampai -->
-                            <input type="date" id="tglSelesai" value="2026-11-06" onchange="updatePeriodeKalender()"
-                                   class="border-2 border-slate-300 bg-white rounded-lg px-2.5 py-1.5 text-xs md:text-sm font-bold text-slate-800 focus:border-green-600 focus:outline-none cursor-pointer shadow-inner">
+                <div class="flex items-center justify-between pb-3.5 mb-5 border-b border-slate-100">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-lg bg-teal-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900">Form Transaksi</h3>
+                    </div>
+                    <button type="button" onclick="resetFormBaru()" 
+                            class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs inline-flex items-center gap-1.5 border border-slate-300 cursor-pointer transition-colors">
+                        <i class="fas fa-redo-alt"></i> Reset Form
+                    </button>
+                </div>
+
+                <!-- 1. DATA PEKERJA -->
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 md:p-5 mb-5">
+                    <h4 class="text-xs font-bold uppercase text-slate-500 tracking-wider mb-3">Data Pekerja</h4>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+                        <div class="md:col-span-6">
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">
+                                Pekerja:
+                            </label>
+                            <div class="relative">
+                                <input type="text" list="datalistPekerja" id="inputPekerja"
+                                       oninput="onPilihPekerja(this.value)"
+                                       placeholder="Cari kode atau nama pekerja..."
+                                       class="form-input-lg uppercase pl-10 font-bold text-slate-900 bg-white">
+                                <i class="fas fa-search absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
+                            </div>
+                            <datalist id="datalistPekerja"></datalist>
                         </div>
 
-                        <!-- Label Hasil Format Kalender -->
-                        <span id="labelPeriodeAktif" class="text-xs md:text-sm font-extrabold text-emerald-900 bg-emerald-200/80 px-3 py-1 rounded-md ml-1">
-                            24 Oktober - 06 Nopember 2026
-                        </span>
-                    </div>
+                        <div class="md:col-span-3">
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">
+                                Posisi:
+                            </label>
+                            <select id="posisiPekerja" onchange="onUbahPosisi(this.value)"
+                                    class="form-input-lg font-bold bg-white cursor-pointer">
+                                <option value="TUKANG">TUKANG</option>
+                                <option value="MANDOR">MANDOR</option>
+                                <option value="SEMI TUKANG">SEMI TUKANG</option>
+                                <option value="PEMBANTU TUKANG">PEMBANTU TUKANG</option>
+                                <option value="MANDOR INTERIOR">MANDOR INTERIOR</option>
+                                <option value="WAKIL MANDOR">WAKIL MANDOR</option>
+                                <option value="MEP">MEP</option>
+                                <option value="CAT">CAT</option>
+                                <option value="RKS">RKS</option>
+                            </select>
+                        </div>
 
-                    <!-- Filter Cepat Projek -->
-                    <div class="flex items-center gap-2 ml-0 md:ml-2">
-                        <span class="text-xs font-bold text-slate-500 uppercase">Filter Projek:</span>
-                        <select id="filterProjekSelect" onchange="jalankanFilter()"
-                                class="border-2 border-slate-300 bg-slate-50 rounded-lg px-3 py-2 text-xs md:text-sm font-bold text-slate-700 focus:outline-none focus:border-green-600 cursor-pointer">
-                            <option value="">Semua Projek (Tampilkan Semua)</option>
-                            <option value="FELISA ESTATE">FELISA ESTATE</option>
-                            <option value="RUKO PAK DEDI">RUKO PAK DEDI</option>
-                            <option value="GREEN HOUSE">GREEN HOUSE</option>
-                            <option value="PAGAR RING ROAD">PAGAR RING ROAD</option>
-                            <option value="PROYEK RTT SAMBOJA">PROYEK RTT SAMBOJA</option>
-                        </select>
+                        <div class="md:col-span-3">
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">
+                                Upah / Hari (Rp):
+                            </label>
+                            <input type="number" id="upahPerHari" value="140000" step="5000" min="0"
+                                   oninput="hitungTotalForm()"
+                                   class="form-input-lg form-input-num text-slate-900 font-bold bg-white">
+                            <p class="text-[11px] text-amber-800 font-bold mt-1 text-right" id="labelTarifLemburInfo">
+                                Lembur: Rp 17.500 / jam
+                            </p>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Tombol Aksi Khas Excel (Besar & Jelas) -->
-                <div class="flex flex-wrap items-center gap-3">
-                    <button type="button" onclick="tambahBarisKosong()"
-                            class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-sm shadow-md inline-flex items-center gap-2 cursor-pointer transition-all">
-                        <i class="fas fa-plus-circle text-base"></i>
-                        <span>+ Tambah Baris Pekerja</span>
-                    </button>
-                    <button type="button" onclick="window.print()"
-                            class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-2.5 px-4 rounded-xl text-sm shadow-md inline-flex items-center gap-2 cursor-pointer transition-all">
-                        <i class="fas fa-print"></i> Cetak Lembar Ini
-                    </button>
+                <!-- 2. RINCIAN PROYEK -->
+                <div class="mb-5">
+                    <h4 class="text-xs font-bold uppercase text-slate-500 tracking-wider mb-3">Rincian Proyek</h4>
+
+                    <div id="containerProyekList" class="space-y-3.5">
+                        <!-- Baris proyek dirender oleh JS -->
+                    </div>
+
+                    <div class="mt-3.5 flex flex-wrap items-center gap-3">
+                        <button type="button" onclick="tambahBlokProyek()" 
+                                class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 px-4 rounded-xl text-xs md:text-sm shadow-sm inline-flex items-center gap-1.5 cursor-pointer transition-colors">
+                            <i class="fas fa-plus"></i> Tambah Proyek
+                        </button>
+                        <button type="button" id="btnHapusTerakhir" onclick="hapusBlokProyekTerakhir()" 
+                                class="bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold py-2.5 px-3.5 rounded-xl text-xs md:text-sm border border-rose-300 shadow-sm inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+                                style="display: none;">
+                            <i class="fas fa-undo-alt text-rose-600"></i> Batal Tambah
+                        </button>
+                    </div>
                 </div>
+
+                <!-- 3. PEMBAYARAN & SISA DITERIMA -->
+                <div class="bg-slate-900 text-white rounded-xl p-5 shadow-lg mb-2">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                        <!-- Total Upah -->
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                            <span class="text-xs text-slate-400 uppercase font-bold block mb-1">Total Upah:</span>
+                            <div class="text-2xl font-black text-white" id="formTotalKotor">Rp 0</div>
+                            <span class="text-[11px] text-slate-400 mt-1 block font-medium" id="formRincianHariLembur">0 Hari Kerja • 0 Jam Lembur</span>
+                        </div>
+
+                        <!-- Kasbon -->
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
+                            <label class="text-xs text-rose-400 uppercase font-bold block mb-1">
+                                Kasbon (Rp):
+                            </label>
+                            <input type="number" id="formKasbon" value="0" min="0" step="10000"
+                                   oninput="hitungTotalForm()"
+                                   placeholder="0"
+                                   class="w-full h-11 px-3 text-right font-black text-xl rounded-lg bg-white text-rose-700 border-2 border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-400">
+                        </div>
+
+                        <!-- Sisa Diterima -->
+                        <div class="bg-emerald-600 p-4 rounded-xl border border-emerald-400 text-white shadow-md">
+                            <span class="text-xs uppercase font-extrabold text-emerald-100 block mb-1">
+                                Sisa Diterima:
+                            </span>
+                            <div class="text-3xl font-black tracking-tight" id="formSisaDiterima">Rp 0</div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-end gap-3 mt-5 pt-4 border-t border-slate-800">
+                        <button type="button" onclick="simpanTransaksi(false)" 
+                                class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2.5 px-5 rounded-xl text-xs md:text-sm shadow cursor-pointer transition-colors inline-flex items-center gap-1.5">
+                            <i class="fas fa-save"></i> Simpan
+                        </button>
+                        <button type="button" onclick="simpanTransaksi(true)" 
+                                class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-2.5 px-6 rounded-xl text-xs md:text-sm shadow-md cursor-pointer transition-colors inline-flex items-center gap-2">
+                            <i class="fas fa-print text-base"></i> Simpan &amp; Cetak Slip
+                        </button>
+                    </div>
+                </div>
+
             </div>
 
-            <!-- TABEL TRANSAKSI SPREADSHEET (BARIS BESAR & LEGA) -->
-            <div class="bg-white rounded-xl border-2 border-slate-300 shadow-md overflow-hidden mb-6">
+            <!-- ============================================================ -->
+            <!-- TABEL DAFTAR TRANSAKSI UPAH PERIODE INI (RANGKUMAN BERSIH)  -->
+            <!-- ============================================================ -->
+            <div id="areaTabelRekap" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-8">
+                
+                <div class="px-5 py-3.5 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-slate-50 no-print">
+                    <h3 class="text-sm md:text-base font-bold text-slate-900">
+                        Daftar Transaksi Periode Ini
+                    </h3>
+
+                    <div class="flex items-center gap-2.5">
+                        <div class="relative">
+                            <input type="text" id="filterTabelInput" oninput="renderDaftarTransaksi()"
+                                   placeholder="Cari pekerja / proyek..." 
+                                   class="text-xs font-semibold pl-8 pr-3 py-1.5 rounded-lg border border-slate-300 bg-white focus:outline-none focus:border-green-600 w-52">
+                            <i class="fas fa-search absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
+                        </div>
+
+                        <button type="button" onclick="window.print()" 
+                                class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-1.5 px-3.5 rounded-lg text-xs shadow-sm inline-flex items-center gap-1.5 cursor-pointer">
+                            <i class="fas fa-print"></i> Cetak Rekap
+                        </button>
+                    </div>
+                </div>
+
                 <div class="overflow-x-auto">
-                    <table class="w-full excel-table" id="tabelExcel">
+                    <table class="w-full text-left border-collapse" style="min-width: 1050px;">
                         <thead>
-                            <tr>
-                                <th style="width: 50px;">No</th>
-                                <th style="min-width: 200px; text-align: left;">Nama Pekerja</th>
-                                <th style="min-width: 170px;">Posisi / Jabatan</th>
-                                <th style="min-width: 180px; background-color: #166534;">Nama Projek</th>
-                                <th style="width: 90px;">Hari Kerja</th>
-                                <th style="width: 135px;">Upah / Hari</th>
-                                <th style="width: 90px;">Lembur (Jam)</th>
-                                <th style="width: 130px; background-color: #14532d;" title="Otomatis dihitung: Upah/Hari : 8">Tarif Lembur/Jam</th>
-                                <th style="width: 120px;">Uang Makan</th>
-                                <th style="width: 120px;">Insentif / Transport</th>
-                                <th style="width: 140px; background-color: #065f46;">Total Upah</th>
-                                <th style="width: 125px; background-color: #991b1b;" class="text-rose-100">Kasbon</th>
-                                <th style="width: 145px; background-color: #047857;">Sisa Diterima</th>
-                                <th style="width: 95px;" class="no-print">Slip Gaji</th>
-                                <th style="width: 55px;" class="no-print">Aksi</th>
+                            <tr class="bg-slate-800 text-white text-xs uppercase tracking-wider font-extrabold">
+                                <th class="p-3 text-center w-12">No</th>
+                                <th class="p-3">Pekerja</th>
+                                <th class="p-3">Posisi</th>
+                                <th class="p-3">Proyek &amp; Hari</th>
+                                <th class="p-3 text-right">Total Upah</th>
+                                <th class="p-3 text-right text-rose-300 bg-rose-900/50">Kasbon</th>
+                                <th class="p-3 text-right text-emerald-300 bg-emerald-950">Sisa Diterima</th>
+                                <th class="p-3 text-center w-36 no-print">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody id="tbodyTransaksi">
-                            <!-- Baris transaksi dirender oleh JS dengan ukuran input besar -->
+                        <tbody id="tbodyDaftarTransaksi" class="divide-y divide-slate-200 text-sm">
+                            <!-- Diisi JS -->
                         </tbody>
                         <tfoot>
-                            <!-- BARIS GRAND TOTAL PERSIS SEPERTI EXCEL DENGAN HURUF JELAS -->
-                            <tr class="bg-slate-200 font-extrabold text-slate-900 border-t-2 border-slate-400 text-sm md:text-base">
-                                <td colspan="4" class="text-right uppercase px-4 py-3.5 bg-slate-300 text-slate-800">
-                                    Grand Total Keseluruhan:
+                            <tr class="bg-slate-200 font-black text-slate-900 text-sm md:text-base border-t-2 border-slate-400">
+                                <td colspan="4" class="p-4 text-right uppercase bg-slate-300 tracking-wider">
+                                    Grand Total Keseluruhan (<span id="totalJumlahPekerja">0</span> Pekerja):
                                 </td>
-                                <td class="text-center font-bold text-slate-900 text-base" id="totalHariKerja">0</td>
-                                <td class="bg-slate-300"></td>
-                                <td class="text-center font-bold text-amber-900 text-base" id="totalJamLembur">0</td>
-                                <td class="bg-slate-300"></td>
-                                <td class="text-right text-slate-900 font-bold" id="totalUangMakan">Rp 0</td>
-                                <td class="text-right text-slate-900 font-bold" id="totalInsentif">Rp 0</td>
-                                <td class="text-right text-emerald-950 font-black bg-emerald-100/90 text-base" id="totalUpahKotor">Rp 0</td>
-                                <td class="text-right text-rose-800 font-black bg-rose-100/90 text-base" id="totalKasbon">Rp 0</td>
-                                <td class="text-right text-emerald-950 font-black bg-emerald-200 text-base md:text-lg" id="totalSisaDiterima">Rp 0</td>
-                                <td colspan="2" class="bg-slate-300 no-print"></td>
+                                <td class="p-4 text-right text-slate-900" id="totalGrandKotor">Rp 0</td>
+                                <td class="p-4 text-right text-rose-700 bg-rose-100" id="totalGrandKasbon">Rp 0</td>
+                                <td class="p-4 text-right text-emerald-950 bg-emerald-200 text-lg font-black" id="totalGrandBersih">Rp 0</td>
+                                <td class="p-4 bg-slate-300 no-print"></td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
             </div>
 
-            <!-- KETERANGAN DI BAWAH TABEL -->
-            <div class="text-xs text-slate-500 flex flex-wrap items-center justify-between gap-2 px-1 no-print">
-                <p>
-                    <i class="fas fa-check-circle text-emerald-600 mr-1"></i>
-                    Rumus Lembur Otomatis: <strong>Tarif Lembur = Upah Harian ÷ 8</strong> (Sesuai ketentuan PT Jaya Kedhaton).
-                </p>
-                <p>
-                    Semua perubahan angka langsung tersimpan otomatis di browser ini.
-                </p>
-            </div>
-
-            <!-- MODAL SLIP GAJI GABUNGAN MULTI-PROJEK -->
-            <div id="modalSlip" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-                <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full p-6 text-slate-800 relative">
-                    <!-- Tombol Tutup -->
-                    <button onclick="tutupSlip()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-2xl font-bold cursor-pointer no-print">
+            <!-- ============================================================ -->
+            <!-- MODAL SLIP GAJI GABUNGAN MULTI-PROJEK (RAPI & TIDAK TERPOTONG) -->
+            <!-- ============================================================ -->
+            <div id="modalSlip" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden overflow-y-auto p-3 sm:p-4 md:p-6 flex justify-center items-start sm:items-center">
+                <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-5 sm:p-6 text-slate-800 relative my-auto border-2 border-slate-300">
+                    
+                    <!-- Tombol Tutup (Hanya Layar) -->
+                    <button onclick="tutupSlip()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-2xl font-bold cursor-pointer no-print w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-100 transition-colors">
                         &times;
                     </button>
 
                     <!-- Kop Surat Jaya Kedhaton -->
                     <div class="border-b-2 border-slate-800 pb-3 text-center">
-                        <img src="images/logo.png" alt="Logo" class="w-14 h-14 mx-auto object-contain mb-1">
-                        <h3 class="text-xl font-black text-slate-900 tracking-wide uppercase">PT. JAYA KEDHATON</h3>
-                        <p class="text-xs text-slate-600 uppercase font-semibold">Design Build, General Contractor, Interior</p>
-                        <p class="text-[11px] text-slate-500">Jl. AW. Syahranie No. 36 A Samarinda</p>
-                        <div class="mt-2 inline-block bg-slate-900 text-white font-bold text-xs uppercase px-4 py-1 rounded">
+                        <img src="images/logo.png" alt="Logo" class="w-12 h-12 mx-auto object-contain mb-1">
+                        <h3 class="text-lg md:text-xl font-black text-slate-900 tracking-wider uppercase">PT. JAYA KEDHATON</h3>
+                        <p class="text-[11px] text-slate-600 uppercase font-bold tracking-wide">Design Build, General Contractor, Interior</p>
+                        <p class="text-[10px] text-slate-500">Jl. AW. Syahranie No. 36 A Samarinda</p>
+                        <div class="mt-2 inline-block bg-slate-900 text-white font-extrabold text-[11px] uppercase px-4 py-0.5 rounded tracking-widest">
                             Slip Gaji &amp; Upah Pekerja
                         </div>
                     </div>
@@ -323,32 +444,32 @@
                     <!-- Identitas Pekerja -->
                     <div class="py-3 text-xs md:text-sm grid grid-cols-2 gap-2 border-b border-slate-200">
                         <div>
-                            <span class="text-slate-500 block text-xs">Nama Pekerja:</span>
-                            <span class="font-bold text-base text-slate-900" id="slipNama">-</span>
+                            <span class="text-slate-500 block text-[11px]">Nama Pekerja:</span>
+                            <span class="font-bold text-sm md:text-base text-slate-900" id="slipNama">-</span>
                         </div>
                         <div>
-                            <span class="text-slate-500 block text-xs">Posisi / Jabatan:</span>
+                            <span class="text-slate-500 block text-[11px]">Posisi / Jabatan:</span>
                             <span class="font-bold text-slate-800" id="slipPosisi">-</span>
                         </div>
                         <div class="col-span-2">
-                            <span class="text-slate-500 block text-xs">Periode:</span>
+                            <span class="text-slate-500 block text-[11px]">Periode Gaji:</span>
                             <span class="font-semibold text-slate-700" id="slipPeriodeDisplay">-</span>
                         </div>
                     </div>
 
                     <!-- Rincian Multi-Proyek -->
                     <div class="py-3">
-                        <p class="text-xs font-bold text-slate-700 uppercase mb-2">Rincian Pekerjaan &amp; Proyek:</p>
-                        <div class="border border-slate-200 rounded-lg overflow-hidden">
-                            <table class="w-full text-xs md:text-sm">
-                                <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                        <p class="text-[11px] font-black text-slate-700 uppercase mb-1.5">Rincian Pekerjaan &amp; Proyek:</p>
+                        <div class="border border-slate-300 rounded-lg overflow-hidden">
+                            <table class="w-full text-xs">
+                                <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-300">
                                     <tr>
-                                        <th class="p-2.5 text-left">Nama Proyek</th>
-                                        <th class="p-2.5 text-center">Hari Kerja</th>
-                                        <th class="p-2.5 text-right">Upah/Hari</th>
-                                        <th class="p-2.5 text-center">Lembur</th>
-                                        <th class="p-2.5 text-right">Uang Makan</th>
-                                        <th class="p-2.5 text-right">Subtotal</th>
+                                        <th class="p-2 text-left">Nama Proyek</th>
+                                        <th class="p-2 text-center">Hari</th>
+                                        <th class="p-2 text-right">Upah/Hari</th>
+                                        <th class="p-2 text-center">Lembur</th>
+                                        <th class="p-2 text-right">Makan</th>
+                                        <th class="p-2 text-right">Subtotal</th>
                                     </tr>
                                 </thead>
                                 <tbody id="slipTbodyProyek" class="divide-y divide-slate-100">
@@ -359,42 +480,42 @@
                     </div>
 
                     <!-- Total Kotor, Kasbon, dan Bersih -->
-                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-1.5 text-xs md:text-sm">
+                    <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 space-y-1 text-xs">
                         <div class="flex justify-between">
-                            <span class="text-slate-600">Total Upah Pekerja:</span>
+                            <span class="text-slate-600 font-medium">Total Upah Kotor:</span>
                             <span class="font-bold text-slate-800" id="slipTotalKotor">Rp 0</span>
                         </div>
                         <div class="flex justify-between text-rose-600 font-semibold" id="slipRowKasbon">
                             <span>Potongan Kasbon:</span>
                             <span id="slipKasbonNilai">- Rp 0</span>
                         </div>
-                        <div class="flex justify-between items-center pt-2 border-t border-slate-300 font-black text-sm md:text-base text-emerald-900">
-                            <span>SISA UPAH YANG DITERIMA:</span>
-                            <span class="text-xl md:text-2xl text-emerald-800" id="slipSisaDiterima">Rp 0</span>
+                        <div class="flex justify-between items-center pt-2 border-t border-slate-300 font-black text-sm text-emerald-950">
+                            <span>SISA UPAH DITERIMA:</span>
+                            <span class="text-lg md:text-xl text-emerald-800 font-black" id="slipSisaDiterima">Rp 0</span>
                         </div>
                     </div>
 
                     <!-- Tanda Tangan -->
-                    <div class="grid grid-cols-2 gap-4 text-center text-xs mt-6 pt-4 border-t border-dashed border-slate-300">
+                    <div class="grid grid-cols-2 gap-4 text-center text-xs mt-4 pt-3 border-t border-dashed border-slate-300">
                         <div>
-                            <p class="text-slate-500">Penerima,</p>
-                            <div class="h-14"></div>
+                            <p class="text-slate-500 text-[11px]">Penerima,</p>
+                            <div class="h-10"></div>
                             <p class="font-bold underline text-slate-800" id="slipTtdNama">-</p>
                         </div>
                         <div>
-                            <p class="text-slate-500">Samarinda, <span id="slipTglCetak">--</span></p>
-                            <p class="text-slate-500">Admin Keuangan,</p>
-                            <div class="h-14"></div>
+                            <p class="text-slate-500 text-[11px]">Samarinda, <span id="slipTglCetak">--</span></p>
+                            <p class="text-slate-500 text-[11px]">Admin Keuangan,</p>
+                            <div class="h-10"></div>
                             <p class="font-bold underline text-slate-800">PT JAYA KEDHATON</p>
                         </div>
                     </div>
 
-                    <!-- Tombol Modal -->
-                    <div class="flex gap-2 mt-5 no-print">
-                        <button type="button" onclick="window.print()" class="flex-1 bg-green-700 hover:bg-green-800 text-white font-bold py-2.5 rounded-lg text-sm shadow cursor-pointer">
-                            <i class="fas fa-print mr-1"></i> Cetak Slip Ini
+                    <!-- Tombol Modal (No Print) -->
+                    <div class="flex gap-2.5 mt-5 no-print pt-2 border-t border-slate-100">
+                        <button type="button" onclick="window.print()" class="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-xl text-xs md:text-sm shadow cursor-pointer transition-colors inline-flex items-center justify-center gap-2">
+                            <i class="fas fa-print"></i> Cetak Slip Ini
                         </button>
-                        <button type="button" onclick="tutupSlip()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-4 py-2.5 rounded-lg text-sm cursor-pointer">
+                        <button type="button" onclick="tutupSlip()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-xl text-xs md:text-sm cursor-pointer transition-colors">
                             Tutup
                         </button>
                     </div>
@@ -404,374 +525,572 @@
         </main>
     </div>
 
-    <!-- SCRIPT LOGIKA TRANSAKSI DENGAN KALENDER & INPUT LEGA -->
+    <!-- DATALIST STANDAR NAMA PROYEK -->
+    <datalist id="listProjekDatalist">
+        <option value="FELISA ESTATE"></option>
+        <option value="RUKO PAK DEDI"></option>
+        <option value="GREEN HOUSE"></option>
+        <option value="PAGAR RING ROAD"></option>
+        <option value="PROYEK RTT SAMBOJA"></option>
+        <option value="ASPOL 2026"></option>
+        <option value="WORKSHOP RING ROAD"></option>
+        <option value="TAMAN BALKOT 2025"></option>
+        <option value="KANTOR DIGITAL MARKETING"></option>
+        <option value="GUDANG"></option>
+    </datalist>
+
+    <!-- SCRIPT DATA & LOGIKA FORM TRANSAKSI -->
     <script>
-        // Data Awal Referensi
-        let dataTransaksi = [
+        // Data 252 Pekerja dari Sheet KODE Baris 1-285
+        const DAFTAR_PEKERJA = [{"k": "SUDIRO-001", "n": "IMAM MUHAMMAD SUDIRO", "p": "TUKANG"}, {"k": "SUDIRO-002", "n": "SUWITO", "p": "TUKANG"}, {"k": "SUDIRO-003", "n": "ARIS TARWADI", "p": "TUKANG"}, {"k": "SUDIRO-004", "n": "GUNARTO", "p": "TUKANG"}, {"k": "SUDIRO-005", "n": "DAVID BAYU SETIAWAN", "p": "TUKANG"}, {"k": "SUDIRO-006", "n": "ERVA BUDI SANTOSO", "p": "TUKANG"}, {"k": "SUDIRO-007", "n": "SUMADJI", "p": "TUKANG"}, {"k": "SUDIRO-008", "n": "MOH. MUKLIS", "p": "TUKANG"}, {"k": "SUDIRO-009", "n": "SUNAR", "p": "TUKANG"}, {"k": "SUDIRO-010", "n": "NARJUANTO", "p": "TUKANG"}, {"k": "SUDIRO-011", "n": "SURANI", "p": "TUKANG"}, {"k": "SUDIRO-012", "n": "PAULUS SUKAMTO", "p": "TUKANG"}, {"k": "SUDIRO-013", "n": "DONI SETIAWAN", "p": "TUKANG"}, {"k": "SUDIRO-014", "n": "FATQUL ROHMAN", "p": "TUKANG"}, {"k": "KANCIL-025", "n": "ACHMAD FRIADI", "p": "MANDOR"}, {"k": "KANCIL-017", "n": "AGUS SULIYANTO", "p": "TUKANG"}, {"k": "KANCIL-008", "n": "SUMARSONO", "p": "TUKANG"}, {"k": "KANCIL-013", "n": "MUSTOFA", "p": "TUKANG"}, {"k": "KANCIL-024", "n": "NUR HASAN", "p": "TUKANG"}, {"k": "KANCIL-014", "n": "DIDIK ANTO", "p": "TUKANG"}, {"k": "KANCIL-004", "n": "PANUT MULYONO", "p": "TUKANG"}, {"k": "KANCIL-003", "n": "BAHRUDIN", "p": "TUKANG"}, {"k": "KANCIL-018", "n": "SEGER", "p": "TUKANG"}, {"k": "KANCIL-012", "n": "EDI", "p": "TUKANG"}, {"k": "KANCIL-010", "n": "SAPOAN", "p": "SEMI TUKANG"}, {"k": "KANCIL-016", "n": "SURYO SETYAWAN", "p": "SEMI TUKANG"}, {"k": "KANCIL-009", "n": "EKO BUDI IRIAWAN", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-007", "n": "YOGI YUNISTIRA", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-001", "n": "TARI", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-022", "n": "AGUNG WIJAYA", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-021", "n": "SUKANI", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-011", "n": "MAULANA ABI SAPUTRA", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-002", "n": "ARI KURNIAWAN", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-005", "n": "VERI SETIAWAN", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-006", "n": "NICHOLAS ARIEL PRASETYO", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-015", "n": "ALDI CAHYO PRASETYO", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-026", "n": "ZAINAL ABIDIN", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-027", "n": "JOKO SUMARTO", "p": "TUKANG"}, {"k": "KANCIL-028", "n": "ENDRO NURSIYO", "p": "TUKANG"}, {"k": "KANCIL-029", "n": "SUMARI", "p": "TUKANG"}, {"k": "KANCIL-030", "n": "SISWANTO-KANCIL", "p": "TUKANG"}, {"k": "KANCIL-031", "n": "SUJIANTO", "p": "SEMI TUKANG"}, {"k": "KANCIL-019", "n": "SISWANTO", "p": "TUKANG"}, {"k": "KANCIL-020", "n": "RIQO YANUWAR SAPUTRA", "p": "TUKANG"}, {"k": "KANCIL-023", "n": "HENRI UTAMAN", "p": "TUKANG"}, {"k": "KANCIL-032", "n": "BOY SETIYAWAN", "p": "TUKANG"}, {"k": "KANCIL-033", "n": "SUMITO", "p": "TUKANG"}, {"k": "KANCIL-034", "n": "MUJIONO", "p": "TUKANG"}, {"k": "KANCIL-035", "n": "SUGENG TKG", "p": "TUKANG"}, {"k": "KANCIL-036", "n": "ALDO", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-037", "n": "CHOIRUL", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-038", "n": "NORWANA", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-039", "n": "GUNAWAN", "p": "TUKANG"}, {"k": "KANCIL-040", "n": "SUNARI", "p": "TUKANG"}, {"k": "KANCIL-041", "n": "KUDORI", "p": "TUKANG"}, {"k": "KANCIL-042", "n": "SUGIANTO", "p": "TUKANG"}, {"k": "KANCIL-043", "n": "ANDRIK SUSANTO", "p": "SEMI TUKANG"}, {"k": "KANCIL-044", "n": "TARJIANTO", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-045", "n": "DAMOKO", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-046", "n": "SUYONO", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-047", "n": "SUMARI", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-001", "n": "IMAM MUSTOFA", "p": "MANDOR"}, {"k": "TOPA-002", "n": "MARKANI", "p": "TUKANG"}, {"k": "TOPA-007", "n": "DIDIK RIFAI", "p": "TUKANG"}, {"k": "TOPA-012", "n": "SUDARSONO", "p": "TUKANG"}, {"k": "TOPA-016", "n": "GUNAJI", "p": "TUKANG"}, {"k": "TOPA-008", "n": "DIMAS DANU TIRTO", "p": "SEMI TUKANG"}, {"k": "TOPA-013", "n": "SUGIYONO", "p": "SEMI TUKANG"}, {"k": "TOPA-003", "n": "RAMADHANI PITRI PRATIKNO", "p": "SEMI TUKANG"}, {"k": "TOPA-004", "n": "YUDHA EKA RAMADHANI", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-005", "n": "LUKI ANDRIAN ARISANDI", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-006", "n": "KOSIM", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-009", "n": "KHOIRUL ROZIQIN", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-010", "n": "YOYOK SUSANTO", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-011", "n": "DIDIK AGUNG BAKTIAR", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-017", "n": "VIXI ANDRIAN", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-018", "n": "AHMAD MUKHLISON", "p": "TUKANG"}, {"k": "TOPA-019", "n": "AGUS SUNARKO", "p": "TUKANG"}, {"k": "TOPA-020", "n": "FIRSGIAN IBNU NAFIS", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-015", "n": "MIRUN", "p": "TUKANG"}, {"k": "TOPA-014", "n": "OMAR HADI", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-021", "n": "SUDARSONO/DARSO", "p": "TUKANG"}, {"k": "TOPA-022", "n": "DODIK AGUNG BAKTIAR", "p": "PEMBANTU TUKANG"}, {"k": "GDG-001", "n": "BAGUS SETIAWAN", "p": "TUKANG"}, {"k": "GDG-002", "n": "MARTIN", "p": "RKS"}, {"k": "GDG-003", "n": "MEBA", "p": "PEMBANTU TUKANG"}, {"k": "GDG-004", "n": "HADI", "p": "PEMBANTU TUKANG"}, {"k": "GDG-005", "n": "ABDUL SUKUR", "p": "TUKANG"}, {"k": "GDG-006", "n": "KALIS", "p": "PEMBANTU TUKANG"}, {"k": "GDG-007", "n": "JATMIKO", "p": "PEMBANTU TUKANG"}, {"k": "GDG-008", "n": "SONDONG", "p": "TUKANG"}, {"k": "GDG-009", "n": "WAHID", "p": "TUKANG"}, {"k": "ALI-001", "n": "ALI MUHAMMAD", "p": "MANDOR"}, {"k": "ALI-011", "n": "MUHARDI WILONOTO", "p": "TUKANG"}, {"k": "ALI-002", "n": "JUREMI", "p": "TUKANG"}, {"k": "ALI-005", "n": "TRIWOKO", "p": "TUKANG"}, {"k": "ALI-017", "n": "DINO MARGO SAPUTRO", "p": "TUKANG"}, {"k": "ALI-019", "n": "M. ZAENURI", "p": "TUKANG"}, {"k": "ALI-007", "n": "ANDI PAMILU IRAWAN", "p": "TUKANG"}, {"k": "ALI-003", "n": "JOKO DWI PURNOMO", "p": "TUKANG"}, {"k": "ALI-013", "n": "RENDI MAULANA", "p": "PEMBANTU TUKANG"}, {"k": "ALI-014", "n": "DENI ADE PUTRA", "p": "PEMBANTU TUKANG"}, {"k": "ALI-018", "n": "M. RIFKI HIDAYAT", "p": "PEMBANTU TUKANG"}, {"k": "ALI-006", "n": "WAHYU AGUNG SETIAWAN", "p": "PEMBANTU TUKANG"}, {"k": "ALI-021", "n": "MUSTOFA", "p": "PEMBANTU TUKANG"}, {"k": "ALI-022", "n": "EDI NUGROHO", "p": "TUKANG"}, {"k": "ALI-023", "n": "AGUS PRASTIAWAN", "p": "TUKANG"}, {"k": "ALI-024", "n": "AHMAD ZAINURI", "p": "TUKANG"}, {"k": "ALI-025", "n": "ARIS WIBOWO", "p": "PEMBANTU TUKANG"}, {"k": "ALI-026", "n": "DWI SANTOSO", "p": "TUKANG"}, {"k": "ALI-027", "n": "MARULI HENY DIATMIKO", "p": "TUKANG"}, {"k": "ALI-028", "n": "PUNGKY ARI W", "p": "PEMBANTU TUKANG"}, {"k": "ALI-029", "n": "SLAMET B", "p": "TUKANG"}, {"k": "ALI-030", "n": "SUMANI", "p": "TUKANG"}, {"k": "ALI-031", "n": "YANTO RIADI", "p": "TUKANG"}, {"k": "ALI-032", "n": "SUYITNO", "p": "TUKANG"}, {"k": "ALI-004", "n": "EDI MUSTONO", "p": "TUKANG"}, {"k": "ALI-009", "n": "ONIK SETIAWAN", "p": "TUKANG"}, {"k": "ALI-010", "n": "PAERAN", "p": "PEMBANTU TUKANG"}, {"k": "ALI-012", "n": "YUDA KRIS SANDINI", "p": "PEMBANTU TUKANG"}, {"k": "ALI-015", "n": "SUYITNO", "p": "TUKANG"}, {"k": "ALI-016", "n": "IRFAN ANDREAN SAPUTRA", "p": "PEMBANTU TUKANG"}, {"k": "ALI-020", "n": "JANI", "p": "PEMBANTU TUKANG"}, {"k": "ALI-008", "n": "RIDHO BAGUS SUMANTRI", "p": "PEMBANTU TUKANG"}, {"k": "KEBUN-001", "n": "JAFAR ARBA", "p": "TUKANG"}, {"k": "KEBUN-002", "n": "ALBERTUS J MUDA", "p": "PEMBANTU TUKANG"}, {"k": "KEBUN-003", "n": "AHMAD MISBAQUL MUNIR", "p": "TUKANG"}, {"k": "KEBUN-004", "n": "DOMINIKUS D MUDA", "p": "PEMBANTU TUKANG"}, {"k": "KEBUN-005", "n": "ONIX", "p": "PEMBANTU TUKANG"}, {"k": "KEBUN-006", "n": "FABIANUS KOPO MUDA", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-021", "n": "ASROFI", "p": "MANDOR"}, {"k": "ASROFI-001", "n": "MASUDI/HADI", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-002", "n": "SUPRI", "p": "TUKANG"}, {"k": "ASROFI-022", "n": "RUDIANTO", "p": "TUKANG"}, {"k": "ASROFI-019", "n": "PRAYOKO", "p": "TUKANG"}, {"k": "ASROFI-007", "n": "ROKIM", "p": "TUKANG"}, {"k": "ASROFI-014", "n": "BASRI", "p": "TUKANG"}, {"k": "ASROFI-015", "n": "UJANG SUKIRMAN", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-016", "n": "AHMAD SUKUR", "p": "TUKANG"}, {"k": "ASROFI-017", "n": "SULANI", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-018", "n": "MAT RODLI", "p": "SEMI TUKANG"}, {"k": "ASROFI-020", "n": "MISNI", "p": "TUKANG"}, {"k": "ASROFI-006", "n": "MASNGUT", "p": "TUKANG"}, {"k": "ASROFI-008", "n": "RIO YUMAS OKTAVIANO", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-009", "n": "SUGIANTA", "p": "TUKANG"}, {"k": "ASROFI-010", "n": "IMAM SOPINGI", "p": "SEMI TUKANG"}, {"k": "ASROFI-011", "n": "DADANG RANU TANTOWI", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-012", "n": "NUR EFFENDI", "p": "TUKANG"}, {"k": "ASROFI-013", "n": "KHOIRI", "p": "TUKANG"}, {"k": "ASROFI-031", "n": "DWI NURWANTO", "p": "TUKANG"}, {"k": "ASROFI-032", "n": "SAFARI", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-033", "n": "ILHAM", "p": "TUKANG"}, {"k": "ASROFI-034", "n": "SRIANTO", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-035", "n": "RIAS", "p": "TUKANG"}, {"k": "ASROFI-036", "n": "NANDA AJI PANGESTU", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-037", "n": "NURHUDA", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-023", "n": "ANGGA PRADANA", "p": "TUKANG"}, {"k": "ASROFI-024", "n": "AGUS JARWANTO", "p": "TUKANG"}, {"k": "ASROFI-025", "n": "ALI MUSTOFA", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-026", "n": "HARIYANTO", "p": "TUKANG"}, {"k": "ASROFI-027", "n": "SUGENG", "p": "TUKANG"}, {"k": "ASROFI-028", "n": "MISYADI", "p": "TUKANG"}, {"k": "ASROFI-029", "n": "JOKO SUWITO", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-030", "n": "IMAM NAHROWI", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-038", "n": "HENDRO", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-039", "n": "ADI SONDONG", "p": "TUKANG"}, {"k": "asrofi-040", "n": "AHMAD BG", "p": "TUKANG"}, {"k": "ASROFI-041", "n": "AHMAD SHAIFUL BASHOR", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-042", "n": "JATMIKO WAHYUDIONO", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-003", "n": "AGUS SUPRAPTO", "p": "TUKANG"}, {"k": "ASROFI-004", "n": "EKA WAHYU PUTRA", "p": "SEMI TUKANG"}, {"k": "ASROFI-005", "n": "JOHAN P", "p": "SEMI TUKANG"}, {"k": "ASROFI-046", "n": "FAJAR", "p": "PEMBANTU TUKANG"}, {"k": "KASUN-001", "n": "KASUN", "p": "MANDOR"}, {"k": "KASUN-005", "n": "MIFTAHUL HUDA", "p": "TUKANG"}, {"k": "KASUN-004", "n": "NANANG ATHO ILLAHI", "p": "PEMBANTU TUKANG"}, {"k": "KASUN-003", "n": "M. HARUN", "p": "SEMI TUKANG"}, {"k": "KASUN-002", "n": "MUNAWIR", "p": "TUKANG"}, {"k": "GIPSUM-001", "n": "AGUS JALI", "p": "CAT"}, {"k": "GIPSUM-002", "n": "SUGENG WALUYO", "p": "CAT"}, {"k": "GIPSUM-003", "n": "RICO YANUAR SAPUTRO", "p": "TUKANG"}, {"k": "GIPSUM-004", "n": "HENRI UTAMAN", "p": "TUKANG"}, {"k": "GIPSUM-005", "n": "EDI PURWANTO", "p": "TUKANG"}, {"k": "GIPSUM-006", "n": "ANDRIANUS LEBA", "p": "PEMBANTU TUKANG"}, {"k": "MEP-001", "n": "AHMAD TAOFIK", "p": "MEP"}, {"k": "MEP-002", "n": "HENDI", "p": "MEP"}, {"k": "MEP-003", "n": "OBY NURJAMAN", "p": "MEP"}, {"k": "MEP-004", "n": "SAEFUL ANWAR", "p": "MEP"}, {"k": "LAS-001", "n": "EKO ANDRIANTO", "p": "MANDOR"}, {"k": "LAS-002", "n": "ASEP SUNJAYA", "p": "TUKANG"}, {"k": "LAS-003", "n": "DEDI IRAWAN", "p": "PEMBANTU TUKANG"}, {"k": "LAS-004", "n": "RAJIDIN", "p": "PEMBANTU TUKANG"}, {"k": "LAS-005", "n": "RUSDIANSYAH", "p": "TUKANG"}, {"k": "NUR-001", "n": "NURSAID", "p": "MANDOR"}, {"k": "NUR-002", "n": "MASIRIN", "p": "TUKANG"}, {"k": "NUR-003", "n": "JUARI", "p": "TUKANG"}, {"k": "NUR-004", "n": "AHMAD SOLEH", "p": "PEMBANTU TUKANG"}, {"k": "NUR-005", "n": "YOGA ABDI PAMBUDI", "p": "PEMBANTU TUKANG"}, {"k": "NUR-006", "n": "MARDA ADITYA", "p": "PEMBANTU TUKANG"}, {"k": "NUR-007", "n": "SAIFUL ANAM", "p": "PEMBANTU TUKANG"}, {"k": "NUR-008", "n": "DENI ARI SANDIA", "p": "PEMBANTU TUKANG"}, {"k": "NUR-009", "n": "TEDO EMBUN SAPUTRA", "p": "TUKANG"}, {"k": "NUR-010", "n": "DJUBAIDI", "p": "PEMBANTU TUKANG"}, {"k": "NUR-011", "n": "SUTAJI", "p": "TUKANG"}, {"k": "NUR-012", "n": "SRINANTO", "p": "PEMBANTU TUKANG"}, {"k": "NUR-013", "n": "SOIMIN", "p": "TUKANG"}, {"k": "NUR-014", "n": "SUTOYO", "p": "PEMBANTU TUKANG"}, {"k": "NUR-015", "n": "JAYADI", "p": "TUKANG"}, {"k": "NUR-016", "n": "JOKO HOGI PUTRA WIANGGA", "p": "PEMBANTU TUKANG"}, {"k": "MEBEL-001", "n": "AHMAD TAMSIR", "p": "MANDOR INTERIOR"}, {"k": "MEBEL-002", "n": "SAPAWI", "p": "TUKANG"}, {"k": "MEBEL-003", "n": "ANDIKA FANI RISTANTO", "p": "TUKANG"}, {"k": "NARDI-001", "n": "ADITIA RUDIANTO", "p": "TUKANG"}, {"k": "NARDI-002", "n": "DARSONO", "p": "TUKANG"}, {"k": "NARDI-003", "n": "PURWAJI", "p": "TUKANG"}, {"k": "NARDI-004", "n": "NURHAMID", "p": "TUKANG"}, {"k": "NARDI-005", "n": "WAHYUDI", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-006", "n": "NAUFAL YUFRON TRI A", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-007", "n": "REGITA PRAMUJI", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-008", "n": "NARDI", "p": "MANDOR"}, {"k": "NARDI-009", "n": "WARDI", "p": "WAKIL MANDOR"}, {"k": "NARDI-010", "n": "MARTONO", "p": "TUKANG"}, {"k": "NARDI-011", "n": "NYAMIN", "p": "TUKANG"}, {"k": "NARDI-012", "n": "SETO", "p": "TUKANG"}, {"k": "NARDI-013", "n": "SUWARNO", "p": "TUKANG"}, {"k": "NARDI-014", "n": "WARSONO", "p": "TUKANG"}, {"k": "NARDI-015", "n": "TEGUH", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-016", "n": "NUR ALI", "p": "SEMI TUKANG"}, {"k": "NARDI-017", "n": "HERMANTO", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-018", "n": "BEJO", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-019", "n": "DENI", "p": "TUKANG"}, {"k": "NARDI-020", "n": "SOLIKIN", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-021", "n": "GIMO", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-022", "n": "ABDUL HALIM", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-023", "n": "MUH. YUSUF", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-024", "n": "MOCH ABDUL MA'ALI", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-025", "n": "KONI ARI WIBISONO", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-026", "n": "GINANJAR ARDI SAPUTRA", "p": "TUKANG"}, {"k": "NARDI-027", "n": "USUF ROHANI", "p": "TUKANG"}, {"k": "NARDI-028", "n": "SURYONO", "p": "TUKANG"}, {"k": "NARDI-029", "n": "NURUDIN", "p": "TUKANG"}, {"k": "NARDI-030", "n": "ANTOK MURDIONO", "p": "TUKANG"}, {"k": "NARDI-031", "n": "SUPRIYANTO MBAH", "p": "TUKANG"}, {"k": "NARDI-032", "n": "SUPRIYANTO 2", "p": "TUKANG"}, {"k": "NARDI-033", "n": "ANTON DWI CAHYONO", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-034", "n": "SUPOMO", "p": "TUKANG"}, {"k": "NARDI-035", "n": "MOH YUSUF", "p": "TUKANG"}, {"k": "NARDI-036", "n": "ACHMAD HUDA", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-037", "n": "SLAMET BUDIYONO", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-038", "n": "SUKARSONO", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-039", "n": "SUJAK", "p": "TUKANG"}, {"k": "NARDI-040", "n": "PUTJIANTO", "p": "TUKANG"}];
+
+        // Standar Upah berdasarkan Posisi
+        const STANDAR_UPAH = {
+            'MANDOR': 200000,
+            'MANDOR INTERIOR': 200000,
+            'WAKIL MANDOR': 150000,
+            'TUKANG': 140000,
+            'MEP': 140000,
+            'CAT': 140000,
+            'SEMI TUKANG': 130000,
+            'PEMBANTU TUKANG': 120000,
+            'RKS': 120000
+        };
+
+        // Data Proyek Aktif di Form Saat Ini
+        let currentProjekList = [
+            { projek: 'FELISA ESTATE', hari: 6, lembur: 6, makan: 30000, insentif: 0 }
+        ];
+
+        // Daftar Transaksi yang Disimpan di Periode Ini (Dilengkapi contoh awal Mustofa dkk)
+        let transaksiList = [
             {
                 id: 1,
-                nama: 'AGUNG WIJAYA',
-                posisi: 'PEMBANTU TUKANG',
-                projek: 'FELISA ESTATE',
-                hari: 6,
-                upah: 120000,
-                lembur: 6,
-                makan: 30000,
-                insentif: 0,
-                kasbon: 1100000
+                kode: 'KANCIL-013',
+                nama: 'MUSTOFA',
+                posisi: 'TUKANG',
+                upahPerHari: 140000,
+                projekList: [
+                    { projek: 'FELISA ESTATE', hari: 6, lembur: 6, makan: 30000, insentif: 0 },
+                    { projek: 'RUKO PAK DEDI', hari: 2, lembur: 0, makan: 10000, insentif: 0 }
+                ],
+                kasbon: 100000
             },
             {
                 id: 2,
-                nama: 'AGUNG WIJAYA', // Orang yang sama, proyek kedua
-                posisi: 'PEMBANTU TUKANG',
-                projek: 'RUKO PAK DEDI',
-                hari: 7,
-                upah: 120000,
-                lembur: 7,
-                makan: 35000,
-                insentif: 0,
+                kode: 'SUDIRO-001',
+                nama: 'IMAM MUHAMMAD SUDIRO',
+                posisi: 'TUKANG',
+                upahPerHari: 140000,
+                projekList: [
+                    { projek: 'FELISA ESTATE', hari: 6, lembur: 4, makan: 30000, insentif: 0 }
+                ],
                 kasbon: 0
             },
             {
                 id: 3,
-                nama: 'JOKO SUSILO',
-                posisi: 'TUKANG',
-                projek: 'FELISA ESTATE',
-                hari: 6,
-                upah: 140000,
-                lembur: 8,
-                makan: 30000,
-                insentif: 0,
-                kasbon: 200000
-            },
-            {
-                id: 4,
-                nama: 'SLAMET RIYADI',
-                posisi: 'SEMI TUKANG',
-                projek: 'GREEN HOUSE',
-                hari: 5,
-                upah: 130000,
-                lembur: 5,
-                makan: 25000,
-                insentif: 50000,
-                kasbon: 0
-            },
-            {
-                id: 5,
-                nama: 'KASUN',
-                posisi: 'MANDOR',
-                projek: 'PAGAR RING ROAD',
-                hari: 12,
-                upah: 200000,
-                lembur: 10,
-                makan: 60000,
-                insentif: 100000,
-                kasbon: 500000
+                kode: 'NARDI-036',
+                nama: 'ACHMAD HUDA',
+                posisi: 'PEMBANTU TUKANG',
+                upahPerHari: 120000,
+                projekList: [
+                    { projek: 'PAGAR RING ROAD', hari: 6, lembur: 2, makan: 25000, insentif: 0 }
+                ],
+                kasbon: 50000
             }
         ];
 
-        // Muat dari penyimpanan lokal jika ada simpanan sebelumnya
+        // Muat dari penyimpanan lokal jika ada
         try {
-            const saved = localStorage.getItem('jaya_transaksi_upah');
-            if (saved) {
-                const parsed = JSON.parse(saved);
+            const savedTrx = localStorage.getItem('jaya_transaksi_upah_v2');
+            if (savedTrx) {
+                const parsed = JSON.parse(savedTrx);
                 if (Array.isArray(parsed) && parsed.length > 0) {
-                    dataTransaksi = parsed;
+                    transaksiList = parsed;
                 }
             }
         } catch (_) {}
 
-        function simpanKeLokal() {
+        function simpanKeStorage() {
             try {
-                localStorage.setItem('jaya_transaksi_upah', JSON.stringify(dataTransaksi));
+                localStorage.setItem('jaya_transaksi_upah_v2', JSON.stringify(transaksiList));
             } catch (_) {}
         }
 
-        // Format angka ke format Rupiah standar yang mudah dibaca
         function formatRp(val) {
             return 'Rp ' + Math.round(Number(val) || 0).toLocaleString('id-ID');
         }
 
-        // ============================================================
-        // LOGIKA KALENDER PERIODE GAJI
-        // ============================================================
-        function updatePeriodeKalender() {
-            const d1 = document.getElementById('tglMulai').value;
-            const d2 = document.getElementById('tglSelesai').value;
-            if (!d1 || !d2) return;
-
-            const formatTgl = (tglStr) => {
-                const parts = tglStr.split('-');
-                if (parts.length !== 3) return tglStr;
-                const y = parts[0];
-                const m = parseInt(parts[1], 10);
-                const d = parseInt(parts[2], 10);
-                const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-                return `${d} ${bulan[m - 1]} ${y}`;
-            };
-
-            const teksHasil = `${formatTgl(d1)} - ${formatTgl(d2)}`;
-            const label = document.getElementById('labelPeriodeAktif');
-            if (label) {
-                label.innerText = teksHasil;
-            }
-
-            try {
-                localStorage.setItem('jaya_periode_kalender', JSON.stringify({ d1, d2, teks: teksHasil }));
-            } catch (_) {}
+        // Isi Datalist Pekerja saat halaman dimuat
+        function inisialisasiDatalist() {
+            const dl = document.getElementById('datalistPekerja');
+            dl.innerHTML = '';
+            DAFTAR_PEKERJA.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = `(${p.k}) ${p.n}`;
+                dl.appendChild(opt);
+            });
         }
 
-        // Muat tanggal yang disimpan jika ada
-        try {
-            const savedCal = localStorage.getItem('jaya_periode_kalender');
-            if (savedCal) {
-                const parsed = JSON.parse(savedCal);
-                if (parsed.d1) document.getElementById('tglMulai').value = parsed.d1;
-                if (parsed.d2) document.getElementById('tglSelesai').value = parsed.d2;
-                if (parsed.teks) document.getElementById('labelPeriodeAktif').innerText = parsed.teks;
-            }
-        } catch (_) {}
+        // Saat pengguna mengetik atau memilih dari datalist
+        function onPilihPekerja(val) {
+            if (!val) return;
+            const clean = val.trim().toUpperCase();
+            
+            // Cocokkan apakah mengandung kode atau nama
+            const match = DAFTAR_PEKERJA.find(p => {
+                const full = `(${p.k}) ${p.n}`.toUpperCase();
+                return full === clean || p.k.toUpperCase() === clean || p.n.toUpperCase() === clean || full.includes(clean);
+            });
 
-        // ============================================================
-        // RENDER SELURUH BARIS KE TABEL (BARIS LEGA & BESAR)
-        // ============================================================
-        function renderTabel() {
-            const tbody = document.getElementById('tbodyTransaksi');
-            const filterProjek = document.getElementById('filterProjekSelect').value;
+            if (match) {
+                document.getElementById('posisiPekerja').value = match.p;
+                
+                // Set Upah Pokok standar sesuai posisi
+                const upahStd = STANDAR_UPAH[match.p] || 140000;
+                document.getElementById('upahPerHari').value = upahStd;
+                
+                hitungTotalForm();
+            }
+        }
+
+        // Saat posisi diubah manual lewat dropdown
+        function onUbahPosisi(pos) {
+            const upahStd = STANDAR_UPAH[pos] || 140000;
+            document.getElementById('upahPerHari').value = upahStd;
+            hitungTotalForm();
+        }
+
+        // Render Blok-Blok Proyek di Form
+        function renderBlokProyek() {
+            const container = document.getElementById('containerProyekList');
+            container.innerHTML = '';
+            const upah = parseFloat(document.getElementById('upahPerHari').value) || 0;
+            const tarifLembur = upah / 8;
+
+            currentProjekList.forEach((item, idx) => {
+                const subPokok = (Number(item.hari) || 0) * upah;
+                const subLembur = (Number(item.lembur) || 0) * tarifLembur;
+                const subTotal = subPokok + subLembur + (Number(item.makan) || 0) + (Number(item.insentif) || 0);
+
+                const card = document.createElement('div');
+                card.className = 'p-4 md:p-5 rounded-xl border ' + (idx === 0 ? 'border-slate-200 bg-slate-50/70' : 'border-amber-200 bg-amber-50/40') + ' relative shadow-sm';
+                
+                let btnHapusHtml = '';
+                if (idx > 0) {
+                    btnHapusHtml = `<button type="button" onclick="hapusBlokProyek(${idx})" 
+                                class="text-rose-600 hover:text-rose-800 hover:bg-rose-50 font-bold text-xs px-2.5 py-1 rounded-lg border border-rose-200 transition-colors inline-flex items-center gap-1.5 cursor-pointer"
+                                title="Hapus Proyek #${idx + 1}">
+                            <i class="fas fa-trash-alt text-[10px]"></i>
+                            <span>Hapus</span>
+                        </button>`;
+                } else {
+                    btnHapusHtml = `<span class="bg-slate-100 text-slate-600 text-xs font-semibold px-2.5 py-1 rounded-md border border-slate-200">
+                            Proyek Utama
+                        </span>`;
+                }
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200/80">
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-lg ${idx === 0 ? 'bg-emerald-600' : 'bg-amber-600'} text-white font-bold text-xs flex items-center justify-center">
+                                ${idx + 1}
+                            </span>
+                            <span class="font-bold text-slate-800 text-sm">Proyek #${idx + 1}</span>
+                        </div>
+                        ${btnHapusHtml}
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-end">
+                        <!-- Nama Proyek -->
+                        <div class="md:col-span-4">
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
+                                Proyek:
+                            </label>
+                            <input type="text" list="listProjekDatalist" value="${escapeHtml(item.projek)}"
+                                   oninput="updateProjekField(${idx}, 'projek', this.value)"
+                                   placeholder="Pilih atau ketik proyek..."
+                                   class="form-input-lg uppercase font-bold text-slate-900 bg-white">
+                        </div>
+
+                        <!-- Hari Kerja -->
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
+                                Hari Kerja:
+                            </label>
+                            <input type="number" min="0" max="31" step="0.5" value="${item.hari}"
+                                   oninput="updateProjekField(${idx}, 'hari', this.value)"
+                                   class="form-input-lg form-input-num text-center text-slate-900 font-bold bg-white">
+                        </div>
+
+                        <!-- Jam Lembur -->
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-amber-900 uppercase mb-1">
+                                Lembur (Jam):
+                            </label>
+                            <input type="number" min="0" step="0.5" value="${item.lembur}"
+                                   oninput="updateProjekField(${idx}, 'lembur', this.value)"
+                                   class="form-input-lg form-input-num text-center text-amber-900 font-bold bg-white">
+                        </div>
+
+                        <!-- Uang Makan -->
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
+                                Uang Makan (Rp):
+                            </label>
+                            <input type="number" min="0" step="5000" value="${item.makan}"
+                                   oninput="updateProjekField(${idx}, 'makan', this.value)"
+                                   class="form-input-lg form-input-num text-slate-800 font-bold bg-white">
+                        </div>
+
+                        <!-- Insentif / Transport -->
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
+                                Insentif (Rp):
+                            </label>
+                            <input type="number" min="0" step="5000" value="${item.insentif}"
+                                   oninput="updateProjekField(${idx}, 'insentif', this.value)"
+                                   class="form-input-lg form-input-num text-slate-800 font-bold bg-white">
+                        </div>
+                    </div>
+
+                    <!-- Subtotal baris ini -->
+                    <div class="mt-3 pt-2.5 border-t border-slate-200/80 flex items-center justify-between text-xs">
+                        <span class="text-slate-500 font-medium" id="teks-perhitungan-${idx}">
+                            ${item.hari} hari @ ${formatRp(upah)}${item.lembur > 0 ? ' + ' + item.lembur + ' jam lembur' : ''}
+                        </span>
+                        <div class="font-bold text-slate-700">
+                            Subtotal: <span id="subtotal-projek-${idx}" class="text-emerald-700 font-extrabold text-sm md:text-base">${formatRp(subTotal)}</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Tampilkan tombol Batal Tambah Proyek Terakhir jika ada proyek tambahan
+            const btnBatal = document.getElementById('btnHapusTerakhir');
+            if (btnBatal) {
+                btnBatal.style.display = currentProjekList.length > 1 ? 'inline-flex' : 'none';
+            }
+        }
+
+        function updateProjekField(idx, key, val) {
+            if (key === 'projek') {
+                currentProjekList[idx][key] = val;
+            } else {
+                currentProjekList[idx][key] = parseFloat(val) || 0;
+            }
+            hitungTotalForm();
+        }
+
+        function tambahBlokProyek() {
+            currentProjekList.push({
+                projek: '',
+                hari: 0,
+                lembur: 0,
+                makan: 0,
+                insentif: 0
+            });
+            renderBlokProyek();
+            hitungTotalForm();
+        }
+
+        function hapusBlokProyek(idx) {
+            if (idx === 0) return; // Proyek utama tidak dihapus
+            currentProjekList.splice(idx, 1);
+            renderBlokProyek();
+            hitungTotalForm();
+        }
+
+        function hapusBlokProyekTerakhir() {
+            if (currentProjekList.length > 1) {
+                currentProjekList.pop();
+                renderBlokProyek();
+                hitungTotalForm();
+            }
+        }
+
+        // Hitung total kotor, kasbon, dan sisa diterima pada form
+        function hitungTotalForm() {
+            const upah = parseFloat(document.getElementById('upahPerHari').value) || 0;
+            const tarifLembur = upah / 8;
+            const elLemburInfo = document.getElementById('labelTarifLemburInfo');
+            if (elLemburInfo) {
+                elLemburInfo.innerText = 'Lembur: ' + formatRp(tarifLembur) + ' / jam';
+            }
+
+            let totalKotor = 0;
+            let totalHari = 0;
+            let totalLembur = 0;
+
+            currentProjekList.forEach((item, idx) => {
+                const subPokok = (Number(item.hari) || 0) * upah;
+                const subLembur = (Number(item.lembur) || 0) * tarifLembur;
+                const subTotal = subPokok + subLembur + (Number(item.makan) || 0) + (Number(item.insentif) || 0);
+                totalKotor += subTotal;
+                totalHari += Number(item.hari) || 0;
+                totalLembur += Number(item.lembur) || 0;
+
+                // Perbarui tampilan subtotal dan teks perhitungan di masing-masing kartu proyek
+                const elSub = document.getElementById('subtotal-projek-' + idx);
+                if (elSub) elSub.innerText = formatRp(subTotal);
+
+                const elHitung = document.getElementById('teks-perhitungan-' + idx);
+                if (elHitung) {
+                    elHitung.innerText = item.hari + ' hari @ ' + formatRp(upah) + (item.lembur > 0 ? ' + ' + item.lembur + ' jam lembur' : '');
+                }
+            });
+
+            const kasbon = parseFloat(document.getElementById('formKasbon').value) || 0;
+            const sisaDiterima = totalKotor - kasbon;
+
+            document.getElementById('formTotalKotor').innerText = formatRp(totalKotor);
+            document.getElementById('formRincianHariLembur').innerText = totalHari + ' Hari Kerja • ' + totalLembur + ' Jam Lembur';
+            document.getElementById('formSisaDiterima').innerText = formatRp(sisaDiterima);
+        }
+
+        // Bersihkan Form untuk input pekerja baru
+        function resetFormBaru() {
+            document.getElementById('inputPekerja').value = '';
+            document.getElementById('posisiPekerja').value = 'TUKANG';
+            document.getElementById('upahPerHari').value = 140000;
+            document.getElementById('formKasbon').value = 0;
+            currentProjekList = [
+                { projek: 'FELISA ESTATE', hari: 6, lembur: 0, makan: 30000, insentif: 0 }
+            ];
+            renderBlokProyek();
+            hitungTotalForm();
+            document.getElementById('inputPekerja').focus();
+        }
+
+        // Simpan transaksi pekerja ke tabel
+        function simpanTransaksi(langsungCetak) {
+            const inputVal = document.getElementById('inputPekerja').value.trim();
+            if (!inputVal) {
+                alert('Silakan pilih atau ketik data pekerja terlebih dahulu!');
+                document.getElementById('inputPekerja').focus();
+                return;
+            }
+
+            let kode = '';
+            let nama = inputVal;
+            const matchReg = inputVal.match(/^\(([^)]+)\)\s*(.*)$/);
+            if (matchReg) {
+                kode = matchReg[1].trim();
+                nama = matchReg[2].trim();
+            } else {
+                const matchP = DAFTAR_PEKERJA.find(p => p.k.toUpperCase() === inputVal.toUpperCase());
+                if (matchP) {
+                    kode = matchP.k;
+                    nama = matchP.n;
+                }
+            }
+
+            const posisi = document.getElementById('posisiPekerja').value;
+            const upahPerHari = parseFloat(document.getElementById('upahPerHari').value) || 0;
+            const kasbon = parseFloat(document.getElementById('formKasbon').value) || 0;
+
+            const projekList = JSON.parse(JSON.stringify(currentProjekList));
+
+            const idxAda = transaksiList.findIndex(t => (t.kode && t.kode === kode) || (t.nama.toUpperCase() === nama.toUpperCase()));
+            
+            let idTrx = Date.now();
+            if (idxAda >= 0) {
+                idTrx = transaksiList[idxAda].id;
+                transaksiList[idxAda] = {
+                    id: idTrx,
+                    kode: kode || transaksiList[idxAda].kode,
+                    nama: nama,
+                    posisi: posisi,
+                    upahPerHari: upahPerHari,
+                    projekList: projekList,
+                    kasbon: kasbon
+                };
+            } else {
+                transaksiList.unshift({
+                    id: idTrx,
+                    kode: kode,
+                    nama: nama,
+                    posisi: posisi,
+                    upahPerHari: upahPerHari,
+                    projekList: projekList,
+                    kasbon: kasbon
+                });
+            }
+
+            simpanKeStorage();
+            renderDaftarTransaksi();
+
+            if (langsungCetak) {
+                bukaSlipById(idTrx);
+            } else {
+                alert('Data upah untuk ' + nama + ' berhasil disimpan ke tabel!');
+            }
+        }
+
+        // Render tabel daftar transaksi di bawah form
+        function renderDaftarTransaksi() {
+            const tbody = document.getElementById('tbodyDaftarTransaksi');
+            const keyword = (document.getElementById('filterTabelInput').value || '').trim().toUpperCase();
             tbody.innerHTML = '';
 
-            let sumHari = 0;
-            let sumLembur = 0;
-            let sumMakan = 0;
-            let sumInsentif = 0;
-            let sumUpahKotor = 0;
-            let sumKasbon = 0;
-            let sumSisa = 0;
+            let grandKotor = 0;
+            let grandKasbon = 0;
+            let grandBersih = 0;
+            let countPekerja = 0;
             let nomor = 1;
 
-            dataTransaksi.forEach((item, index) => {
-                // Terapkan filter jika dipilih
-                if (filterProjek && item.projek !== filterProjek) {
+            transaksiList.forEach(trx => {
+                const teksCari = (trx.kode + ' ' + trx.nama + ' ' + trx.posisi + ' ' + trx.projekList.map(p => p.projek).join(' ')).toUpperCase();
+                if (keyword && !teksCari.includes(keyword)) {
                     return;
                 }
 
-                // Rumus lembur = upah : 8
-                const tarifLembur = (Number(item.upah) || 0) / 8;
-                const totalHarian = (Number(item.hari) || 0) * (Number(item.upah) || 0);
-                const totalLembur = (Number(item.lembur) || 0) * tarifLembur;
-                const totalKotor = totalHarian + totalLembur + (Number(item.makan) || 0) + (Number(item.insentif) || 0);
-                const sisaDiterima = totalKotor - (Number(item.kasbon) || 0);
+                countPekerja++;
+                const tarifLembur = (trx.upahPerHari || 0) / 8;
+                let totKotor = 0;
+                let totHari = 0;
+                let ringkasanProjek = [];
 
-                // Tambahkan ke akumulasi Grand Total
-                sumHari += Number(item.hari) || 0;
-                sumLembur += Number(item.lembur) || 0;
-                sumMakan += Number(item.makan) || 0;
-                sumInsentif += Number(item.insentif) || 0;
-                sumUpahKotor += totalKotor;
-                sumKasbon += Number(item.kasbon) || 0;
-                sumSisa += sisaDiterima;
+                trx.projekList.forEach(p => {
+                    const subPokok = (Number(p.hari) || 0) * trx.upahPerHari;
+                    const subLembur = (Number(p.lembur) || 0) * tarifLembur;
+                    const sub = subPokok + subLembur + (Number(p.makan) || 0) + (Number(p.insentif) || 0);
+                    totKotor += sub;
+                    totHari += Number(p.hari) || 0;
+                    ringkasanProjek.push('<strong>' + escapeHtml(p.projek || 'PROYEK') + '</strong>: ' + p.hari + ' hari' + (p.lembur > 0 ? ', ' + p.lembur + 'j lembur' : ''));
+                });
+
+                const bersih = totKotor - (trx.kasbon || 0);
+
+                grandKotor += totKotor;
+                grandKasbon += (trx.kasbon || 0);
+                grandBersih += bersih;
 
                 const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition-colors';
                 tr.innerHTML = `
-                    <td class="text-center font-bold text-slate-500 bg-slate-50">${nomor++}</td>
-                    
-                    <!-- NAMA PEKERJA (KOTAK BESAR & TEBAL) -->
-                    <td>
-                        <input type="text" value="${escapeHtml(item.nama)}" 
-                               class="excel-input uppercase font-bold text-slate-900"
-                               placeholder="Ketik Nama"
-                               onchange="updateField(${index}, 'nama', this.value)">
+                    <td class="p-3.5 text-center font-bold text-slate-400 bg-slate-50/50">${nomor++}</td>
+                    <td class="p-3.5">
+                        <div class="font-extrabold text-slate-900 text-sm">
+                            ${trx.kode ? `<span class="inline-block bg-slate-800 text-white font-mono text-[11px] px-2 py-0.5 rounded-md mr-1.5">${escapeHtml(trx.kode)}</span>` : ''}
+                            ${escapeHtml(trx.nama)}
+                        </div>
                     </td>
-
-                    <!-- POSISI (MANDOR, TUKANG, SEMI TUKANG, PEMBANTU TUKANG) -->
-                    <td>
-                        <select class="excel-input font-bold bg-white cursor-pointer"
-                                onchange="updateField(${index}, 'posisi', this.value)">
-                            <option value="MANDOR" ${item.posisi === 'MANDOR' ? 'selected' : ''}>MANDOR</option>
-                            <option value="TUKANG" ${item.posisi === 'TUKANG' ? 'selected' : ''}>TUKANG</option>
-                            <option value="SEMI TUKANG" ${item.posisi === 'SEMI TUKANG' ? 'selected' : ''}>SEMI TUKANG</option>
-                            <option value="PEMBANTU TUKANG" ${item.posisi === 'PEMBANTU TUKANG' ? 'selected' : ''}>PEMBANTU TUKANG</option>
-                        </select>
+                    <td class="p-3.5">
+                        <span class="inline-block bg-slate-100 border border-slate-300 text-slate-700 text-xs font-bold px-2.5 py-1 rounded-md uppercase">
+                            ${escapeHtml(trx.posisi)}
+                        </span>
                     </td>
-
-                    <!-- NAMA PROJEK -->
-                    <td class="bg-emerald-50/50">
-                        <input type="text" value="${escapeHtml(item.projek)}" 
-                               class="excel-input font-bold text-emerald-950 uppercase"
-                               placeholder="Nama Projek"
-                               onchange="updateField(${index}, 'projek', this.value)">
+                    <td class="p-3.5 text-xs text-slate-700 leading-relaxed">
+                        ${ringkasanProjek.join('<br>')}
                     </td>
-
-                    <!-- HARI KERJA -->
-                    <td>
-                        <input type="number" min="0" max="31" step="0.5" value="${item.hari}" 
-                               class="excel-input excel-input-num text-center text-slate-900 font-extrabold"
-                               oninput="updateField(${index}, 'hari', this.value)">
+                    <td class="p-3.5 text-right font-extrabold text-slate-900 text-sm">
+                        ${formatRp(totKotor)}
                     </td>
-
-                    <!-- UPAH HARIAN -->
-                    <td>
-                        <input type="number" min="0" step="5000" value="${item.upah}" 
-                               class="excel-input excel-input-num text-slate-900 font-extrabold"
-                               oninput="updateField(${index}, 'upah', this.value)">
+                    <td class="p-3.5 text-right font-bold text-rose-700 bg-rose-50/50 text-sm">
+                        ${trx.kasbon > 0 ? formatRp(trx.kasbon) : '-'}
                     </td>
-
-                    <!-- JAM LEMBUR -->
-                    <td>
-                        <input type="number" min="0" step="1" value="${item.lembur}" 
-                               class="excel-input excel-input-num text-center text-amber-900 font-extrabold"
-                               oninput="updateField(${index}, 'lembur', this.value)">
+                    <td class="p-3.5 text-right font-black text-emerald-950 bg-emerald-50 text-base">
+                        ${formatRp(bersih)}
                     </td>
-
-                    <!-- TARIF LEMBUR (OTOMATIS: UPAH / 8) -->
-                    <td class="text-right font-extrabold text-amber-900 bg-amber-50/70 text-sm md:text-base" title="Otomatis dari Upah Harian dibagi 8">
-                        ${formatRp(tarifLembur)}
-                    </td>
-
-                    <!-- UANG MAKAN -->
-                    <td>
-                        <input type="number" min="0" step="5000" value="${item.makan}" 
-                               class="excel-input excel-input-num text-slate-800 font-bold"
-                               oninput="updateField(${index}, 'makan', this.value)">
-                    </td>
-
-                    <!-- INSENTIF / TRANSPORT -->
-                    <td>
-                        <input type="number" min="0" step="5000" value="${item.insentif}" 
-                               class="excel-input excel-input-num text-slate-800 font-bold"
-                               oninput="updateField(${index}, 'insentif', this.value)">
-                    </td>
-
-                    <!-- TOTAL UPAH -->
-                    <td class="text-right font-extrabold text-emerald-950 bg-emerald-50/80 text-sm md:text-base">
-                        ${formatRp(totalKotor)}
-                    </td>
-
-                    <!-- KASBON (POTONGAN MANUAL) -->
-                    <td class="bg-rose-50/60">
-                        <input type="number" min="0" step="10000" value="${item.kasbon}" 
-                               class="excel-input excel-input-num text-rose-700 font-extrabold"
-                               placeholder="0"
-                               oninput="updateField(${index}, 'kasbon', this.value)">
-                    </td>
-
-                    <!-- SISA BERSIH YANG DITERIMA -->
-                    <td class="text-right font-black text-emerald-950 bg-emerald-100 text-sm md:text-base">
-                        ${formatRp(sisaDiterima)}
-                    </td>
-
-                    <!-- TOMBOL CETAK SLIP GAJI -->
-                    <td class="text-center no-print">
-                        <button type="button" onclick="bukaSlipPekerja('${escapeHtml(item.nama)}')"
-                                class="bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold px-3 py-2 rounded-lg text-xs inline-flex items-center gap-1.5 shadow-md cursor-pointer transition-colors"
-                                title="Lihat dan Cetak Slip Gaji">
-                            <i class="fas fa-file-invoice"></i> Slip
-                        </button>
-                    </td>
-
-                    <!-- TOMBOL HAPUS BARIS -->
-                    <td class="text-center no-print">
-                        <button type="button" onclick="hapusBaris(${index})"
-                                class="p-2 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-sm cursor-pointer transition-colors"
-                                title="Hapus baris ini">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
+                    <td class="p-3.5 text-center no-print">
+                        <div class="inline-flex items-center gap-1.5">
+                            <button type="button" onclick="bukaSlipById(${trx.id})" 
+                                    class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-2.5 py-1.5 rounded-lg text-xs shadow-sm cursor-pointer"
+                                    title="Cetak Slip Gaji">
+                                <i class="fas fa-file-invoice"></i> Slip
+                            </button>
+                            <button type="button" onclick="editTrxKeForm(${trx.id})" 
+                                    class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-2.5 py-1.5 rounded-lg text-xs border border-slate-300 cursor-pointer"
+                                    title="Muat kembali data ke form di atas untuk diedit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button type="button" onclick="hapusTrx(${trx.id})" 
+                                    class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold px-2.5 py-1.5 rounded-lg text-xs border border-rose-200 cursor-pointer"
+                                    title="Hapus dari daftar">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
 
-            // Update Grand Total Baris Bawah
-            document.getElementById('totalHariKerja').innerText = sumHari;
-            document.getElementById('totalJamLembur').innerText = sumLembur;
-            document.getElementById('totalUangMakan').innerText = formatRp(sumMakan);
-            document.getElementById('totalInsentif').innerText = formatRp(sumInsentif);
-            document.getElementById('totalUpahKotor').innerText = formatRp(sumUpahKotor);
-            document.getElementById('totalKasbon').innerText = formatRp(sumKasbon);
-            document.getElementById('totalSisaDiterima').innerText = formatRp(sumSisa);
+            document.getElementById('totalJumlahPekerja').innerText = countPekerja;
+            document.getElementById('totalGrandKotor').innerText = formatRp(grandKotor);
+            document.getElementById('totalGrandKasbon').innerText = formatRp(grandKasbon);
+            document.getElementById('totalGrandBersih').innerText = formatRp(grandBersih);
         }
 
-        function updateField(index, key, val) {
-            if (key === 'nama' || key === 'posisi' || key === 'projek') {
-                dataTransaksi[index][key] = val;
-            } else {
-                dataTransaksi[index][key] = parseFloat(val) || 0;
-            }
-            simpanKeLokal();
-            renderTabel();
+        // Muat data transaksi ke form atas untuk diedit
+        function editTrxKeForm(idTrx) {
+            const trx = transaksiList.find(t => t.id === idTrx);
+            if (!trx) return;
+
+            document.getElementById('inputPekerja').value = trx.kode ? `(${trx.kode}) ${trx.nama}` : trx.nama;
+            document.getElementById('posisiPekerja').value = trx.posisi;
+            document.getElementById('upahPerHari').value = trx.upahPerHari;
+            document.getElementById('formKasbon').value = trx.kasbon || 0;
+
+            currentProjekList = JSON.parse(JSON.stringify(trx.projekList));
+            renderBlokProyek();
+            hitungTotalForm();
+
+            document.getElementById('areaInputForm').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function tambahBarisKosong() {
-            dataTransaksi.push({
-                id: Date.now(),
-                nama: 'PEKERJA BARU',
-                posisi: 'TUKANG',
-                projek: 'FELISA ESTATE',
-                hari: 6,
-                upah: 120000,
-                lembur: 0,
-                makan: 30000,
-                insentif: 0,
-                kasbon: 0
-            });
-            simpanKeLokal();
-            renderTabel();
-        }
-
-        function hapusBaris(index) {
-            if (confirm(`Yakin ingin menghapus baris ${dataTransaksi[index].nama} (${dataTransaksi[index].projek})?`)) {
-                dataTransaksi.splice(index, 1);
-                simpanKeLokal();
-                renderTabel();
+        // Hapus transaksi
+        function hapusTrx(idTrx) {
+            const trx = transaksiList.find(t => t.id === idTrx);
+            if (!trx) return;
+            if (confirm('Yakin ingin menghapus transaksi upah ' + trx.nama + '?')) {
+                transaksiList = transaksiList.filter(t => t.id !== idTrx);
+                simpanKeStorage();
+                renderDaftarTransaksi();
             }
         }
 
-        function jalankanFilter() {
-            renderTabel();
-        }
+        // Buka Slip Gaji berdasarkan ID transaksi
+        function bukaSlipById(idTrx) {
+            const trx = transaksiList.find(t => t.id === idTrx);
+            if (!trx) return;
 
-        // Buka Slip Gaji Gabungan (Satu orang bisa beberapa proyek sekaligus)
-        function bukaSlipPekerja(namaPekerja) {
-            const barisPekerja = dataTransaksi.filter(d => d.nama.trim().toUpperCase() === namaPekerja.trim().toUpperCase());
-            if (barisPekerja.length === 0) return;
-
-            const pertama = barisPekerja[0];
-            document.getElementById('slipNama').innerText = pertama.nama;
-            document.getElementById('slipTtdNama').innerText = pertama.nama;
-            document.getElementById('slipPosisi').innerText = pertama.posisi;
+            const tarifLembur = (trx.upahPerHari || 0) / 8;
+            document.getElementById('slipNama').innerText = trx.kode ? `(${trx.kode}) ${trx.nama}` : trx.nama;
+            document.getElementById('slipTtdNama').innerText = trx.nama;
+            document.getElementById('slipPosisi').innerText = trx.posisi;
             document.getElementById('slipPeriodeDisplay').innerText = document.getElementById('labelPeriodeAktif').innerText;
             document.getElementById('slipTglCetak').innerText = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
-            const tbodySlip = document.getElementById('slipTbodyProyek');
-            tbodySlip.innerHTML = '';
+            const tbody = document.getElementById('slipTbodyProyek');
+            tbody.innerHTML = '';
 
             let grandKotor = 0;
-            let grandKasbon = 0;
-
-            barisPekerja.forEach(item => {
-                const tarifLembur = (Number(item.upah) || 0) / 8;
-                const subPokok = (Number(item.hari) || 0) * (Number(item.upah) || 0);
-                const subLembur = (Number(item.lembur) || 0) * tarifLembur;
-                const subKotor = subPokok + subLembur + (Number(item.makan) || 0) + (Number(item.insentif) || 0);
-                grandKotor += subKotor;
-                grandKasbon += (Number(item.kasbon) || 0);
+            trx.projekList.forEach(p => {
+                const subPokok = (Number(p.hari) || 0) * trx.upahPerHari;
+                const subLembur = (Number(p.lembur) || 0) * tarifLembur;
+                const sub = subPokok + subLembur + (Number(p.makan) || 0) + (Number(p.insentif) || 0);
+                grandKotor += sub;
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td class="p-2.5 font-bold text-slate-800">${escapeHtml(item.projek)}</td>
-                    <td class="p-2.5 text-center font-semibold">${item.hari} hari</td>
-                    <td class="p-2.5 text-right">${formatRp(item.upah)}</td>
-                    <td class="p-2.5 text-center font-semibold">${item.lembur} jam (${formatRp(tarifLembur)}/jam)</td>
-                    <td class="p-2.5 text-right">${formatRp(item.makan)}</td>
-                    <td class="p-2.5 text-right font-bold text-emerald-800">${formatRp(subKotor)}</td>
+                    <td class="p-2 font-bold text-slate-800">${escapeHtml(p.projek || 'PROYEK')}</td>
+                    <td class="p-2 text-center font-semibold">${p.hari} hari</td>
+                    <td class="p-2 text-right">${formatRp(trx.upahPerHari)}</td>
+                    <td class="p-2 text-center font-semibold">${p.lembur} jam (${formatRp(tarifLembur)}/j)</td>
+                    <td class="p-2 text-right">${formatRp(p.makan)}</td>
+                    <td class="p-2 text-right font-black text-emerald-800">${formatRp(sub)}</td>
                 `;
-                tbodySlip.appendChild(tr);
+                tbody.appendChild(tr);
             });
 
-            const grandBersih = grandKotor - grandKasbon;
+            const kasbon = trx.kasbon || 0;
+            const bersih = grandKotor - kasbon;
+
             document.getElementById('slipTotalKotor').innerText = formatRp(grandKotor);
-            document.getElementById('slipKasbonNilai').innerText = '- ' + formatRp(grandKasbon);
-            document.getElementById('slipSisaDiterima').innerText = formatRp(grandBersih);
+            document.getElementById('slipKasbonNilai').innerText = '- ' + formatRp(kasbon);
+            document.getElementById('slipSisaDiterima').innerText = formatRp(bersih);
 
             document.getElementById('modalSlip').classList.remove('hidden');
             document.body.classList.add('slip-open');
@@ -787,9 +1106,37 @@
             return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
 
-        // ============================================================
-        // LOGIKA SIDEBAR SANGAT JELAS & USER FRIENDLY
-        // ============================================================
+        // Kalender Periode
+        function updatePeriodeKalender() {
+            const d1 = document.getElementById('tglMulai').value;
+            const d2 = document.getElementById('tglSelesai').value;
+            if (!d1 || !d2) return;
+
+            const formatTgl = (tglStr) => {
+                const parts = tglStr.split('-');
+                if (parts.length !== 3) return tglStr;
+                const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                return parseInt(parts[2], 10) + ' ' + bulan[parseInt(parts[1], 10) - 1] + ' ' + parts[0];
+            };
+
+            const teksHasil = formatTgl(d1) + ' - ' + formatTgl(d2);
+            document.getElementById('labelPeriodeAktif').innerText = teksHasil;
+            try {
+                localStorage.setItem('jaya_periode_kalender_v2', JSON.stringify({ d1, d2, teks: teksHasil }));
+            } catch (_) {}
+        }
+
+        try {
+            const savedCal = localStorage.getItem('jaya_periode_kalender_v2');
+            if (savedCal) {
+                const parsed = JSON.parse(savedCal);
+                if (parsed.d1) document.getElementById('tglMulai').value = parsed.d1;
+                if (parsed.d2) document.getElementById('tglSelesai').value = parsed.d2;
+                if (parsed.teks) document.getElementById('labelPeriodeAktif').innerText = parsed.teks;
+            }
+        } catch (_) {}
+
+        // Toggle Sidebar Navigasi
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebarNav');
             const wrapper = document.getElementById('mainContentWrapper');
@@ -798,9 +1145,7 @@
             if (!sidebar || !wrapper) return;
 
             const isTutup = sidebar.classList.contains('-translate-x-full');
-
             if (isTutup) {
-                // Tampilkan sidebar kembali
                 sidebar.classList.remove('-translate-x-full');
                 wrapper.classList.remove('ml-0');
                 wrapper.classList.add('ml-64');
@@ -811,7 +1156,6 @@
                 }
                 localStorage.setItem('sidebar_drop_left', 'buka');
             } else {
-                // Sembunyikan sidebar ke kiri
                 sidebar.classList.add('-translate-x-full');
                 wrapper.classList.remove('ml-64');
                 wrapper.classList.add('ml-0');
@@ -824,7 +1168,6 @@
             }
         }
 
-        // Ingat preferensi: jika sebelumnya disembunyikan, tetap sembunyikan saat buka halaman
         if (localStorage.getItem('sidebar_drop_left') === 'tutup') {
             const sidebar = document.getElementById('sidebarNav');
             const wrapper = document.getElementById('mainContentWrapper');
@@ -842,8 +1185,26 @@
             }
         }
 
-        // Render awal saat halaman dibuka
-        renderTabel();
+        // Jam Realtime
+        function updateJamHeader() {
+            const el = document.getElementById('waktuRealtime');
+            if (el) {
+                const now = new Date();
+                el.innerText = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB';
+            }
+        }
+        setInterval(updateJamHeader, 1000);
+        updateJamHeader();
+
+        // Inisialisasi awal saat halaman dibuka
+        inisialisasiDatalist();
+        renderBlokProyek();
+        hitungTotalForm();
+        renderDaftarTransaksi();
+
+        // Contoh awal jika baru buka, arahkan fokus ke input pekerja
+        onPilihPekerja('(KANCIL-013) MUSTOFA');
+        document.getElementById('inputPekerja').value = '(KANCIL-013) MUSTOFA';
     </script>
 </body>
 </html>
