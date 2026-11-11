@@ -10,38 +10,42 @@
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
         
-        /* Gaya tabel persis Excel */
+        /* Gaya tabel spreadsheet persis Excel tapi jauh lebih lega dan besar */
         .excel-table th {
-            background-color: #15803d; /* Green 700 khas Excel */
+            background-color: #15803d; /* Hijau Excel */
             color: white;
-            font-weight: 600;
-            font-size: 13px;
-            padding: 10px 8px;
+            font-weight: 700;
+            font-size: 14px;
+            padding: 14px 10px;
             border: 1px solid #166534;
             text-align: center;
+            letter-spacing: 0.02em;
         }
         .excel-table td {
-            border: 1px solid #d1d5db;
-            padding: 6px 8px;
-            font-size: 13px;
+            border: 1px solid #cbd5e1;
+            padding: 10px 8px;
+            font-size: 15px;
             vertical-align: middle;
         }
         .excel-table tr:hover td {
             background-color: #f0fdf4;
         }
+        
+        /* Kotak input besar, jelas, dan sangat nyaman diketik */
         .excel-input {
             width: 100%;
-            padding: 6px 8px;
-            border: 1px solid #cbd5e1;
-            border-radius: 4px;
-            font-size: 13px;
-            font-weight: 600;
+            padding: 9px 12px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
             background: #ffffff;
-            transition: all 0.15s;
+            transition: all 0.15s ease-in-out;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
         }
         .excel-input:focus {
             border-color: #16a34a;
-            outline: 2px solid #bbf7d0;
+            outline: 3px solid #bbf7d0;
             background: #ffffff;
         }
         .excel-input-num {
@@ -52,7 +56,7 @@
         /* Mode Cetak Slip */
         @media print {
             aside, header, #areaKontrol, .no-print { display: none !important; }
-            .ml-64 { margin-left: 0 !important; }
+            .ml-64, #mainContentWrapper { margin-left: 0 !important; }
             body { background: white !important; }
             body.slip-open main > div:not(#modalSlip) { display: none !important; }
             body.slip-open #modalSlip {
@@ -72,126 +76,90 @@
 </head>
 <body class="bg-slate-100 min-h-screen text-slate-800">
 
-    <!-- SIDEBAR COLLAPSIBLE (BISA DICUTKAN / SLIDE KE KIRI) -->
+    <!-- SIDEBAR DENGAN TOMBOL TUTUP SANGAT JELAS -->
     <aside id="sidebarNav" class="fixed top-0 left-0 w-64 h-full bg-slate-800 text-white flex flex-col z-50 shadow-2xl transition-transform duration-300 ease-in-out no-print">
-        <div class="px-4 py-4 border-b border-slate-700 flex items-center justify-between">
-            <div class="flex items-center gap-2.5 overflow-hidden">
-                <img src="images/logo.png" alt="Logo" class="w-10 h-10 object-contain shrink-0">
+        <!-- Header Sidebar -->
+        <div class="px-5 py-4 border-b border-slate-700">
+            <div class="flex items-center gap-3">
+                <img src="images/logo.png" alt="Logo" class="w-11 h-11 object-contain shrink-0">
                 <div class="overflow-hidden">
                     <h1 class="text-sm font-bold tracking-wide text-white leading-tight truncate">Jaya Kedhaton</h1>
-                    <p class="text-[10px] text-slate-400 truncate">Sistem Absensi Digital</p>
+                    <p class="text-xs text-slate-400 truncate">Sistem Absensi Digital</p>
                 </div>
             </div>
-            <!-- Tombol Sembunyikan Menu ke Kiri -->
+
+            <!-- Tombol Sembunyikan Menu Sangat Jelas -->
             <button type="button" onclick="toggleSidebar()" 
-                    class="text-slate-400 hover:text-white hover:bg-slate-700 p-1.5 rounded-lg text-sm transition-colors cursor-pointer"
-                    title="Tutup / Sembunyikan Menu ke Kiri">
-                <i class="fas fa-angles-left"></i>
+                    class="w-full mt-3 bg-slate-700 hover:bg-rose-600 text-white font-bold py-2.5 px-3 rounded-lg text-xs flex items-center justify-center gap-2 border border-slate-600 shadow cursor-pointer transition-colors"
+                    title="Klik untuk menyembunyikan menu ini agar layar tabel lebih luas">
+                <i class="fas fa-arrow-left"></i>
+                <span>Sembunyikan Menu (Biar Luas)</span>
             </button>
         </div>
 
-        <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-            <a href="dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-chart-bar w-5 text-center text-sm"></i>
+        <!-- Menu Navigasi -->
+        <nav class="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto">
+            <a href="dashboard.html" class="flex items-center gap-3 px-3.5 py-3 rounded-lg text-sm font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
+                <i class="fas fa-chart-bar w-5 text-center text-base"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="riwayat.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-clipboard-list w-5 text-center text-sm"></i>
+            <a href="riwayat.html" class="flex items-center gap-3 px-3.5 py-3 rounded-lg text-sm font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
+                <i class="fas fa-clipboard-list w-5 text-center text-base"></i>
                 <span>Riwayat Absensi</span>
             </a>
-            <a href="rekap.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-calendar-week w-5 text-center text-sm"></i>
+            <a href="rekap.html" class="flex items-center gap-3 px-3.5 py-3 rounded-lg text-sm font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
+                <i class="fas fa-calendar-week w-5 text-center text-base"></i>
                 <span>Rekap Kehadiran</span>
             </a>
-            <a href="upah.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-bold bg-green-700 text-white shadow">
-                <i class="fas fa-file-excel w-5 text-center text-sm"></i>
+            <a href="upah.html" class="flex items-center gap-3 px-3.5 py-3 rounded-lg text-sm font-bold bg-green-700 text-white shadow">
+                <i class="fas fa-file-excel w-5 text-center text-lg"></i>
                 <span>Form Upah &amp; Lembur</span>
             </a>
-            <a href="karyawan.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-users w-5 text-center text-sm"></i>
+            <a href="karyawan.html" class="flex items-center gap-3 px-3.5 py-3 rounded-lg text-sm font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
+                <i class="fas fa-users w-5 text-center text-base"></i>
                 <span>Daftar Karyawan</span>
             </a>
-            <a href="kartu-rfid.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-id-card w-5 text-center text-sm"></i>
+            <a href="kartu-rfid.html" class="flex items-center gap-3 px-3.5 py-3 rounded-lg text-sm font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
+                <i class="fas fa-id-card w-5 text-center text-base"></i>
                 <span>Kartu RFID</span>
             </a>
-            <a href="audit-log.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-shield-alt w-5 text-center text-sm"></i>
+            <a href="audit-log.html" class="flex items-center gap-3 px-3.5 py-3 rounded-lg text-sm font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
+                <i class="fas fa-shield-alt w-5 text-center text-base"></i>
                 <span>Log Aktivitas</span>
             </a>
         </nav>
 
-        <div class="px-4 py-3 border-t border-slate-700 text-[11px] text-slate-400 flex items-center justify-between">
-            <span>&copy; PT Jaya Kedhaton</span>
-            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-slate-200" title="Sembunyikan">
-                <i class="fas fa-chevron-left text-xs"></i>
-            </button>
+        <div class="px-5 py-3.5 border-t border-slate-700 text-xs text-slate-400">
+            &copy; 2026 PT Jaya Kedhaton
         </div>
     </aside>
 
     <!-- KONTEN UTAMA -->
     <div id="mainContentWrapper" class="min-h-screen flex flex-col transition-all duration-300 ml-64">
-        <!-- Topbar Sederhana dengan Tombol Drop-Left Menu -->
-        <header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-40 no-print">
-            <div class="flex items-center gap-3">
-                <!-- TOMBOL TOGGLE SIDEBAR (DROP LEFT / SLIDE TO LEFT) -->
-                <button type="button" onclick="toggleSidebar()" 
-                        class="px-3 py-1.5 rounded-lg bg-green-50 hover:bg-green-100 border border-green-300 text-green-900 font-bold text-xs inline-flex items-center gap-1.5 cursor-pointer shadow-sm transition-all"
-                        title="Klik untuk menyembunyikan / menampilkan menu di sebelah kiri">
-                    <i class="fas fa-bars text-sm text-green-700"></i>
+        <!-- Topbar Sederhana -->
+        <header class="bg-white border-b border-slate-200 px-6 py-3.5 flex items-center justify-between sticky top-0 z-40 no-print">
+            <div class="flex items-center gap-4">
+                <!-- TOMBOL BUKA/TUTUP MENU SAMPING (BESAR, JELAS & USER FRIENDLY) -->
+                <button type="button" id="btnToggleMenu" onclick="toggleSidebar()" 
+                        class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs md:text-sm inline-flex items-center gap-2 cursor-pointer shadow-md transition-all"
+                        title="Klik untuk membuka / menutup menu samping">
+                    <i class="fas fa-bars text-sm"></i>
                     <span id="labelTombolMenu">Sembunyikan Menu</span>
                 </button>
 
-                <!-- MENU CEPAT DROPDOWN (PILIH HALAMAN LANGSUNG) -->
-                <div class="relative inline-block text-left" id="boxQuickMenu">
-                    <button type="button" onclick="toggleDropdownMenu()"
-                            class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-700 font-bold text-xs inline-flex items-center gap-1.5 cursor-pointer transition-colors">
-                        <i class="fas fa-th-large text-slate-500"></i>
-                        <span>Pindah Menu</span>
-                        <i class="fas fa-chevron-down text-[10px] text-slate-400 ml-0.5"></i>
-                    </button>
-                    <!-- Isi Dropdown Menu -->
-                    <div id="dropdownMenuContent" class="hidden absolute left-0 mt-2 w-52 bg-white rounded-xl shadow-2xl border border-slate-200 py-1.5 z-50">
-                        <div class="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
-                            Navigasi Halaman
-                        </div>
-                        <a href="dashboard.html" class="flex items-center gap-2.5 px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100">
-                            <i class="fas fa-chart-bar w-4 text-slate-400"></i> Dashboard
-                        </a>
-                        <a href="riwayat.html" class="flex items-center gap-2.5 px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100">
-                            <i class="fas fa-clipboard-list w-4 text-slate-400"></i> Riwayat Absensi
-                        </a>
-                        <a href="rekap.html" class="flex items-center gap-2.5 px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100">
-                            <i class="fas fa-calendar-week w-4 text-slate-400"></i> Rekap Kehadiran
-                        </a>
-                        <a href="upah.html" class="flex items-center gap-2.5 px-3.5 py-2 text-xs font-bold text-green-800 bg-green-50">
-                            <i class="fas fa-file-excel w-4 text-green-600"></i> Form Upah &amp; Lembur
-                        </a>
-                        <a href="karyawan.html" class="flex items-center gap-2.5 px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100">
-                            <i class="fas fa-users w-4 text-slate-400"></i> Daftar Karyawan
-                        </a>
-                        <a href="kartu-rfid.html" class="flex items-center gap-2.5 px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100">
-                            <i class="fas fa-id-card w-4 text-slate-400"></i> Kartu RFID
-                        </a>
-                        <a href="audit-log.html" class="flex items-center gap-2.5 px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100">
-                            <i class="fas fa-shield-alt w-4 text-slate-400"></i> Log Aktivitas
-                        </a>
-                    </div>
-                </div>
+                <div class="h-6 w-px bg-slate-300 hidden sm:block"></div>
 
-                <div class="h-5 w-px bg-slate-300 mx-1 hidden sm:block"></div>
-
-                <div class="hidden sm:block">
-                    <h2 class="text-sm font-bold text-slate-800 leading-tight">Form Transaksi Upah Pekerja</h2>
-                    <p class="text-[11px] text-slate-500">PT Jaya Kedhaton &bull; Format Spreadsheet Excel</p>
+                <div>
+                    <h2 class="text-base font-bold text-slate-800 leading-tight">Form Transaksi Upah Pekerja</h2>
+                    <p class="text-xs text-slate-500">Format Spreadsheet Excel &bull; PT Jaya Kedhaton</p>
                 </div>
             </div>
 
             <div class="flex items-center gap-3 text-sm">
-                <div class="bg-slate-100 px-3 py-1.5 rounded-lg text-slate-700 font-semibold border border-slate-200 text-xs hidden md:inline-flex items-center">
+                <div class="bg-slate-100 px-3.5 py-1.5 rounded-lg text-slate-700 font-semibold border border-slate-200 text-xs hidden md:inline-flex items-center">
                     <i class="fas fa-user-circle mr-1.5 text-slate-500"></i> Admin Keuangan
                 </div>
-                <button onclick="location.reload()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-200">
+                <button onclick="location.reload()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-1.5 rounded-lg text-xs font-bold border border-slate-300 cursor-pointer">
                     <i class="fas fa-sync-alt mr-1"></i> Refresh
                 </button>
             </div>
@@ -208,33 +176,48 @@
                     </span>
                     <div class="text-sm text-emerald-950">
                         <p class="font-bold text-base text-emerald-900 mb-1">
-                            Petunjuk Mudah Pengisian Form Upah:
+                            Petunjuk Pengisian Form Upah:
                         </p>
-                        <ol class="list-decimal list-inside space-y-1 text-emerald-800 text-xs md:text-sm">
-                            <li><strong>Cukup ketik angka</strong> pada kolom yang berkotak putih (Hari, Upah, Jam Lembur, Makan, Kasbon).</li>
-                            <li><strong>Upah lembur otomatis dihitung</strong>: <code class="bg-emerald-200/70 px-1.5 py-0.5 rounded font-mono font-bold">Upah Harian ÷ 8 × Jam Lembur</code>. Tidak perlu hitung kalkulator lagi.</li>
-                            <li><strong>Satu orang kerja di banyak proyek?</strong> Sangat bisa! Klik tombol hijau <span class="bg-emerald-600 text-white font-bold px-2 py-0.5 rounded text-xs">+ Tambah Baris Proyek</span> untuk orang yang sama. Di slip gaji otomatis digabung jadi satu.</li>
+                        <ol class="list-decimal list-inside space-y-1 text-emerald-800 text-xs md:text-sm font-medium">
+                            <li><strong>Pilih tanggal periode</strong> menggunakan kalender di bawah (klik ikon kalender untuk memilih tanggal).</li>
+                            <li><strong>Ketik angka</strong> pada kolom yang berkotak putih (Hari, Upah, Jam Lembur, Makan, Kasbon). Ukuran kolom sudah dibuat besar agar nyaman dibaca.</li>
+                            <li><strong>Upah lembur otomatis dihitung</strong>: <code class="bg-emerald-200/80 px-1.5 py-0.5 rounded font-mono font-bold text-emerald-950">Upah Harian ÷ 8 × Jam Lembur</code>. Tidak perlu kalkulator lagi.</li>
+                            <li><strong>Satu orang kerja di beberapa proyek?</strong> Klik tombol hijau <span class="bg-emerald-600 text-white font-bold px-2 py-0.5 rounded text-xs">+ Tambah Baris Pekerja</span> untuk menambahkan proyek lainnya bagi pekerja yang sama. Di slip gaji otomatis digabungkan.</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <!-- PANEL KONTROL & FILTER ATAS -->
-            <div id="areaKontrol" class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mb-5 flex flex-wrap items-center justify-between gap-4">
-                <!-- Info Periode -->
+            <!-- PANEL KONTROL & FILTER ATAS DENGAN KALENDER -->
+            <div id="areaKontrol" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm mb-5 flex flex-wrap items-center justify-between gap-4">
+                
+                <!-- BAGIAN KALENDER PERIODE GAJI (USER FRIENDLY KALENDER) -->
                 <div class="flex flex-wrap items-center gap-3">
-                    <div class="flex items-center gap-2">
-                        <label class="text-xs font-bold text-slate-600 uppercase">Periode Gaji:</label>
-                        <input type="text" id="inputPeriode" value="24 Oktober - 06 Nopember 2026"
-                               class="border border-slate-300 rounded-lg px-3 py-1.5 text-sm font-bold text-slate-800 bg-white focus:border-green-600 focus:outline-none w-64 shadow-sm"
-                               title="Ketik nama periode seperti di Excel">
+                    <div class="flex items-center gap-2 bg-emerald-50/70 border-2 border-emerald-300 rounded-xl px-4 py-2.5 shadow-sm">
+                        <i class="fas fa-calendar-alt text-emerald-700 text-base mr-1"></i>
+                        <span class="text-xs font-bold text-emerald-950 uppercase">Periode:</span>
+                        
+                        <!-- Kalender Dari -->
+                        <div class="flex items-center gap-1.5">
+                            <input type="date" id="tglMulai" value="2026-10-24" onchange="updatePeriodeKalender()"
+                                   class="border-2 border-slate-300 bg-white rounded-lg px-2.5 py-1.5 text-xs md:text-sm font-bold text-slate-800 focus:border-green-600 focus:outline-none cursor-pointer shadow-inner">
+                            <span class="text-xs font-bold text-slate-500">s/d</span>
+                            <!-- Kalender Sampai -->
+                            <input type="date" id="tglSelesai" value="2026-11-06" onchange="updatePeriodeKalender()"
+                                   class="border-2 border-slate-300 bg-white rounded-lg px-2.5 py-1.5 text-xs md:text-sm font-bold text-slate-800 focus:border-green-600 focus:outline-none cursor-pointer shadow-inner">
+                        </div>
+
+                        <!-- Label Hasil Format Kalender -->
+                        <span id="labelPeriodeAktif" class="text-xs md:text-sm font-extrabold text-emerald-900 bg-emerald-200/80 px-3 py-1 rounded-md ml-1">
+                            24 Oktober - 06 Nopember 2026
+                        </span>
                     </div>
 
                     <!-- Filter Cepat Projek -->
-                    <div class="flex items-center gap-1.5 ml-0 md:ml-4">
-                        <span class="text-xs font-bold text-slate-500 uppercase mr-1">Filter Projek:</span>
+                    <div class="flex items-center gap-2 ml-0 md:ml-2">
+                        <span class="text-xs font-bold text-slate-500 uppercase">Filter Projek:</span>
                         <select id="filterProjekSelect" onchange="jalankanFilter()"
-                                class="border border-slate-300 bg-slate-50 rounded-lg px-3 py-1.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-green-600 cursor-pointer">
+                                class="border-2 border-slate-300 bg-slate-50 rounded-lg px-3 py-2 text-xs md:text-sm font-bold text-slate-700 focus:outline-none focus:border-green-600 cursor-pointer">
                             <option value="">Semua Projek (Tampilkan Semua)</option>
                             <option value="FELISA ESTATE">FELISA ESTATE</option>
                             <option value="RUKO PAK DEDI">RUKO PAK DEDI</option>
@@ -245,61 +228,61 @@
                     </div>
                 </div>
 
-                <!-- Tombol Aksi Khas Excel -->
-                <div class="flex flex-wrap items-center gap-2">
+                <!-- Tombol Aksi Khas Excel (Besar & Jelas) -->
+                <div class="flex flex-wrap items-center gap-3">
                     <button type="button" onclick="tambahBarisKosong()"
-                            class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-lg text-sm shadow inline-flex items-center gap-2 cursor-pointer transition-all">
+                            class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-sm shadow-md inline-flex items-center gap-2 cursor-pointer transition-all">
                         <i class="fas fa-plus-circle text-base"></i>
                         <span>+ Tambah Baris Pekerja</span>
                     </button>
                     <button type="button" onclick="window.print()"
-                            class="bg-slate-800 hover:bg-slate-900 text-white font-semibold py-2 px-4 rounded-lg text-sm shadow inline-flex items-center gap-2 cursor-pointer">
+                            class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-2.5 px-4 rounded-xl text-sm shadow-md inline-flex items-center gap-2 cursor-pointer transition-all">
                         <i class="fas fa-print"></i> Cetak Lembar Ini
                     </button>
                 </div>
             </div>
 
-            <!-- TABEL TRANSAKSI SPREADSHEET (GAYA EXCEL) -->
+            <!-- TABEL TRANSAKSI SPREADSHEET (BARIS BESAR & LEGA) -->
             <div class="bg-white rounded-xl border-2 border-slate-300 shadow-md overflow-hidden mb-6">
                 <div class="overflow-x-auto">
                     <table class="w-full excel-table" id="tabelExcel">
                         <thead>
                             <tr>
-                                <th style="width: 40px;">No</th>
-                                <th style="min-width: 170px; text-align: left;">Nama Pekerja</th>
-                                <th style="min-width: 140px;">Posisi / Jabatan</th>
-                                <th style="min-width: 160px; background-color: #166534;">Nama Projek</th>
-                                <th style="width: 75px;">Hari Kerja</th>
-                                <th style="width: 110px;">Upah / Hari</th>
-                                <th style="width: 75px;">Lembur (Jam)</th>
-                                <th style="width: 110px; background-color: #14532d;" title="Otomatis dihitung Upah/Hari : 8">Tarif Lembur/Jam</th>
-                                <th style="width: 100px;">Uang Makan</th>
-                                <th style="width: 100px;">Insentif / Transport</th>
-                                <th style="width: 125px; background-color: #065f46;">Total Upah</th>
-                                <th style="width: 105px; background-color: #991b1b;" class="text-rose-100">Kasbon</th>
-                                <th style="width: 130px; background-color: #047857;">Sisa Diterima</th>
-                                <th style="width: 90px;" class="no-print">Slip Gaji</th>
-                                <th style="width: 45px;" class="no-print">Aksi</th>
+                                <th style="width: 50px;">No</th>
+                                <th style="min-width: 200px; text-align: left;">Nama Pekerja</th>
+                                <th style="min-width: 170px;">Posisi / Jabatan</th>
+                                <th style="min-width: 180px; background-color: #166534;">Nama Projek</th>
+                                <th style="width: 90px;">Hari Kerja</th>
+                                <th style="width: 135px;">Upah / Hari</th>
+                                <th style="width: 90px;">Lembur (Jam)</th>
+                                <th style="width: 130px; background-color: #14532d;" title="Otomatis dihitung: Upah/Hari : 8">Tarif Lembur/Jam</th>
+                                <th style="width: 120px;">Uang Makan</th>
+                                <th style="width: 120px;">Insentif / Transport</th>
+                                <th style="width: 140px; background-color: #065f46;">Total Upah</th>
+                                <th style="width: 125px; background-color: #991b1b;" class="text-rose-100">Kasbon</th>
+                                <th style="width: 145px; background-color: #047857;">Sisa Diterima</th>
+                                <th style="width: 95px;" class="no-print">Slip Gaji</th>
+                                <th style="width: 55px;" class="no-print">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="tbodyTransaksi">
-                            <!-- Baris-baris transaksi otomatis dirender oleh JS di bawah -->
+                            <!-- Baris transaksi dirender oleh JS dengan ukuran input besar -->
                         </tbody>
                         <tfoot>
-                            <!-- BARIS GRAND TOTAL PERSIS SEPERTI EXCEL -->
-                            <tr class="bg-slate-200 font-extrabold text-slate-900 border-t-2 border-slate-400 text-xs md:text-sm">
-                                <td colspan="4" class="text-right uppercase px-4 py-3 bg-slate-300 text-slate-800">
+                            <!-- BARIS GRAND TOTAL PERSIS SEPERTI EXCEL DENGAN HURUF JELAS -->
+                            <tr class="bg-slate-200 font-extrabold text-slate-900 border-t-2 border-slate-400 text-sm md:text-base">
+                                <td colspan="4" class="text-right uppercase px-4 py-3.5 bg-slate-300 text-slate-800">
                                     Grand Total Keseluruhan:
                                 </td>
-                                <td class="text-center font-bold text-slate-800" id="totalHariKerja">0</td>
+                                <td class="text-center font-bold text-slate-900 text-base" id="totalHariKerja">0</td>
                                 <td class="bg-slate-300"></td>
-                                <td class="text-center font-bold text-amber-800" id="totalJamLembur">0</td>
+                                <td class="text-center font-bold text-amber-900 text-base" id="totalJamLembur">0</td>
                                 <td class="bg-slate-300"></td>
-                                <td class="text-right text-slate-800" id="totalUangMakan">Rp 0</td>
-                                <td class="text-right text-slate-800" id="totalInsentif">Rp 0</td>
-                                <td class="text-right text-emerald-900 font-extrabold bg-emerald-100/80" id="totalUpahKotor">Rp 0</td>
-                                <td class="text-right text-rose-800 font-extrabold bg-rose-100/80" id="totalKasbon">Rp 0</td>
-                                <td class="text-right text-emerald-950 font-black bg-emerald-200 text-sm md:text-base" id="totalSisaDiterima">Rp 0</td>
+                                <td class="text-right text-slate-900 font-bold" id="totalUangMakan">Rp 0</td>
+                                <td class="text-right text-slate-900 font-bold" id="totalInsentif">Rp 0</td>
+                                <td class="text-right text-emerald-950 font-black bg-emerald-100/90 text-base" id="totalUpahKotor">Rp 0</td>
+                                <td class="text-right text-rose-800 font-black bg-rose-100/90 text-base" id="totalKasbon">Rp 0</td>
+                                <td class="text-right text-emerald-950 font-black bg-emerald-200 text-base md:text-lg" id="totalSisaDiterima">Rp 0</td>
                                 <td colspan="2" class="bg-slate-300 no-print"></td>
                             </tr>
                         </tfoot>
@@ -357,15 +340,15 @@
                     <div class="py-3">
                         <p class="text-xs font-bold text-slate-700 uppercase mb-2">Rincian Pekerjaan &amp; Proyek:</p>
                         <div class="border border-slate-200 rounded-lg overflow-hidden">
-                            <table class="w-full text-xs">
+                            <table class="w-full text-xs md:text-sm">
                                 <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
                                     <tr>
-                                        <th class="p-2 text-left">Nama Proyek</th>
-                                        <th class="p-2 text-center">Hari Kerja</th>
-                                        <th class="p-2 text-right">Upah/Hari</th>
-                                        <th class="p-2 text-center">Lembur</th>
-                                        <th class="p-2 text-right">Uang Makan</th>
-                                        <th class="p-2 text-right">Subtotal</th>
+                                        <th class="p-2.5 text-left">Nama Proyek</th>
+                                        <th class="p-2.5 text-center">Hari Kerja</th>
+                                        <th class="p-2.5 text-right">Upah/Hari</th>
+                                        <th class="p-2.5 text-center">Lembur</th>
+                                        <th class="p-2.5 text-right">Uang Makan</th>
+                                        <th class="p-2.5 text-right">Subtotal</th>
                                     </tr>
                                 </thead>
                                 <tbody id="slipTbodyProyek" class="divide-y divide-slate-100">
@@ -376,7 +359,7 @@
                     </div>
 
                     <!-- Total Kotor, Kasbon, dan Bersih -->
-                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-1.5 text-xs md:text-sm">
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-1.5 text-xs md:text-sm">
                         <div class="flex justify-between">
                             <span class="text-slate-600">Total Upah Pekerja:</span>
                             <span class="font-bold text-slate-800" id="slipTotalKotor">Rp 0</span>
@@ -387,7 +370,7 @@
                         </div>
                         <div class="flex justify-between items-center pt-2 border-t border-slate-300 font-black text-sm md:text-base text-emerald-900">
                             <span>SISA UPAH YANG DITERIMA:</span>
-                            <span class="text-lg md:text-xl text-emerald-800" id="slipSisaDiterima">Rp 0</span>
+                            <span class="text-xl md:text-2xl text-emerald-800" id="slipSisaDiterima">Rp 0</span>
                         </div>
                     </div>
 
@@ -408,10 +391,10 @@
 
                     <!-- Tombol Modal -->
                     <div class="flex gap-2 mt-5 no-print">
-                        <button type="button" onclick="window.print()" class="flex-1 bg-green-700 hover:bg-green-800 text-white font-bold py-2.5 rounded-lg text-sm shadow">
+                        <button type="button" onclick="window.print()" class="flex-1 bg-green-700 hover:bg-green-800 text-white font-bold py-2.5 rounded-lg text-sm shadow cursor-pointer">
                             <i class="fas fa-print mr-1"></i> Cetak Slip Ini
                         </button>
-                        <button type="button" onclick="tutupSlip()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-4 py-2.5 rounded-lg text-sm">
+                        <button type="button" onclick="tutupSlip()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-4 py-2.5 rounded-lg text-sm cursor-pointer">
                             Tutup
                         </button>
                     </div>
@@ -421,10 +404,9 @@
         </main>
     </div>
 
-    <!-- SCRIPT LOGIKA TRANSAKSI EXCEL SANGAT RAMAH AWAM -->
+    <!-- SCRIPT LOGIKA TRANSAKSI DENGAN KALENDER & INPUT LEGA -->
     <script>
-        // Data Awal Referensi (Bisa ditambah / diedit langsung oleh ibu-ibu)
-        // Satu pekerja bisa punya beberapa baris proyek berbeda!
+        // Data Awal Referensi
         let dataTransaksi = [
             {
                 id: 1,
@@ -436,11 +418,11 @@
                 lembur: 6,
                 makan: 30000,
                 insentif: 0,
-                kasbon: 1100000 // Kasbon dicatat di baris pertama
+                kasbon: 1100000
             },
             {
                 id: 2,
-                nama: 'AGUNG WIJAYA', // Orang yang sama, proyek kedua!
+                nama: 'AGUNG WIJAYA', // Orang yang sama, proyek kedua
                 posisi: 'PEMBANTU TUKANG',
                 projek: 'RUKO PAK DEDI',
                 hari: 7,
@@ -510,7 +492,49 @@
             return 'Rp ' + Math.round(Number(val) || 0).toLocaleString('id-ID');
         }
 
-        // Render Seluruh Baris ke Tabel
+        // ============================================================
+        // LOGIKA KALENDER PERIODE GAJI
+        // ============================================================
+        function updatePeriodeKalender() {
+            const d1 = document.getElementById('tglMulai').value;
+            const d2 = document.getElementById('tglSelesai').value;
+            if (!d1 || !d2) return;
+
+            const formatTgl = (tglStr) => {
+                const parts = tglStr.split('-');
+                if (parts.length !== 3) return tglStr;
+                const y = parts[0];
+                const m = parseInt(parts[1], 10);
+                const d = parseInt(parts[2], 10);
+                const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                return `${d} ${bulan[m - 1]} ${y}`;
+            };
+
+            const teksHasil = `${formatTgl(d1)} - ${formatTgl(d2)}`;
+            const label = document.getElementById('labelPeriodeAktif');
+            if (label) {
+                label.innerText = teksHasil;
+            }
+
+            try {
+                localStorage.setItem('jaya_periode_kalender', JSON.stringify({ d1, d2, teks: teksHasil }));
+            } catch (_) {}
+        }
+
+        // Muat tanggal yang disimpan jika ada
+        try {
+            const savedCal = localStorage.getItem('jaya_periode_kalender');
+            if (savedCal) {
+                const parsed = JSON.parse(savedCal);
+                if (parsed.d1) document.getElementById('tglMulai').value = parsed.d1;
+                if (parsed.d2) document.getElementById('tglSelesai').value = parsed.d2;
+                if (parsed.teks) document.getElementById('labelPeriodeAktif').innerText = parsed.teks;
+            }
+        } catch (_) {}
+
+        // ============================================================
+        // RENDER SELURUH BARIS KE TABEL (BARIS LEGA & BESAR)
+        // ============================================================
         function renderTabel() {
             const tbody = document.getElementById('tbodyTransaksi');
             const filterProjek = document.getElementById('filterProjekSelect').value;
@@ -551,7 +575,7 @@
                 tr.innerHTML = `
                     <td class="text-center font-bold text-slate-500 bg-slate-50">${nomor++}</td>
                     
-                    <!-- NAMA PEKERJA -->
+                    <!-- NAMA PEKERJA (KOTAK BESAR & TEBAL) -->
                     <td>
                         <input type="text" value="${escapeHtml(item.nama)}" 
                                class="excel-input uppercase font-bold text-slate-900"
@@ -561,7 +585,7 @@
 
                     <!-- POSISI (MANDOR, TUKANG, SEMI TUKANG, PEMBANTU TUKANG) -->
                     <td>
-                        <select class="excel-input font-semibold bg-white cursor-pointer"
+                        <select class="excel-input font-bold bg-white cursor-pointer"
                                 onchange="updateField(${index}, 'posisi', this.value)">
                             <option value="MANDOR" ${item.posisi === 'MANDOR' ? 'selected' : ''}>MANDOR</option>
                             <option value="TUKANG" ${item.posisi === 'TUKANG' ? 'selected' : ''}>TUKANG</option>
@@ -570,7 +594,7 @@
                         </select>
                     </td>
 
-                    <!-- NAMA PROJEK (Bisa di beberapa proyek) -->
+                    <!-- NAMA PROJEK -->
                     <td class="bg-emerald-50/50">
                         <input type="text" value="${escapeHtml(item.projek)}" 
                                class="excel-input font-bold text-emerald-950 uppercase"
@@ -581,65 +605,65 @@
                     <!-- HARI KERJA -->
                     <td>
                         <input type="number" min="0" max="31" step="0.5" value="${item.hari}" 
-                               class="excel-input excel-input-num text-center text-slate-900 font-bold"
+                               class="excel-input excel-input-num text-center text-slate-900 font-extrabold"
                                oninput="updateField(${index}, 'hari', this.value)">
                     </td>
 
                     <!-- UPAH HARIAN -->
                     <td>
                         <input type="number" min="0" step="5000" value="${item.upah}" 
-                               class="excel-input excel-input-num text-slate-900 font-bold"
+                               class="excel-input excel-input-num text-slate-900 font-extrabold"
                                oninput="updateField(${index}, 'upah', this.value)">
                     </td>
 
                     <!-- JAM LEMBUR -->
                     <td>
                         <input type="number" min="0" step="1" value="${item.lembur}" 
-                               class="excel-input excel-input-num text-center text-amber-800 font-bold"
+                               class="excel-input excel-input-num text-center text-amber-900 font-extrabold"
                                oninput="updateField(${index}, 'lembur', this.value)">
                     </td>
 
                     <!-- TARIF LEMBUR (OTOMATIS: UPAH / 8) -->
-                    <td class="text-right font-bold text-amber-900 bg-amber-50/60" title="Otomatis dari Upah Harian dibagi 8">
+                    <td class="text-right font-extrabold text-amber-900 bg-amber-50/70 text-sm md:text-base" title="Otomatis dari Upah Harian dibagi 8">
                         ${formatRp(tarifLembur)}
                     </td>
 
                     <!-- UANG MAKAN -->
                     <td>
                         <input type="number" min="0" step="5000" value="${item.makan}" 
-                               class="excel-input excel-input-num text-slate-800"
+                               class="excel-input excel-input-num text-slate-800 font-bold"
                                oninput="updateField(${index}, 'makan', this.value)">
                     </td>
 
                     <!-- INSENTIF / TRANSPORT -->
                     <td>
                         <input type="number" min="0" step="5000" value="${item.insentif}" 
-                               class="excel-input excel-input-num text-slate-800"
+                               class="excel-input excel-input-num text-slate-800 font-bold"
                                oninput="updateField(${index}, 'insentif', this.value)">
                     </td>
 
                     <!-- TOTAL UPAH -->
-                    <td class="text-right font-bold text-emerald-900 bg-emerald-50/70">
+                    <td class="text-right font-extrabold text-emerald-950 bg-emerald-50/80 text-sm md:text-base">
                         ${formatRp(totalKotor)}
                     </td>
 
                     <!-- KASBON (POTONGAN MANUAL) -->
-                    <td class="bg-rose-50/50">
+                    <td class="bg-rose-50/60">
                         <input type="number" min="0" step="10000" value="${item.kasbon}" 
-                               class="excel-input excel-input-num text-rose-700 font-bold"
+                               class="excel-input excel-input-num text-rose-700 font-extrabold"
                                placeholder="0"
                                oninput="updateField(${index}, 'kasbon', this.value)">
                     </td>
 
                     <!-- SISA BERSIH YANG DITERIMA -->
-                    <td class="text-right font-extrabold text-emerald-950 bg-emerald-100/70 text-sm">
+                    <td class="text-right font-black text-emerald-950 bg-emerald-100 text-sm md:text-base">
                         ${formatRp(sisaDiterima)}
                     </td>
 
                     <!-- TOMBOL CETAK SLIP GAJI -->
                     <td class="text-center no-print">
                         <button type="button" onclick="bukaSlipPekerja('${escapeHtml(item.nama)}')"
-                                class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-2.5 py-1 rounded text-xs inline-flex items-center gap-1 shadow cursor-pointer"
+                                class="bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold px-3 py-2 rounded-lg text-xs inline-flex items-center gap-1.5 shadow-md cursor-pointer transition-colors"
                                 title="Lihat dan Cetak Slip Gaji">
                             <i class="fas fa-file-invoice"></i> Slip
                         </button>
@@ -648,7 +672,7 @@
                     <!-- TOMBOL HAPUS BARIS -->
                     <td class="text-center no-print">
                         <button type="button" onclick="hapusBaris(${index})"
-                                class="text-rose-500 hover:text-rose-700 font-bold p-1 cursor-pointer"
+                                class="p-2 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-sm cursor-pointer transition-colors"
                                 title="Hapus baris ini">
                             <i class="fas fa-trash-alt"></i>
                         </button>
@@ -706,7 +730,7 @@
             renderTabel();
         }
 
-        // Buka Slip Gaji Gabungan (Satu orang bisa beberapa proyek sekaligus!)
+        // Buka Slip Gaji Gabungan (Satu orang bisa beberapa proyek sekaligus)
         function bukaSlipPekerja(namaPekerja) {
             const barisPekerja = dataTransaksi.filter(d => d.nama.trim().toUpperCase() === namaPekerja.trim().toUpperCase());
             if (barisPekerja.length === 0) return;
@@ -715,7 +739,7 @@
             document.getElementById('slipNama').innerText = pertama.nama;
             document.getElementById('slipTtdNama').innerText = pertama.nama;
             document.getElementById('slipPosisi').innerText = pertama.posisi;
-            document.getElementById('slipPeriodeDisplay').innerText = document.getElementById('inputPeriode').value;
+            document.getElementById('slipPeriodeDisplay').innerText = document.getElementById('labelPeriodeAktif').innerText;
             document.getElementById('slipTglCetak').innerText = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
             const tbodySlip = document.getElementById('slipTbodyProyek');
@@ -734,12 +758,12 @@
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td class="p-2 font-bold text-slate-800">${escapeHtml(item.projek)}</td>
-                    <td class="p-2 text-center">${item.hari} hari</td>
-                    <td class="p-2 text-right">${formatRp(item.upah)}</td>
-                    <td class="p-2 text-center">${item.lembur} jam (${formatRp(tarifLembur)}/jam)</td>
-                    <td class="p-2 text-right">${formatRp(item.makan)}</td>
-                    <td class="p-2 text-right font-bold text-emerald-800">${formatRp(subKotor)}</td>
+                    <td class="p-2.5 font-bold text-slate-800">${escapeHtml(item.projek)}</td>
+                    <td class="p-2.5 text-center font-semibold">${item.hari} hari</td>
+                    <td class="p-2.5 text-right">${formatRp(item.upah)}</td>
+                    <td class="p-2.5 text-center font-semibold">${item.lembur} jam (${formatRp(tarifLembur)}/jam)</td>
+                    <td class="p-2.5 text-right">${formatRp(item.makan)}</td>
+                    <td class="p-2.5 text-right font-bold text-emerald-800">${formatRp(subKotor)}</td>
                 `;
                 tbodySlip.appendChild(tr);
             });
@@ -764,12 +788,15 @@
         }
 
         // ============================================================
-        // LOGIKA SIDEBAR DROP-LEFT / COLLAPSE KE KIRI & DROPDOWN MENU
+        // LOGIKA SIDEBAR SANGAT JELAS & USER FRIENDLY
         // ============================================================
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebarNav');
             const wrapper = document.getElementById('mainContentWrapper');
+            const btn = document.getElementById('btnToggleMenu');
             const labelBtn = document.getElementById('labelTombolMenu');
+            if (!sidebar || !wrapper) return;
+
             const isTutup = sidebar.classList.contains('-translate-x-full');
 
             if (isTutup) {
@@ -778,43 +805,40 @@
                 wrapper.classList.remove('ml-0');
                 wrapper.classList.add('ml-64');
                 if (labelBtn) labelBtn.innerText = 'Sembunyikan Menu';
+                if (btn) {
+                    btn.classList.remove('bg-emerald-700', 'hover:bg-emerald-800');
+                    btn.classList.add('bg-slate-800', 'hover:bg-slate-900');
+                }
                 localStorage.setItem('sidebar_drop_left', 'buka');
             } else {
-                // Sembunyikan sidebar ke kiri (drop left)
+                // Sembunyikan sidebar ke kiri
                 sidebar.classList.add('-translate-x-full');
                 wrapper.classList.remove('ml-64');
                 wrapper.classList.add('ml-0');
-                if (labelBtn) labelBtn.innerText = 'Buka Menu Kiri';
+                if (labelBtn) labelBtn.innerText = 'Buka Menu Samping';
+                if (btn) {
+                    btn.classList.remove('bg-slate-800', 'hover:bg-slate-900');
+                    btn.classList.add('bg-emerald-700', 'hover:bg-emerald-800');
+                }
                 localStorage.setItem('sidebar_drop_left', 'tutup');
             }
         }
-
-        function toggleDropdownMenu() {
-            const menu = document.getElementById('dropdownMenuContent');
-            if (menu) {
-                menu.classList.toggle('hidden');
-            }
-        }
-
-        // Tutup dropdown jika klik di luar
-        window.addEventListener('click', function(e) {
-            const box = document.getElementById('boxQuickMenu');
-            const menu = document.getElementById('dropdownMenuContent');
-            if (box && menu && !box.contains(e.target)) {
-                menu.classList.add('hidden');
-            }
-        });
 
         // Ingat preferensi: jika sebelumnya disembunyikan, tetap sembunyikan saat buka halaman
         if (localStorage.getItem('sidebar_drop_left') === 'tutup') {
             const sidebar = document.getElementById('sidebarNav');
             const wrapper = document.getElementById('mainContentWrapper');
+            const btn = document.getElementById('btnToggleMenu');
             const labelBtn = document.getElementById('labelTombolMenu');
             if (sidebar && wrapper) {
                 sidebar.classList.add('-translate-x-full');
                 wrapper.classList.remove('ml-64');
                 wrapper.classList.add('ml-0');
-                if (labelBtn) labelBtn.innerText = 'Buka Menu Kiri';
+                if (labelBtn) labelBtn.innerText = 'Buka Menu Samping';
+                if (btn) {
+                    btn.classList.remove('bg-slate-800', 'hover:bg-slate-900');
+                    btn.classList.add('bg-emerald-700', 'hover:bg-emerald-800');
+                }
             }
         }
 
