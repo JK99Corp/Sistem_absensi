@@ -13,7 +13,8 @@
       "tglGabung": "15/01/2026",
       "deletedAt": "9/11/2026, 14.13.11",
       "keterangan": "Diarsipkan oleh admin. Data keuangan & riwayat absensi tetap aman 100%.",
-      "projek": "-"
+      "projek": "-",
+      "posisi": "-"
     },
     {
       "id": 3,
@@ -27,7 +28,8 @@
       "tglGabung": "01/02/2026",
       "deletedAt": "9/11/2026, 14.13.11",
       "keterangan": "Diarsipkan oleh admin. Data keuangan & riwayat absensi tetap aman 100%.",
-      "projek": "-"
+      "projek": "-",
+      "posisi": "-"
     },
     {
       "id": 4,
@@ -37,9 +39,10 @@
       "noHp": "0857-1234-5678",
       "status": "Aktif",
       "upahHarian": 120000,
-      "tarifLembur": 25000,
+      "tarifLembur": 15000,
       "tglGabung": "01/07/2026",
-      "projek": "Projek A"
+      "projek": "Projek A",
+      "posisi": "Tukang"
     },
     {
       "id": 5,
@@ -48,10 +51,11 @@
       "uid": "47C201F8",
       "noHp": "0858-8765-4321",
       "status": "Aktif",
-      "upahHarian": 120000,
-      "tarifLembur": 25000,
+      "upahHarian": 100000,
+      "tarifLembur": 12500,
       "tglGabung": "05/07/2026",
-      "projek": "Projek B"
+      "projek": "Projek B",
+      "posisi": "Semi Tukang"
     },
     {
       "id": 6,
@@ -60,10 +64,11 @@
       "uid": "19E873A2",
       "noHp": "0878-9988-7766",
       "status": "Aktif",
-      "upahHarian": 110000,
-      "tarifLembur": 25000,
+      "upahHarian": 90000,
+      "tarifLembur": 11250,
       "tglGabung": "10/07/2026",
-      "projek": "Projek C"
+      "projek": "Projek C",
+      "posisi": "Pembantu Tukang"
     },
     {
       "id": 1,
@@ -77,7 +82,8 @@
       "tglGabung": "01/01/2026",
       "deletedAt": "10/11/2026, 13.43.17",
       "keterangan": "Diarsipkan oleh admin. Data keuangan & riwayat absensi tetap aman 100%.",
-      "projek": "-"
+      "projek": "-",
+      "posisi": "-"
     }
   ],
   "deviceAktif": 1,
@@ -298,7 +304,9 @@
       "hariKerja": 6,
       "jamLembur": 4,
       "pokok": 3500000,
-      "tarifLembur": 30000
+      "tarifLembur": 30000,
+      "posisi": "-",
+      "kasbon": 0
     },
     {
       "id": 2,
@@ -309,7 +317,9 @@
       "hariKerja": 5,
       "jamLembur": 3,
       "pokok": 3200000,
-      "tarifLembur": 30000
+      "tarifLembur": 30000,
+      "posisi": "-",
+      "kasbon": 0
     },
     {
       "id": 3,
@@ -320,7 +330,9 @@
       "hariKerja": 5,
       "jamLembur": 2,
       "pokok": 3000000,
-      "tarifLembur": 30000
+      "tarifLembur": 30000,
+      "posisi": "-",
+      "kasbon": 0
     },
     {
       "id": 4,
@@ -331,7 +343,12 @@
       "hariKerja": 6,
       "jamLembur": 8,
       "pokok": 120000,
-      "tarifLembur": 25000
+      "tarifLembur": 15000,
+      "posisi": "Tukang",
+      "projek": "Projek A",
+      "uangMakan": 30000,
+      "insentif": 0,
+      "kasbon": 0
     },
     {
       "id": 5,
@@ -341,8 +358,13 @@
       "uid": "47C201F8",
       "hariKerja": 5,
       "jamLembur": 5,
-      "pokok": 120000,
-      "tarifLembur": 25000
+      "pokok": 100000,
+      "tarifLembur": 12500,
+      "posisi": "Semi Tukang",
+      "projek": "Projek B",
+      "uangMakan": 25000,
+      "insentif": 0,
+      "kasbon": 0
     },
     {
       "id": 6,
@@ -352,8 +374,13 @@
       "uid": "19E873A2",
       "hariKerja": 6,
       "jamLembur": 4,
-      "pokok": 110000,
-      "tarifLembur": 25000
+      "pokok": 90000,
+      "tarifLembur": 11250,
+      "posisi": "Pembantu Tukang",
+      "projek": "Projek C",
+      "uangMakan": 20000,
+      "insentif": 0,
+      "kasbon": 0
     }
   ],
   "pekerjaHarian": [
@@ -364,7 +391,12 @@
       "hariKerja": 6,
       "jamLembur": 8,
       "upahHarian": 120000,
-      "tarifLembur": 25000
+      "tarifLembur": 15000,
+      "posisi": "Tukang",
+      "projek": "Projek A",
+      "uangMakan": 30000,
+      "insentif": 0,
+      "kasbon": 0
     },
     {
       "id": 5,
@@ -372,8 +404,13 @@
       "uid": "47C201F8",
       "hariKerja": 5,
       "jamLembur": 5,
-      "upahHarian": 120000,
-      "tarifLembur": 25000
+      "upahHarian": 100000,
+      "tarifLembur": 12500,
+      "posisi": "Semi Tukang",
+      "projek": "Projek B",
+      "uangMakan": 25000,
+      "insentif": 0,
+      "kasbon": 0
     },
     {
       "id": 6,
@@ -381,8 +418,13 @@
       "uid": "19E873A2",
       "hariKerja": 6,
       "jamLembur": 4,
-      "upahHarian": 110000,
-      "tarifLembur": 25000
+      "upahHarian": 90000,
+      "tarifLembur": 11250,
+      "posisi": "Pembantu Tukang",
+      "projek": "Projek C",
+      "uangMakan": 20000,
+      "insentif": 0,
+      "kasbon": 0
     }
   ],
   "karyawanArsip": [
@@ -1276,7 +1318,7 @@
       "nama": "Direktur Utama",
       "role": "Super Admin (Direksi)",
       "aksi": "TAMBAH_KARYAWAN",
-      "keterangan": "Menambahkan karyawan baru: Budi Santoso 👨‍🔧 (Shift Pagi) (Pekerja Harian, UID: EMOJI01)",
+      "keterangan": "Menambahkan karyawan baru: Budi Santoso \ud83d\udc68\u200d\ud83d\udd27 (Shift Pagi) (Pekerja Harian, UID: EMOJI01)",
       "ip": "127.0.0.1"
     },
     {
