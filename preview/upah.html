@@ -3,38 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Absensi Jaya Kedhaton - Form Transaksi Upah</title>
+    <title>Form Transaksi Upah Pekerja - PT Jaya Kedhaton</title>
     <link rel="icon" type="image/png" href="images/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        
+        /* Gaya tabel persis Excel */
+        .excel-table th {
+            background-color: #15803d; /* Green 700 khas Excel */
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+            padding: 10px 8px;
+            border: 1px solid #166534;
+            text-align: center;
+        }
+        .excel-table td {
+            border: 1px solid #d1d5db;
+            padding: 6px 8px;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+        .excel-table tr:hover td {
+            background-color: #f0fdf4;
+        }
+        .excel-input {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            background: #ffffff;
+            transition: all 0.15s;
+        }
+        .excel-input:focus {
+            border-color: #16a34a;
+            outline: 2px solid #bbf7d0;
+            background: #ffffff;
+        }
+        .excel-input-num {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Mode Cetak Slip */
         @media print {
-            aside, header, .no-print, button { display: none !important; }
+            aside, header, #areaKontrol, .no-print { display: none !important; }
             .ml-64 { margin-left: 0 !important; }
             body { background: white !important; }
             body.slip-open main > div:not(#modalSlip) { display: none !important; }
             body.slip-open #modalSlip {
                 position: static !important;
                 background: white !important;
-                box-shadow: none !important;
                 padding: 0 !important;
                 display: block !important;
             }
             body.slip-open #modalSlip > div {
                 box-shadow: none !important;
-                border: 2px solid #0f766e !important;
+                border: 2px solid #334155 !important;
                 width: 100% !important;
                 max-width: 100% !important;
             }
         }
-        input[type=number]::-webkit-inner-spin-button { opacity: 1; }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-slate-100 min-h-screen text-slate-800">
 
     <!-- SIDEBAR -->
-    <aside class="fixed top-0 left-0 w-64 h-full bg-slate-800 text-white flex flex-col z-50 shadow-xl">
+    <aside class="fixed top-0 left-0 w-64 h-full bg-slate-800 text-white flex flex-col z-50 shadow-xl no-print">
         <div class="px-5 py-5 border-b border-slate-700 flex items-center gap-3">
             <img src="images/logo.png" alt="Logo Jaya Kedhaton" class="w-12 h-12 object-contain shrink-0">
             <div class="overflow-hidden">
@@ -44,916 +83,616 @@
         </div>
 
         <nav class="flex-1 px-4 py-5 space-y-1.5 overflow-y-auto">
-            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-chart-bar w-6 text-center text-lg"></i>
+            <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-chart-bar w-5 text-center"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="riwayat.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-clipboard-list w-6 text-center text-lg"></i>
+            <a href="riwayat.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-clipboard-list w-5 text-center"></i>
                 <span>Riwayat Absensi</span>
             </a>
-            <a href="rekap.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-calendar-week w-6 text-center text-lg"></i>
-                <span>Rekap Mingguan</span>
+            <a href="rekap.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-calendar-week w-5 text-center"></i>
+                <span>Rekap Kehadiran</span>
             </a>
-            <a href="upah.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 bg-teal-600 text-white shadow-md">
-                <i class="fas fa-money-bill-wave w-6 text-center text-lg"></i>
-                <span>Form Transaksi Upah</span>
+            <a href="upah.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-bold bg-green-700 text-white shadow">
+                <i class="fas fa-file-excel w-5 text-center text-lg"></i>
+                <span>Form Upah & Lembur</span>
             </a>
-            <a href="karyawan.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-users w-6 text-center text-lg"></i>
-                <span>Karyawan</span>
+            <a href="karyawan.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-users w-5 text-center"></i>
+                <span>Daftar Karyawan</span>
             </a>
-            <a href="kartu-rfid.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-id-card-clip w-6 text-center text-lg"></i>
+            <a href="kartu-rfid.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-id-card w-5 text-center"></i>
                 <span>Kartu RFID</span>
             </a>
-            <a href="device.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-desktop w-6 text-center text-lg"></i>
-                <span>Device</span>
-            </a>
-            <a href="audit-log.html" class="flex items-center gap-3 px-4 py-3.5 rounded-lg text-base font-medium transition-colors duration-200 text-slate-300 hover:bg-slate-700 hover:text-white">
-                <i class="fas fa-shield-halved w-6 text-center text-lg"></i>
+            <a href="audit-log.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fas fa-shield-alt w-5 text-center"></i>
                 <span>Log Aktivitas</span>
-                <span class="bg-rose-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ml-auto tracking-wider">Admin</span>
             </a>
         </nav>
 
-        <div class="px-6 py-4 border-t border-slate-700 text-xs text-slate-400">
-            &copy; 2026 Sistem Absensi Jaya Kedhaton — Dual-ESP32
+        <div class="px-5 py-4 border-t border-slate-700 text-xs text-slate-400">
+            &copy; 2026 PT Jaya Kedhaton
         </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
+    <!-- KONTEN UTAMA -->
     <div class="ml-64 min-h-screen flex flex-col">
-        <!-- Top Bar -->
-        <header class="bg-white shadow-sm px-8 py-4 flex items-center justify-between sticky top-0 z-40 no-print">
-            <div class="text-base text-slate-600">
-                Login sebagai <span class="font-semibold text-slate-800">Admin Keuangan &amp; Absensi</span> - admin
+        <!-- Topbar Sederhana -->
+        <header class="bg-white border-b border-slate-200 px-8 py-3.5 flex items-center justify-between sticky top-0 z-40 no-print">
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-green-100 text-green-700 font-bold">
+                    <i class="fas fa-table"></i>
+                </span>
+                <div>
+                    <h2 class="text-base font-bold text-slate-800 leading-tight">Form Transaksi Upah Pekerja Harian</h2>
+                    <p class="text-xs text-slate-500">Format spreadsheet Excel &bull; PT Jaya Kedhaton</p>
+                </div>
             </div>
-            <div class="flex items-center gap-3">
-                <a href="javascript:location.reload()"
-                   class="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2 px-4 rounded-lg transition-colors text-sm">
-                    <i class="fas fa-sync-alt"></i> Refresh
-                </a>
-                <a href="login.html"
-                   class="inline-flex items-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 font-medium py-2 px-4 rounded-lg transition-colors text-sm">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
+            <div class="flex items-center gap-3 text-sm">
+                <div class="bg-slate-100 px-3 py-1.5 rounded-lg text-slate-700 font-semibold border border-slate-200 text-xs">
+                    <i class="fas fa-user-circle mr-1 text-slate-500"></i> Admin Keuangan
+                </div>
+                <button onclick="location.reload()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold">
+                    <i class="fas fa-sync-alt mr-1"></i> Refresh
+                </button>
             </div>
         </header>
 
-        <!-- Page Content -->
-        <main class="flex-1 p-8">
+        <!-- Area Isi Halaman -->
+        <main class="flex-1 p-6">
 
-        <!-- Page Title -->
-        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
-            <div>
-                <h2 class="text-2xl font-bold text-slate-800">Form Transaksi Upah Pekerja</h2>
-                <p class="text-base text-slate-500 mt-0.5">
-                    Perhitungan upah harian, lembur, tunjangan, dan kasbon — referensi PT Jaya Kedhaton
+            <!-- KOTAK PETUNJUK SANGAT RAMAH IBU-IBU AWAM -->
+            <div class="bg-emerald-50 border-2 border-emerald-300 rounded-xl p-4 mb-5 shadow-sm no-print">
+                <div class="flex items-start gap-3">
+                    <span class="text-2xl text-emerald-600 mt-0.5">
+                        <i class="fas fa-lightbulb"></i>
+                    </span>
+                    <div class="text-sm text-emerald-950">
+                        <p class="font-bold text-base text-emerald-900 mb-1">
+                            Petunjuk Mudah Pengisian Form Upah:
+                        </p>
+                        <ol class="list-decimal list-inside space-y-1 text-emerald-800 text-xs md:text-sm">
+                            <li><strong>Cukup ketik angka</strong> pada kolom yang berkotak putih (Hari, Upah, Jam Lembur, Makan, Kasbon).</li>
+                            <li><strong>Upah lembur otomatis dihitung</strong>: <code class="bg-emerald-200/70 px-1.5 py-0.5 rounded font-mono font-bold">Upah Harian ÷ 8 × Jam Lembur</code>. Tidak perlu hitung kalkulator lagi.</li>
+                            <li><strong>Satu orang kerja di banyak proyek?</strong> Sangat bisa! Klik tombol hijau <span class="bg-emerald-600 text-white font-bold px-2 py-0.5 rounded text-xs">+ Tambah Baris Proyek</span> untuk orang yang sama. Di slip gaji otomatis digabung jadi satu.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL KONTROL & FILTER ATAS -->
+            <div id="areaKontrol" class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mb-5 flex flex-wrap items-center justify-between gap-4">
+                <!-- Info Periode -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <div class="flex items-center gap-2">
+                        <label class="text-xs font-bold text-slate-600 uppercase">Periode Gaji:</label>
+                        <input type="text" id="inputPeriode" value="24 Oktober - 06 Nopember 2026"
+                               class="border border-slate-300 rounded-lg px-3 py-1.5 text-sm font-bold text-slate-800 bg-white focus:border-green-600 focus:outline-none w-64 shadow-sm"
+                               title="Ketik nama periode seperti di Excel">
+                    </div>
+
+                    <!-- Filter Cepat Projek -->
+                    <div class="flex items-center gap-1.5 ml-0 md:ml-4">
+                        <span class="text-xs font-bold text-slate-500 uppercase mr-1">Filter Projek:</span>
+                        <select id="filterProjekSelect" onchange="jalankanFilter()"
+                                class="border border-slate-300 bg-slate-50 rounded-lg px-3 py-1.5 text-xs font-bold text-slate-700 focus:outline-none focus:border-green-600 cursor-pointer">
+                            <option value="">Semua Projek (Tampilkan Semua)</option>
+                            <option value="FELISA ESTATE">FELISA ESTATE</option>
+                            <option value="RUKO PAK DEDI">RUKO PAK DEDI</option>
+                            <option value="GREEN HOUSE">GREEN HOUSE</option>
+                            <option value="PAGAR RING ROAD">PAGAR RING ROAD</option>
+                            <option value="PROYEK RTT SAMBOJA">PROYEK RTT SAMBOJA</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tombol Aksi Khas Excel -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <button type="button" onclick="tambahBarisKosong()"
+                            class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-lg text-sm shadow inline-flex items-center gap-2 cursor-pointer transition-all">
+                        <i class="fas fa-plus-circle text-base"></i>
+                        <span>+ Tambah Baris Pekerja</span>
+                    </button>
+                    <button type="button" onclick="window.print()"
+                            class="bg-slate-800 hover:bg-slate-900 text-white font-semibold py-2 px-4 rounded-lg text-sm shadow inline-flex items-center gap-2 cursor-pointer">
+                        <i class="fas fa-print"></i> Cetak Lembar Ini
+                    </button>
+                </div>
+            </div>
+
+            <!-- TABEL TRANSAKSI SPREADSHEET (GAYA EXCEL) -->
+            <div class="bg-white rounded-xl border-2 border-slate-300 shadow-md overflow-hidden mb-6">
+                <div class="overflow-x-auto">
+                    <table class="w-full excel-table" id="tabelExcel">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;">No</th>
+                                <th style="min-width: 170px; text-align: left;">Nama Pekerja</th>
+                                <th style="min-width: 140px;">Posisi / Jabatan</th>
+                                <th style="min-width: 160px; background-color: #166534;">Nama Projek</th>
+                                <th style="width: 75px;">Hari Kerja</th>
+                                <th style="width: 110px;">Upah / Hari</th>
+                                <th style="width: 75px;">Lembur (Jam)</th>
+                                <th style="width: 110px; background-color: #14532d;" title="Otomatis dihitung Upah/Hari : 8">Tarif Lembur/Jam</th>
+                                <th style="width: 100px;">Uang Makan</th>
+                                <th style="width: 100px;">Insentif / Transport</th>
+                                <th style="width: 125px; background-color: #065f46;">Total Upah</th>
+                                <th style="width: 105px; background-color: #991b1b;" class="text-rose-100">Kasbon</th>
+                                <th style="width: 130px; background-color: #047857;">Sisa Diterima</th>
+                                <th style="width: 90px;" class="no-print">Slip Gaji</th>
+                                <th style="width: 45px;" class="no-print">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyTransaksi">
+                            <!-- Baris-baris transaksi otomatis dirender oleh JS di bawah -->
+                        </tbody>
+                        <tfoot>
+                            <!-- BARIS GRAND TOTAL PERSIS SEPERTI EXCEL -->
+                            <tr class="bg-slate-200 font-extrabold text-slate-900 border-t-2 border-slate-400 text-xs md:text-sm">
+                                <td colspan="4" class="text-right uppercase px-4 py-3 bg-slate-300 text-slate-800">
+                                    Grand Total Keseluruhan:
+                                </td>
+                                <td class="text-center font-bold text-slate-800" id="totalHariKerja">0</td>
+                                <td class="bg-slate-300"></td>
+                                <td class="text-center font-bold text-amber-800" id="totalJamLembur">0</td>
+                                <td class="bg-slate-300"></td>
+                                <td class="text-right text-slate-800" id="totalUangMakan">Rp 0</td>
+                                <td class="text-right text-slate-800" id="totalInsentif">Rp 0</td>
+                                <td class="text-right text-emerald-900 font-extrabold bg-emerald-100/80" id="totalUpahKotor">Rp 0</td>
+                                <td class="text-right text-rose-800 font-extrabold bg-rose-100/80" id="totalKasbon">Rp 0</td>
+                                <td class="text-right text-emerald-950 font-black bg-emerald-200 text-sm md:text-base" id="totalSisaDiterima">Rp 0</td>
+                                <td colspan="2" class="bg-slate-300 no-print"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- KETERANGAN DI BAWAH TABEL -->
+            <div class="text-xs text-slate-500 flex flex-wrap items-center justify-between gap-2 px-1 no-print">
+                <p>
+                    <i class="fas fa-check-circle text-emerald-600 mr-1"></i>
+                    Rumus Lembur Otomatis: <strong>Tarif Lembur = Upah Harian ÷ 8</strong> (Sesuai ketentuan PT Jaya Kedhaton).
+                </p>
+                <p>
+                    Semua perubahan angka langsung tersimpan otomatis di browser ini.
                 </p>
             </div>
-            <div class="flex items-center gap-3 no-print">
-                <span class="bg-slate-100 border border-slate-200 text-slate-700 px-4 py-2 rounded-lg font-medium text-sm">
-                    <i class="fas fa-calendar-alt mr-1.5 text-slate-400"></i>
-                    Periode: <span id="labelPeriode">24 Okt – 06 Nov 2026</span>
-                </span>
-                <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-900 text-white font-medium py-2 px-4 rounded-lg text-sm shadow transition-colors inline-flex items-center gap-2 cursor-pointer">
-                    <i class="fas fa-print"></i> Cetak Rekap
-                </button>
-            </div>
-        </div>
 
-        <!-- Summary Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-6">
-            <div class="bg-white rounded-xl shadow-sm p-5 border border-slate-200">
-                <p class="text-sm font-medium text-slate-500">Total Pekerja</p>
-                <p class="text-3xl font-extrabold text-slate-800 mt-1" id="summaryJumlah">3 Orang</p>
-                <p class="text-xs text-slate-400 mt-1">Ditampilkan saat ini</p>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm p-5 border border-slate-200">
-                <p class="text-sm font-medium text-slate-500">Total Jam Lembur</p>
-                <p class="text-3xl font-extrabold text-amber-600 mt-1" id="summaryLembur">17 Jam</p>
-                <p class="text-xs text-slate-400 mt-1">Upah lembur = Upah/hari ÷ 8 × jam</p>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm p-5 border border-slate-200">
-                <p class="text-sm font-medium text-slate-500">Total Upah Bersih</p>
-                <p class="text-3xl font-extrabold text-teal-700 mt-1" id="summaryTotal">Rp 0</p>
-                <p class="text-xs text-slate-400 mt-1">Setelah kasbon dipotong</p>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm p-5 border border-rose-100 border-dashed">
-                <p class="text-sm font-medium text-rose-600">Total Kasbon</p>
-                <p class="text-3xl font-extrabold text-rose-700 mt-1" id="summaryKasbon">Rp 0</p>
-                <p class="text-xs text-slate-400 mt-1">Total potongan kasbon periode ini</p>
-            </div>
-        </div>
+            <!-- MODAL SLIP GAJI GABUNGAN MULTI-PROJEK -->
+            <div id="modalSlip" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+                <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full p-6 text-slate-800 relative">
+                    <!-- Tombol Tutup -->
+                    <button onclick="tutupSlip()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-2xl font-bold cursor-pointer no-print">
+                        &times;
+                    </button>
 
-        <!-- FILTER AREA -->
-        <div class="bg-white rounded-xl shadow-sm p-5 mb-6 border border-slate-200 space-y-3 no-print">
-            <!-- Row 1: Kategori -->
-            <div class="flex flex-wrap items-center gap-2">
-                <span class="text-xs font-bold uppercase text-slate-500 w-28 flex items-center gap-1.5">
-                    <i class="fas fa-users text-teal-600"></i> Kategori:
-                </span>
-                <button onclick="setFilter('kategori','')" id="fKatAll"
-                        class="px-4 py-2 rounded-lg text-xs font-bold transition-all bg-slate-800 text-white shadow">
-                    Semua (6)
-                </button>
-                <button onclick="setFilter('kategori','Staff Kantor')" id="fKatStaff"
-                        class="px-4 py-2 rounded-lg text-xs font-bold transition-all bg-blue-50 text-blue-900 border border-blue-200 hover:bg-blue-100">
-                    <i class="fas fa-briefcase text-[10px] mr-1 text-blue-600"></i> Staff Kantor (3)
-                </button>
-                <button onclick="setFilter('kategori','Pekerja Harian')" id="fKatHarian"
-                        class="px-4 py-2 rounded-lg text-xs font-bold transition-all bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100">
-                    <i class="fas fa-hammer text-[10px] mr-1 text-amber-600"></i> Pekerja Harian (3)
-                </button>
-            </div>
-            <!-- Row 2: Projek -->
-            <div class="flex flex-wrap items-center gap-2" id="boxFilterProjek">
-                <span class="text-xs font-bold uppercase text-amber-900 w-28 flex items-center gap-1.5">
-                    <i class="fas fa-hard-hat text-amber-600"></i> Projek:
-                </span>
-                <button onclick="setFilter('projek','')" id="fPrjAll"
-                        class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-amber-700 text-white shadow">
-                    Semua (3)
-                </button>
-                <button onclick="setFilter('projek','Projek A')" id="fPrjA"
-                        class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-amber-900 border border-amber-300 hover:bg-amber-100">
-                    Projek A (1)
-                </button>
-                <button onclick="setFilter('projek','Projek B')" id="fPrjB"
-                        class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-amber-900 border border-amber-300 hover:bg-amber-100">
-                    Projek B (1)
-                </button>
-                <button onclick="setFilter('projek','Projek C')" id="fPrjC"
-                        class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-amber-900 border border-amber-300 hover:bg-amber-100">
-                    Projek C (1)
-                </button>
-            </div>
-            <!-- Row 3: Posisi (hanya untuk Pekerja Harian) -->
-            <div class="flex flex-wrap items-center gap-2" id="boxFilterPosisi">
-                <span class="text-xs font-bold uppercase text-purple-900 w-28 flex items-center gap-1.5">
-                    <i class="fas fa-id-badge text-purple-600"></i> Posisi:
-                </span>
-                <button onclick="setFilter('posisi','')" id="fPosAll"
-                        class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-purple-700 text-white shadow">
-                    Semua
-                </button>
-                <button onclick="setFilter('posisi','Mandor')" id="fPosMandor"
-                        class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-purple-900 border border-purple-300 hover:bg-purple-50">
-                    Mandor
-                </button>
-                <button onclick="setFilter('posisi','Tukang')" id="fPosTukang"
-                        class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-purple-900 border border-purple-300 hover:bg-purple-50">
-                    Tukang
-                </button>
-                <button onclick="setFilter('posisi','Semi Tukang')" id="fPosSemi"
-                        class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-purple-900 border border-purple-300 hover:bg-purple-50">
-                    Semi Tukang
-                </button>
-                <button onclick="setFilter('posisi','Pembantu Tukang')" id="fPosPembantu"
-                        class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-purple-900 border border-purple-300 hover:bg-purple-50">
-                    Pembantu Tukang
-                </button>
-            </div>
-        </div>
-
-        <!-- TABEL TRANSAKSI PEKERJA HARIAN -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-6">
-            <div class="px-6 py-4 bg-amber-50 border-b border-amber-200 flex flex-wrap items-center justify-between gap-3">
-                <div>
-                    <h3 class="text-base font-bold text-amber-900">
-                        <i class="fas fa-hammer mr-2 text-amber-600"></i>Transaksi Upah Pekerja Harian
-                    </h3>
-                    <p class="text-xs text-amber-700 mt-0.5">Upah lembur = Upah harian ÷ 8 × Jam Lembur &nbsp;|&nbsp; Kasbon diinput manual</p>
-                </div>
-                <span class="text-xs bg-amber-100 text-amber-800 border border-amber-300 px-3 py-1 rounded-full font-bold">
-                    <i class="fas fa-calculator mr-1"></i> Hitung Otomatis
-                </span>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm" id="tabelHarian">
-                    <thead>
-                        <tr class="bg-slate-700 text-white text-xs uppercase tracking-wider">
-                            <th class="px-4 py-3 text-left min-w-[150px]">Nama Pekerja</th>
-                            <th class="px-3 py-3 text-center bg-purple-900/50">Posisi</th>
-                            <th class="px-3 py-3 text-center bg-amber-700/40 text-amber-200">Projek</th>
-                            <th class="px-3 py-3 text-center">Hari Kerja</th>
-                            <th class="px-3 py-3 text-left">Upah/Hari</th>
-                            <th class="px-3 py-3 text-center">Jam Lembur</th>
-                            <th class="px-3 py-3 text-center text-amber-200">Tarif Lembur/Jam</th>
-                            <th class="px-3 py-3 text-right">Upah Makan</th>
-                            <th class="px-3 py-3 text-right">Insentif / Transport</th>
-                            <th class="px-3 py-3 text-right text-teal-200">Total Upah</th>
-                            <th class="px-3 py-3 text-right text-rose-300">Kasbon</th>
-                            <th class="px-3 py-3 text-right bg-slate-800 text-teal-300 min-w-[130px]">Jumlah Diterima</th>
-                            <th class="px-3 py-3 text-center no-print">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100" id="tbodyHarian">
-
-<!-- Baris: Joko Susilo | Tukang | Projek A -->
-<tr class="hover:bg-slate-50 transition-colors row-pekerja"
-    data-id="4" data-kategori="Pekerja Harian" data-projek="Projek A" data-posisi="Tukang">
-    <td class="px-4 py-3">
-        <p class="font-bold text-slate-900">Joko Susilo</p>
-        <span class="text-[10px] font-mono text-slate-400">UID: 83A192B4</span>
-    </td>
-    <td class="px-3 py-3 text-center">
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-purple-100 text-purple-800">Tukang</span>
-    </td>
-    <td class="px-3 py-3 text-center bg-amber-50/40">
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-extrabold bg-amber-500 text-white">
-            <i class="fas fa-hard-hat mr-1 text-[8px]"></i> Projek A
-        </span>
-    </td>
-    <td class="px-3 py-3 text-center">
-        <input type="number" min="0" max="14" value="6" class="inp-hari w-14 text-center border border-slate-300 rounded-lg py-1 font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBaris(this)">
-        <div class="text-[10px] text-slate-400 mt-0.5">hari</div>
-    </td>
-    <td class="px-3 py-3">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-slate-400 text-[10px] font-semibold">Rp</span>
-            <input type="number" step="5000" value="120000" class="inp-pokok w-28 pl-7 pr-1 py-1 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBaris(this)">
-        </div>
-    </td>
-    <td class="px-3 py-3 text-center">
-        <input type="number" min="0" value="8" class="inp-lembur w-14 text-center border border-slate-300 rounded-lg py-1 font-bold text-amber-700 focus:border-teal-500 focus:outline-none" oninput="hitungBaris(this)">
-        <div class="text-[10px] text-slate-400 mt-0.5">jam</div>
-    </td>
-    <td class="px-3 py-3 text-center bg-amber-50/30">
-        <span class="inp-tarif-display text-sm font-bold text-amber-700">Rp 15.000</span>
-        <div class="text-[10px] text-slate-400 mt-0.5">upah/hari ÷ 8</div>
-    </td>
-    <td class="px-3 py-3 text-right">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-slate-400 text-[10px]">Rp</span>
-            <input type="number" step="5000" value="30000" class="inp-makan w-24 pl-7 pr-1 py-1 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBaris(this)">
-        </div>
-        <div class="text-[10px] text-slate-400 mt-0.5">makan pekerja</div>
-    </td>
-    <td class="px-3 py-3 text-right">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-slate-400 text-[10px]">Rp</span>
-            <input type="number" step="5000" value="0" class="inp-insentif w-24 pl-7 pr-1 py-1 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBaris(this)">
-        </div>
-        <div class="text-[10px] text-slate-400 mt-0.5">insentif / transport</div>
-    </td>
-    <td class="px-3 py-3 text-right">
-        <span class="text-sm font-bold text-teal-700 disp-total-upah">Rp 0</span>
-    </td>
-    <td class="px-3 py-3 text-right">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-rose-400 text-[10px]">Rp</span>
-            <input type="number" step="10000" value="0" class="inp-kasbon w-24 pl-7 pr-1 py-1 border border-rose-200 rounded-lg text-sm font-bold text-rose-700 focus:border-rose-400 focus:outline-none" oninput="hitungBaris(this)">
-        </div>
-        <div class="text-[10px] text-rose-400 mt-0.5">potongan</div>
-    </td>
-    <td class="px-3 py-3 text-right bg-teal-50/50">
-        <span class="text-base font-extrabold text-teal-900 disp-bersih">Rp 0</span>
-    </td>
-    <td class="px-3 py-3 text-center no-print">
-        <button type="button" onclick="bukaSlip(this)"
-                class="bg-teal-600 hover:bg-teal-700 text-white font-medium py-1.5 px-3 rounded-lg text-xs transition-colors inline-flex items-center gap-1 cursor-pointer shadow">
-            <i class="fas fa-file-invoice"></i> Slip
-        </button>
-    </td>
-</tr>
-
-<!-- Baris: Slamet Riyadi | Semi Tukang | Projek B -->
-<tr class="hover:bg-slate-50 transition-colors row-pekerja"
-    data-id="5" data-kategori="Pekerja Harian" data-projek="Projek B" data-posisi="Semi Tukang">
-    <td class="px-4 py-3">
-        <p class="font-bold text-slate-900">Slamet Riyadi</p>
-        <span class="text-[10px] font-mono text-slate-400">UID: 47C201F8</span>
-    </td>
-    <td class="px-3 py-3 text-center">
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-indigo-100 text-indigo-800">Semi Tukang</span>
-    </td>
-    <td class="px-3 py-3 text-center bg-amber-50/40">
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-extrabold bg-amber-500 text-white">
-            <i class="fas fa-hard-hat mr-1 text-[8px]"></i> Projek B
-        </span>
-    </td>
-    <td class="px-3 py-3 text-center">
-        <input type="number" min="0" max="14" value="5" class="inp-hari w-14 text-center border border-slate-300 rounded-lg py-1 font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBaris(this)">
-        <div class="text-[10px] text-slate-400 mt-0.5">hari</div>
-    </td>
-    <td class="px-3 py-3">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-slate-400 text-[10px] font-semibold">Rp</span>
-            <input type="number" step="5000" value="100000" class="inp-pokok w-28 pl-7 pr-1 py-1 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBaris(this)">
-        </div>
-    </td>
-    <td class="px-3 py-3 text-center">
-        <input type="number" min="0" value="5" class="inp-lembur w-14 text-center border border-slate-300 rounded-lg py-1 font-bold text-amber-700 focus:border-teal-500 focus:outline-none" oninput="hitungBaris(this)">
-        <div class="text-[10px] text-slate-400 mt-0.5">jam</div>
-    </td>
-    <td class="px-3 py-3 text-center bg-amber-50/30">
-        <span class="inp-tarif-display text-sm font-bold text-amber-700">Rp 12.500</span>
-        <div class="text-[10px] text-slate-400 mt-0.5">upah/hari ÷ 8</div>
-    </td>
-    <td class="px-3 py-3 text-right">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-slate-400 text-[10px]">Rp</span>
-            <input type="number" step="5000" value="25000" class="inp-makan w-24 pl-7 pr-1 py-1 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBaris(this)">
-        </div>
-        <div class="text-[10px] text-slate-400 mt-0.5">makan pekerja</div>
-    </td>
-    <td class="px-3 py-3 text-right">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-slate-400 text-[10px]">Rp</span>
-            <input type="number" step="5000" value="0" class="inp-insentif w-24 pl-7 pr-1 py-1 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBaris(this)">
-        </div>
-        <div class="text-[10px] text-slate-400 mt-0.5">insentif / transport</div>
-    </td>
-    <td class="px-3 py-3 text-right">
-        <span class="text-sm font-bold text-teal-700 disp-total-upah">Rp 0</span>
-    </td>
-    <td class="px-3 py-3 text-right">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-rose-400 text-[10px]">Rp</span>
-            <input type="number" step="10000" value="0" class="inp-kasbon w-24 pl-7 pr-1 py-1 border border-rose-200 rounded-lg text-sm font-bold text-rose-700 focus:border-rose-400 focus:outline-none" oninput="hitungBaris(this)">
-        </div>
-        <div class="text-[10px] text-rose-400 mt-0.5">potongan</div>
-    </td>
-    <td class="px-3 py-3 text-right bg-teal-50/50">
-        <span class="text-base font-extrabold text-teal-900 disp-bersih">Rp 0</span>
-    </td>
-    <td class="px-3 py-3 text-center no-print">
-        <button type="button" onclick="bukaSlip(this)"
-                class="bg-teal-600 hover:bg-teal-700 text-white font-medium py-1.5 px-3 rounded-lg text-xs transition-colors inline-flex items-center gap-1 cursor-pointer shadow">
-            <i class="fas fa-file-invoice"></i> Slip
-        </button>
-    </td>
-</tr>
-
-<!-- Baris: Bambang Triyono | Pembantu Tukang | Projek C -->
-<tr class="hover:bg-slate-50 transition-colors row-pekerja"
-    data-id="6" data-kategori="Pekerja Harian" data-projek="Projek C" data-posisi="Pembantu Tukang">
-    <td class="px-4 py-3">
-        <p class="font-bold text-slate-900">Bambang Triyono</p>
-        <span class="text-[10px] font-mono text-slate-400">UID: 19E873A2</span>
-    </td>
-    <td class="px-3 py-3 text-center">
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-orange-100 text-orange-800">Pembantu Tukang</span>
-    </td>
-    <td class="px-3 py-3 text-center bg-amber-50/40">
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-extrabold bg-amber-500 text-white">
-            <i class="fas fa-hard-hat mr-1 text-[8px]"></i> Projek C
-        </span>
-    </td>
-    <td class="px-3 py-3 text-center">
-        <input type="number" min="0" max="14" value="6" class="inp-hari w-14 text-center border border-slate-300 rounded-lg py-1 font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBaris(this)">
-        <div class="text-[10px] text-slate-400 mt-0.5">hari</div>
-    </td>
-    <td class="px-3 py-3">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-slate-400 text-[10px] font-semibold">Rp</span>
-            <input type="number" step="5000" value="90000" class="inp-pokok w-28 pl-7 pr-1 py-1 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBaris(this)">
-        </div>
-    </td>
-    <td class="px-3 py-3 text-center">
-        <input type="number" min="0" value="4" class="inp-lembur w-14 text-center border border-slate-300 rounded-lg py-1 font-bold text-amber-700 focus:border-teal-500 focus:outline-none" oninput="hitungBaris(this)">
-        <div class="text-[10px] text-slate-400 mt-0.5">jam</div>
-    </td>
-    <td class="px-3 py-3 text-center bg-amber-50/30">
-        <span class="inp-tarif-display text-sm font-bold text-amber-700">Rp 11.250</span>
-        <div class="text-[10px] text-slate-400 mt-0.5">upah/hari ÷ 8</div>
-    </td>
-    <td class="px-3 py-3 text-right">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-slate-400 text-[10px]">Rp</span>
-            <input type="number" step="5000" value="20000" class="inp-makan w-24 pl-7 pr-1 py-1 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBaris(this)">
-        </div>
-        <div class="text-[10px] text-slate-400 mt-0.5">makan pekerja</div>
-    </td>
-    <td class="px-3 py-3 text-right">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-slate-400 text-[10px]">Rp</span>
-            <input type="number" step="5000" value="0" class="inp-insentif w-24 pl-7 pr-1 py-1 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBaris(this)">
-        </div>
-        <div class="text-[10px] text-slate-400 mt-0.5">insentif / transport</div>
-    </td>
-    <td class="px-3 py-3 text-right">
-        <span class="text-sm font-bold text-teal-700 disp-total-upah">Rp 0</span>
-    </td>
-    <td class="px-3 py-3 text-right">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-rose-400 text-[10px]">Rp</span>
-            <input type="number" step="10000" value="0" class="inp-kasbon w-24 pl-7 pr-1 py-1 border border-rose-200 rounded-lg text-sm font-bold text-rose-700 focus:border-rose-400 focus:outline-none" oninput="hitungBaris(this)">
-        </div>
-        <div class="text-[10px] text-rose-400 mt-0.5">potongan</div>
-    </td>
-    <td class="px-3 py-3 text-right bg-teal-50/50">
-        <span class="text-base font-extrabold text-teal-900 disp-bersih">Rp 0</span>
-    </td>
-    <td class="px-3 py-3 text-center no-print">
-        <button type="button" onclick="bukaSlip(this)"
-                class="bg-teal-600 hover:bg-teal-700 text-white font-medium py-1.5 px-3 rounded-lg text-xs transition-colors inline-flex items-center gap-1 cursor-pointer shadow">
-            <i class="fas fa-file-invoice"></i> Slip
-        </button>
-    </td>
-</tr>
-
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- TABEL STAFF KANTOR -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-8">
-            <div class="px-6 py-4 bg-blue-50 border-b border-blue-200 flex flex-wrap items-center justify-between gap-3">
-                <div>
-                    <h3 class="text-base font-bold text-blue-900">
-                        <i class="fas fa-briefcase mr-2 text-blue-600"></i>Transaksi Upah Staff Kantor
-                    </h3>
-                    <p class="text-xs text-blue-700 mt-0.5">Gaji pokok bulanan + upah lembur per jam</p>
-                </div>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm" id="tabelStaff">
-                    <thead>
-                        <tr class="bg-slate-700 text-white text-xs uppercase tracking-wider">
-                            <th class="px-4 py-3 text-left min-w-[160px]">Nama Karyawan</th>
-                            <th class="px-3 py-3 text-center">Jabatan</th>
-                            <th class="px-3 py-3 text-center">Hari Masuk</th>
-                            <th class="px-3 py-3 text-left">Gaji Pokok</th>
-                            <th class="px-3 py-3 text-center">Jam Lembur</th>
-                            <th class="px-3 py-3 text-left">Tarif Lembur/Jam</th>
-                            <th class="px-3 py-3 text-right text-teal-200">Total Lembur</th>
-                            <th class="px-3 py-3 text-right text-rose-300">Kasbon</th>
-                            <th class="px-3 py-3 text-right bg-slate-800 text-teal-300 min-w-[130px]">Total Diterima</th>
-                            <th class="px-3 py-3 text-center no-print">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100" id="tbodyStaff">
-
-<!-- Staff 1 -->
-<tr class="hover:bg-slate-50 transition-colors row-pekerja"
-    data-id="1" data-kategori="Staff Kantor" data-projek="Kantor" data-posisi="-">
-    <td class="px-4 py-3">
-        <p class="font-bold text-slate-900">Dimas Arya Kedhaton</p>
-        <span class="text-[10px] font-mono text-slate-400">UID: 53492607</span>
-    </td>
-    <td class="px-3 py-3 text-center">
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-800">Staff Kantor</span>
-    </td>
-    <td class="px-3 py-3 text-center">
-        <input type="number" min="0" max="31" value="6" class="inp-hari w-14 text-center border border-slate-300 rounded-lg py-1 font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBarisStaff(this)">
-        <div class="text-[10px] text-slate-400 mt-0.5">hari</div>
-    </td>
-    <td class="px-3 py-3">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-slate-400 text-[10px] font-semibold">Rp</span>
-            <input type="number" step="50000" value="3500000" class="inp-pokok w-32 pl-7 pr-1 py-1 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBarisStaff(this)">
-        </div>
-        <div class="text-[10px] text-slate-400 mt-0.5">per bulan</div>
-    </td>
-    <td class="px-3 py-3 text-center">
-        <input type="number" min="0" value="4" class="inp-lembur w-14 text-center border border-slate-300 rounded-lg py-1 font-bold text-amber-700 focus:border-teal-500 focus:outline-none" oninput="hitungBarisStaff(this)">
-        <div class="text-[10px] text-slate-400 mt-0.5">jam</div>
-    </td>
-    <td class="px-3 py-3">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-slate-400 text-[10px] font-semibold">Rp</span>
-            <input type="number" step="5000" value="30000" class="inp-tarif w-28 pl-7 pr-1 py-1 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBarisStaff(this)">
-        </div>
-        <div class="text-[10px] text-slate-400 mt-0.5">per jam</div>
-    </td>
-    <td class="px-3 py-3 text-right">
-        <span class="text-sm font-bold text-amber-700 disp-total-lembur">Rp 0</span>
-    </td>
-    <td class="px-3 py-3 text-right">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-rose-400 text-[10px]">Rp</span>
-            <input type="number" step="10000" value="0" class="inp-kasbon w-24 pl-7 pr-1 py-1 border border-rose-200 rounded-lg text-sm font-bold text-rose-700 focus:border-rose-400 focus:outline-none" oninput="hitungBarisStaff(this)">
-        </div>
-    </td>
-    <td class="px-3 py-3 text-right bg-teal-50/50">
-        <span class="text-base font-extrabold text-teal-900 disp-bersih">Rp 0</span>
-    </td>
-    <td class="px-3 py-3 text-center no-print">
-        <button type="button" onclick="bukaSlipStaff(this)"
-                class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1.5 px-3 rounded-lg text-xs transition-colors inline-flex items-center gap-1 cursor-pointer shadow">
-            <i class="fas fa-file-invoice"></i> Slip
-        </button>
-    </td>
-</tr>
-
-<!-- Staff 2 -->
-<tr class="hover:bg-slate-50 transition-colors row-pekerja"
-    data-id="2" data-kategori="Staff Kantor" data-projek="Kantor" data-posisi="-">
-    <td class="px-4 py-3">
-        <p class="font-bold text-slate-900">Akmal Zaidan</p>
-        <span class="text-[10px] font-mono text-slate-400">UID: 9491F306</span>
-    </td>
-    <td class="px-3 py-3 text-center">
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-800">Staff Kantor</span>
-    </td>
-    <td class="px-3 py-3 text-center">
-        <input type="number" min="0" max="31" value="5" class="inp-hari w-14 text-center border border-slate-300 rounded-lg py-1 font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBarisStaff(this)">
-        <div class="text-[10px] text-slate-400 mt-0.5">hari</div>
-    </td>
-    <td class="px-3 py-3">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-slate-400 text-[10px] font-semibold">Rp</span>
-            <input type="number" step="50000" value="3200000" class="inp-pokok w-32 pl-7 pr-1 py-1 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBarisStaff(this)">
-        </div>
-        <div class="text-[10px] text-slate-400 mt-0.5">per bulan</div>
-    </td>
-    <td class="px-3 py-3 text-center">
-        <input type="number" min="0" value="3" class="inp-lembur w-14 text-center border border-slate-300 rounded-lg py-1 font-bold text-amber-700 focus:border-teal-500 focus:outline-none" oninput="hitungBarisStaff(this)">
-        <div class="text-[10px] text-slate-400 mt-0.5">jam</div>
-    </td>
-    <td class="px-3 py-3">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-slate-400 text-[10px] font-semibold">Rp</span>
-            <input type="number" step="5000" value="30000" class="inp-tarif w-28 pl-7 pr-1 py-1 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBarisStaff(this)">
-        </div>
-        <div class="text-[10px] text-slate-400 mt-0.5">per jam</div>
-    </td>
-    <td class="px-3 py-3 text-right">
-        <span class="text-sm font-bold text-amber-700 disp-total-lembur">Rp 0</span>
-    </td>
-    <td class="px-3 py-3 text-right">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-rose-400 text-[10px]">Rp</span>
-            <input type="number" step="10000" value="0" class="inp-kasbon w-24 pl-7 pr-1 py-1 border border-rose-200 rounded-lg text-sm font-bold text-rose-700 focus:border-rose-400 focus:outline-none" oninput="hitungBarisStaff(this)">
-        </div>
-    </td>
-    <td class="px-3 py-3 text-right bg-teal-50/50">
-        <span class="text-base font-extrabold text-teal-900 disp-bersih">Rp 0</span>
-    </td>
-    <td class="px-3 py-3 text-center no-print">
-        <button type="button" onclick="bukaSlipStaff(this)"
-                class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1.5 px-3 rounded-lg text-xs transition-colors inline-flex items-center gap-1 cursor-pointer shadow">
-            <i class="fas fa-file-invoice"></i> Slip
-        </button>
-    </td>
-</tr>
-
-<!-- Staff 3 -->
-<tr class="hover:bg-slate-50 transition-colors row-pekerja"
-    data-id="3" data-kategori="Staff Kantor" data-projek="Kantor" data-posisi="-">
-    <td class="px-4 py-3">
-        <p class="font-bold text-slate-900">Anom Arya</p>
-        <span class="text-[10px] font-mono text-slate-400">UID: A3B7C901</span>
-    </td>
-    <td class="px-3 py-3 text-center">
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-800">Staff Kantor</span>
-    </td>
-    <td class="px-3 py-3 text-center">
-        <input type="number" min="0" max="31" value="5" class="inp-hari w-14 text-center border border-slate-300 rounded-lg py-1 font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBarisStaff(this)">
-        <div class="text-[10px] text-slate-400 mt-0.5">hari</div>
-    </td>
-    <td class="px-3 py-3">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-slate-400 text-[10px] font-semibold">Rp</span>
-            <input type="number" step="50000" value="3000000" class="inp-pokok w-32 pl-7 pr-1 py-1 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBarisStaff(this)">
-        </div>
-        <div class="text-[10px] text-slate-400 mt-0.5">per bulan</div>
-    </td>
-    <td class="px-3 py-3 text-center">
-        <input type="number" min="0" value="2" class="inp-lembur w-14 text-center border border-slate-300 rounded-lg py-1 font-bold text-amber-700 focus:border-teal-500 focus:outline-none" oninput="hitungBarisStaff(this)">
-        <div class="text-[10px] text-slate-400 mt-0.5">jam</div>
-    </td>
-    <td class="px-3 py-3">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-slate-400 text-[10px] font-semibold">Rp</span>
-            <input type="number" step="5000" value="30000" class="inp-tarif w-28 pl-7 pr-1 py-1 border border-slate-300 rounded-lg text-sm font-bold text-slate-800 focus:border-teal-500 focus:outline-none" oninput="hitungBarisStaff(this)">
-        </div>
-        <div class="text-[10px] text-slate-400 mt-0.5">per jam</div>
-    </td>
-    <td class="px-3 py-3 text-right">
-        <span class="text-sm font-bold text-amber-700 disp-total-lembur">Rp 0</span>
-    </td>
-    <td class="px-3 py-3 text-right">
-        <div class="relative">
-            <span class="absolute inset-y-0 left-2 flex items-center text-rose-400 text-[10px]">Rp</span>
-            <input type="number" step="10000" value="0" class="inp-kasbon w-24 pl-7 pr-1 py-1 border border-rose-200 rounded-lg text-sm font-bold text-rose-700 focus:border-rose-400 focus:outline-none" oninput="hitungBarisStaff(this)">
-        </div>
-    </td>
-    <td class="px-3 py-3 text-right bg-teal-50/50">
-        <span class="text-base font-extrabold text-teal-900 disp-bersih">Rp 0</span>
-    </td>
-    <td class="px-3 py-3 text-center no-print">
-        <button type="button" onclick="bukaSlipStaff(this)"
-                class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1.5 px-3 rounded-lg text-xs transition-colors inline-flex items-center gap-1 cursor-pointer shadow">
-            <i class="fas fa-file-invoice"></i> Slip
-        </button>
-    </td>
-</tr>
-
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- MODAL SLIP GAJI -->
-        <div id="modalSlip" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-            <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 text-slate-800 relative">
-                <button onclick="tutupSlip()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl font-bold cursor-pointer no-print">
-                    <i class="fas fa-times"></i>
-                </button>
-
-                <!-- Kop slip -->
-                <div class="text-center pb-4 border-b border-dashed border-slate-300">
-                    <img src="images/logo.png" alt="Logo" class="w-14 h-14 mx-auto object-contain mb-2">
-                    <h4 class="text-lg font-extrabold text-slate-900">PT JAYA KEDHATON</h4>
-                    <p class="text-[10px] text-slate-500 uppercase tracking-widest mt-0.5">Design Build, General Contractor, Interior</p>
-                    <p class="text-[10px] text-slate-400 mt-0.5">Jl. AW. Syahranie No. 36 A Samarinda</p>
-                    <p class="text-xs font-bold text-teal-700 uppercase tracking-wider mt-2">Slip Pembayaran Upah</p>
-                    <p class="text-[10px] font-mono text-slate-400 mt-0.5" id="slipPeriode">Periode: 24 Okt – 06 Nov 2026</p>
-                </div>
-
-                <!-- Info pekerja -->
-                <div class="py-3 space-y-1.5 text-sm border-b border-dashed border-slate-200">
-                    <div class="flex justify-between">
-                        <span class="text-slate-500">Nama</span>
-                        <span class="font-bold text-slate-900" id="slipNama">-</span>
-                    </div>
-                    <div class="flex justify-between" id="slipRowPosisi">
-                        <span class="text-slate-500">Posisi</span>
-                        <span class="font-semibold text-purple-700" id="slipPosisi">-</span>
-                    </div>
-                    <div class="flex justify-between" id="slipRowProjek">
-                        <span class="text-slate-500">Projek</span>
-                        <span class="font-bold text-amber-800" id="slipProjek">-</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-slate-500">Kategori</span>
-                        <span class="font-semibold text-slate-700" id="slipKategori">-</span>
-                    </div>
-                </div>
-
-                <!-- Rincian upah -->
-                <div class="py-3 space-y-1.5 text-sm border-b border-dashed border-slate-200" id="slipRincianBox">
-                    <!-- diisi JS -->
-                </div>
-
-                <!-- Total bersih -->
-                <div class="pt-3 pb-2">
-                    <div class="flex justify-between items-center bg-teal-50 p-3.5 rounded-xl border border-teal-200">
-                        <div>
-                            <p class="text-xs text-teal-700 font-bold uppercase tracking-wider">Jumlah Diterima</p>
-                            <p class="text-2xl font-extrabold text-teal-900" id="slipTotalBersih">Rp 0</p>
+                    <!-- Kop Surat Jaya Kedhaton -->
+                    <div class="border-b-2 border-slate-800 pb-3 text-center">
+                        <img src="images/logo.png" alt="Logo" class="w-14 h-14 mx-auto object-contain mb-1">
+                        <h3 class="text-xl font-black text-slate-900 tracking-wide uppercase">PT. JAYA KEDHATON</h3>
+                        <p class="text-xs text-slate-600 uppercase font-semibold">Design Build, General Contractor, Interior</p>
+                        <p class="text-[11px] text-slate-500">Jl. AW. Syahranie No. 36 A Samarinda</p>
+                        <div class="mt-2 inline-block bg-slate-900 text-white font-bold text-xs uppercase px-4 py-1 rounded">
+                            Slip Gaji &amp; Upah Pekerja
                         </div>
-                        <i class="fas fa-hand-holding-dollar text-3xl text-teal-500"></i>
                     </div>
-                    <!-- Jika ada kasbon -->
-                    <div class="mt-2 text-xs text-rose-600 text-right font-semibold" id="slipKasbonNote" style="display:none">
-                        * Sudah dipotong kasbon <span id="slipKasbonAmt"></span>
-                    </div>
-                </div>
 
-                <div class="flex gap-3 pt-2 no-print">
-                    <button type="button" onclick="window.print()" class="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2.5 px-4 rounded-lg text-sm shadow transition-colors cursor-pointer">
-                        <i class="fas fa-print mr-1.5"></i> Cetak Slip
-                    </button>
-                    <button type="button" onclick="tutupSlip()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2.5 px-4 rounded-lg text-sm transition-colors cursor-pointer">
-                        Tutup
-                    </button>
+                    <!-- Identitas Pekerja -->
+                    <div class="py-3 text-xs md:text-sm grid grid-cols-2 gap-2 border-b border-slate-200">
+                        <div>
+                            <span class="text-slate-500 block text-xs">Nama Pekerja:</span>
+                            <span class="font-bold text-base text-slate-900" id="slipNama">-</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block text-xs">Posisi / Jabatan:</span>
+                            <span class="font-bold text-slate-800" id="slipPosisi">-</span>
+                        </div>
+                        <div class="col-span-2">
+                            <span class="text-slate-500 block text-xs">Periode:</span>
+                            <span class="font-semibold text-slate-700" id="slipPeriodeDisplay">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Rincian Multi-Proyek -->
+                    <div class="py-3">
+                        <p class="text-xs font-bold text-slate-700 uppercase mb-2">Rincian Pekerjaan &amp; Proyek:</p>
+                        <div class="border border-slate-200 rounded-lg overflow-hidden">
+                            <table class="w-full text-xs">
+                                <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                                    <tr>
+                                        <th class="p-2 text-left">Nama Proyek</th>
+                                        <th class="p-2 text-center">Hari Kerja</th>
+                                        <th class="p-2 text-right">Upah/Hari</th>
+                                        <th class="p-2 text-center">Lembur</th>
+                                        <th class="p-2 text-right">Uang Makan</th>
+                                        <th class="p-2 text-right">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="slipTbodyProyek" class="divide-y divide-slate-100">
+                                    <!-- Diisi JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Total Kotor, Kasbon, dan Bersih -->
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-1.5 text-xs md:text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-slate-600">Total Upah Pekerja:</span>
+                            <span class="font-bold text-slate-800" id="slipTotalKotor">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between text-rose-600 font-semibold" id="slipRowKasbon">
+                            <span>Potongan Kasbon:</span>
+                            <span id="slipKasbonNilai">- Rp 0</span>
+                        </div>
+                        <div class="flex justify-between items-center pt-2 border-t border-slate-300 font-black text-sm md:text-base text-emerald-900">
+                            <span>SISA UPAH YANG DITERIMA:</span>
+                            <span class="text-lg md:text-xl text-emerald-800" id="slipSisaDiterima">Rp 0</span>
+                        </div>
+                    </div>
+
+                    <!-- Tanda Tangan -->
+                    <div class="grid grid-cols-2 gap-4 text-center text-xs mt-6 pt-4 border-t border-dashed border-slate-300">
+                        <div>
+                            <p class="text-slate-500">Penerima,</p>
+                            <div class="h-14"></div>
+                            <p class="font-bold underline text-slate-800" id="slipTtdNama">-</p>
+                        </div>
+                        <div>
+                            <p class="text-slate-500">Samarinda, <span id="slipTglCetak">--</span></p>
+                            <p class="text-slate-500">Admin Keuangan,</p>
+                            <div class="h-14"></div>
+                            <p class="font-bold underline text-slate-800">PT JAYA KEDHATON</p>
+                        </div>
+                    </div>
+
+                    <!-- Tombol Modal -->
+                    <div class="flex gap-2 mt-5 no-print">
+                        <button type="button" onclick="window.print()" class="flex-1 bg-green-700 hover:bg-green-800 text-white font-bold py-2.5 rounded-lg text-sm shadow">
+                            <i class="fas fa-print mr-1"></i> Cetak Slip Ini
+                        </button>
+                        <button type="button" onclick="tutupSlip()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-4 py-2.5 rounded-lg text-sm">
+                            Tutup
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
 
         </main>
     </div>
 
+    <!-- SCRIPT LOGIKA TRANSAKSI EXCEL SANGAT RAMAH AWAM -->
     <script>
-        // ============================================================
-        // FILTER
-        // ============================================================
-        let fKategori = '', fProjek = '', fPosisi = '';
-
-        const posisiClass = {
-            'Mandor': 'bg-yellow-100 text-yellow-800',
-            'Tukang': 'bg-purple-100 text-purple-800',
-            'Semi Tukang': 'bg-indigo-100 text-indigo-800',
-            'Pembantu Tukang': 'bg-orange-100 text-orange-800',
-        };
-
-        function setFilter(type, val) {
-            if (type === 'kategori') {
-                fKategori = val;
-                if (val === 'Staff Kantor') fProjek = fPosisi = '';
-            } else if (type === 'projek') {
-                fProjek = val;
-            } else if (type === 'posisi') {
-                fPosisi = val;
+        // Data Awal Referensi (Bisa ditambah / diedit langsung oleh ibu-ibu)
+        // Satu pekerja bisa punya beberapa baris proyek berbeda!
+        let dataTransaksi = [
+            {
+                id: 1,
+                nama: 'AGUNG WIJAYA',
+                posisi: 'PEMBANTU TUKANG',
+                projek: 'FELISA ESTATE',
+                hari: 6,
+                upah: 120000,
+                lembur: 6,
+                makan: 30000,
+                insentif: 0,
+                kasbon: 1100000 // Kasbon dicatat di baris pertama
+            },
+            {
+                id: 2,
+                nama: 'AGUNG WIJAYA', // Orang yang sama, proyek kedua!
+                posisi: 'PEMBANTU TUKANG',
+                projek: 'RUKO PAK DEDI',
+                hari: 7,
+                upah: 120000,
+                lembur: 7,
+                makan: 35000,
+                insentif: 0,
+                kasbon: 0
+            },
+            {
+                id: 3,
+                nama: 'JOKO SUSILO',
+                posisi: 'TUKANG',
+                projek: 'FELISA ESTATE',
+                hari: 6,
+                upah: 140000,
+                lembur: 8,
+                makan: 30000,
+                insentif: 0,
+                kasbon: 200000
+            },
+            {
+                id: 4,
+                nama: 'SLAMET RIYADI',
+                posisi: 'SEMI TUKANG',
+                projek: 'GREEN HOUSE',
+                hari: 5,
+                upah: 130000,
+                lembur: 5,
+                makan: 25000,
+                insentif: 50000,
+                kasbon: 0
+            },
+            {
+                id: 5,
+                nama: 'KASUN',
+                posisi: 'MANDOR',
+                projek: 'PAGAR RING ROAD',
+                hari: 12,
+                upah: 200000,
+                lembur: 10,
+                makan: 60000,
+                insentif: 100000,
+                kasbon: 500000
             }
-            updateFilterButtons();
-            jalankanFilter();
+        ];
+
+        // Muat dari penyimpanan lokal jika ada simpanan sebelumnya
+        try {
+            const saved = localStorage.getItem('jaya_transaksi_upah');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    dataTransaksi = parsed;
+                }
+            }
+        } catch (_) {}
+
+        function simpanKeLokal() {
+            try {
+                localStorage.setItem('jaya_transaksi_upah', JSON.stringify(dataTransaksi));
+            } catch (_) {}
         }
 
-        function updateFilterButtons() {
-            const aktif = 'px-4 py-2 rounded-lg text-xs font-bold transition-all bg-slate-800 text-white shadow';
-            const off   = 'px-4 py-2 rounded-lg text-xs font-bold transition-all bg-white border border-slate-300 text-slate-700 hover:bg-slate-100';
-            document.getElementById('fKatAll').className   = fKategori === '' ? aktif : off;
-            document.getElementById('fKatStaff').className = fKategori === 'Staff Kantor'
-                ? 'px-4 py-2 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow'
-                : 'px-4 py-2 rounded-lg text-xs font-bold transition-all bg-blue-50 text-blue-900 border border-blue-200 hover:bg-blue-100';
-            document.getElementById('fKatHarian').className = fKategori === 'Pekerja Harian'
-                ? 'px-4 py-2 rounded-lg text-xs font-bold transition-all bg-amber-600 text-white shadow'
-                : 'px-4 py-2 rounded-lg text-xs font-bold transition-all bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100';
+        // Format angka ke format Rupiah standar yang mudah dibaca
+        function formatRp(val) {
+            return 'Rp ' + Math.round(Number(val) || 0).toLocaleString('id-ID');
+        }
 
-            const aktifPrj = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-amber-700 text-white shadow';
-            const offPrj   = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-amber-900 border border-amber-300 hover:bg-amber-100';
-            ['fPrjAll','fPrjA','fPrjB','fPrjC'].forEach(id => {
-                const el = document.getElementById(id);
-                const val = el.onclick?.toString().match(/'([^']+)'/)?.[1] ?? '';
-                el.className = fProjek === val ? aktifPrj.replace('bg-amber-700','bg-amber-600') : offPrj;
+        // Render Seluruh Baris ke Tabel
+        function renderTabel() {
+            const tbody = document.getElementById('tbodyTransaksi');
+            const filterProjek = document.getElementById('filterProjekSelect').value;
+            tbody.innerHTML = '';
+
+            let sumHari = 0;
+            let sumLembur = 0;
+            let sumMakan = 0;
+            let sumInsentif = 0;
+            let sumUpahKotor = 0;
+            let sumKasbon = 0;
+            let sumSisa = 0;
+            let nomor = 1;
+
+            dataTransaksi.forEach((item, index) => {
+                // Terapkan filter jika dipilih
+                if (filterProjek && item.projek !== filterProjek) {
+                    return;
+                }
+
+                // Rumus lembur = upah : 8
+                const tarifLembur = (Number(item.upah) || 0) / 8;
+                const totalHarian = (Number(item.hari) || 0) * (Number(item.upah) || 0);
+                const totalLembur = (Number(item.lembur) || 0) * tarifLembur;
+                const totalKotor = totalHarian + totalLembur + (Number(item.makan) || 0) + (Number(item.insentif) || 0);
+                const sisaDiterima = totalKotor - (Number(item.kasbon) || 0);
+
+                // Tambahkan ke akumulasi Grand Total
+                sumHari += Number(item.hari) || 0;
+                sumLembur += Number(item.lembur) || 0;
+                sumMakan += Number(item.makan) || 0;
+                sumInsentif += Number(item.insentif) || 0;
+                sumUpahKotor += totalKotor;
+                sumKasbon += Number(item.kasbon) || 0;
+                sumSisa += sisaDiterima;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="text-center font-bold text-slate-500 bg-slate-50">${nomor++}</td>
+                    
+                    <!-- NAMA PEKERJA -->
+                    <td>
+                        <input type="text" value="${escapeHtml(item.nama)}" 
+                               class="excel-input uppercase font-bold text-slate-900"
+                               placeholder="Ketik Nama"
+                               onchange="updateField(${index}, 'nama', this.value)">
+                    </td>
+
+                    <!-- POSISI (MANDOR, TUKANG, SEMI TUKANG, PEMBANTU TUKANG) -->
+                    <td>
+                        <select class="excel-input font-semibold bg-white cursor-pointer"
+                                onchange="updateField(${index}, 'posisi', this.value)">
+                            <option value="MANDOR" ${item.posisi === 'MANDOR' ? 'selected' : ''}>MANDOR</option>
+                            <option value="TUKANG" ${item.posisi === 'TUKANG' ? 'selected' : ''}>TUKANG</option>
+                            <option value="SEMI TUKANG" ${item.posisi === 'SEMI TUKANG' ? 'selected' : ''}>SEMI TUKANG</option>
+                            <option value="PEMBANTU TUKANG" ${item.posisi === 'PEMBANTU TUKANG' ? 'selected' : ''}>PEMBANTU TUKANG</option>
+                        </select>
+                    </td>
+
+                    <!-- NAMA PROJEK (Bisa di beberapa proyek) -->
+                    <td class="bg-emerald-50/50">
+                        <input type="text" value="${escapeHtml(item.projek)}" 
+                               class="excel-input font-bold text-emerald-950 uppercase"
+                               placeholder="Nama Projek"
+                               onchange="updateField(${index}, 'projek', this.value)">
+                    </td>
+
+                    <!-- HARI KERJA -->
+                    <td>
+                        <input type="number" min="0" max="31" step="0.5" value="${item.hari}" 
+                               class="excel-input excel-input-num text-center text-slate-900 font-bold"
+                               oninput="updateField(${index}, 'hari', this.value)">
+                    </td>
+
+                    <!-- UPAH HARIAN -->
+                    <td>
+                        <input type="number" min="0" step="5000" value="${item.upah}" 
+                               class="excel-input excel-input-num text-slate-900 font-bold"
+                               oninput="updateField(${index}, 'upah', this.value)">
+                    </td>
+
+                    <!-- JAM LEMBUR -->
+                    <td>
+                        <input type="number" min="0" step="1" value="${item.lembur}" 
+                               class="excel-input excel-input-num text-center text-amber-800 font-bold"
+                               oninput="updateField(${index}, 'lembur', this.value)">
+                    </td>
+
+                    <!-- TARIF LEMBUR (OTOMATIS: UPAH / 8) -->
+                    <td class="text-right font-bold text-amber-900 bg-amber-50/60" title="Otomatis dari Upah Harian dibagi 8">
+                        ${formatRp(tarifLembur)}
+                    </td>
+
+                    <!-- UANG MAKAN -->
+                    <td>
+                        <input type="number" min="0" step="5000" value="${item.makan}" 
+                               class="excel-input excel-input-num text-slate-800"
+                               oninput="updateField(${index}, 'makan', this.value)">
+                    </td>
+
+                    <!-- INSENTIF / TRANSPORT -->
+                    <td>
+                        <input type="number" min="0" step="5000" value="${item.insentif}" 
+                               class="excel-input excel-input-num text-slate-800"
+                               oninput="updateField(${index}, 'insentif', this.value)">
+                    </td>
+
+                    <!-- TOTAL UPAH -->
+                    <td class="text-right font-bold text-emerald-900 bg-emerald-50/70">
+                        ${formatRp(totalKotor)}
+                    </td>
+
+                    <!-- KASBON (POTONGAN MANUAL) -->
+                    <td class="bg-rose-50/50">
+                        <input type="number" min="0" step="10000" value="${item.kasbon}" 
+                               class="excel-input excel-input-num text-rose-700 font-bold"
+                               placeholder="0"
+                               oninput="updateField(${index}, 'kasbon', this.value)">
+                    </td>
+
+                    <!-- SISA BERSIH YANG DITERIMA -->
+                    <td class="text-right font-extrabold text-emerald-950 bg-emerald-100/70 text-sm">
+                        ${formatRp(sisaDiterima)}
+                    </td>
+
+                    <!-- TOMBOL CETAK SLIP GAJI -->
+                    <td class="text-center no-print">
+                        <button type="button" onclick="bukaSlipPekerja('${escapeHtml(item.nama)}')"
+                                class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-2.5 py-1 rounded text-xs inline-flex items-center gap-1 shadow cursor-pointer"
+                                title="Lihat dan Cetak Slip Gaji">
+                            <i class="fas fa-file-invoice"></i> Slip
+                        </button>
+                    </td>
+
+                    <!-- TOMBOL HAPUS BARIS -->
+                    <td class="text-center no-print">
+                        <button type="button" onclick="hapusBaris(${index})"
+                                class="text-rose-500 hover:text-rose-700 font-bold p-1 cursor-pointer"
+                                title="Hapus baris ini">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
             });
-            document.getElementById('fPrjAll').className = fProjek === '' ? aktifPrj : offPrj;
 
-            const aktifPos = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-purple-700 text-white shadow';
-            const offPos   = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-purple-900 border border-purple-300 hover:bg-purple-50';
-            ['fPosAll','fPosMandor','fPosTukang','fPosSemi','fPosPembantu'].forEach(id => {
-                const el = document.getElementById(id);
-                if (!el) return;
-                const isAll = id === 'fPosAll';
-                const val = el.onclick?.toString().match(/'([^']+)'/)?.[1] ?? '';
-                el.className = (isAll && fPosisi === '') || (!isAll && fPosisi === val)
-                    ? aktifPos : offPos;
+            // Update Grand Total Baris Bawah
+            document.getElementById('totalHariKerja').innerText = sumHari;
+            document.getElementById('totalJamLembur').innerText = sumLembur;
+            document.getElementById('totalUangMakan').innerText = formatRp(sumMakan);
+            document.getElementById('totalInsentif').innerText = formatRp(sumInsentif);
+            document.getElementById('totalUpahKotor').innerText = formatRp(sumUpahKotor);
+            document.getElementById('totalKasbon').innerText = formatRp(sumKasbon);
+            document.getElementById('totalSisaDiterima').innerText = formatRp(sumSisa);
+        }
+
+        function updateField(index, key, val) {
+            if (key === 'nama' || key === 'posisi' || key === 'projek') {
+                dataTransaksi[index][key] = val;
+            } else {
+                dataTransaksi[index][key] = parseFloat(val) || 0;
+            }
+            simpanKeLokal();
+            renderTabel();
+        }
+
+        function tambahBarisKosong() {
+            dataTransaksi.push({
+                id: Date.now(),
+                nama: 'PEKERJA BARU',
+                posisi: 'TUKANG',
+                projek: 'FELISA ESTATE',
+                hari: 6,
+                upah: 120000,
+                lembur: 0,
+                makan: 30000,
+                insentif: 0,
+                kasbon: 0
             });
+            simpanKeLokal();
+            renderTabel();
+        }
 
-            // Sembunyikan filter projek & posisi untuk Staff Kantor
-            const boxPrj = document.getElementById('boxFilterProjek');
-            const boxPos = document.getElementById('boxFilterPosisi');
-            const isStaff = fKategori === 'Staff Kantor';
-            boxPrj.classList.toggle('opacity-30', isStaff);
-            boxPrj.classList.toggle('pointer-events-none', isStaff);
-            boxPos.classList.toggle('opacity-30', isStaff);
-            boxPos.classList.toggle('pointer-events-none', isStaff);
+        function hapusBaris(index) {
+            if (confirm(`Yakin ingin menghapus baris ${dataTransaksi[index].nama} (${dataTransaksi[index].projek})?`)) {
+                dataTransaksi.splice(index, 1);
+                simpanKeLokal();
+                renderTabel();
+            }
         }
 
         function jalankanFilter() {
-            let tampil = 0, totalLembur = 0, totalBersih = 0, totalKasbon = 0;
+            renderTabel();
+        }
 
-            document.querySelectorAll('.row-pekerja').forEach(row => {
-                const kat = row.dataset.kategori;
-                const prj = row.dataset.projek;
-                const pos = row.dataset.posisi;
+        // Buka Slip Gaji Gabungan (Satu orang bisa beberapa proyek sekaligus!)
+        function bukaSlipPekerja(namaPekerja) {
+            const barisPekerja = dataTransaksi.filter(d => d.nama.trim().toUpperCase() === namaPekerja.trim().toUpperCase());
+            if (barisPekerja.length === 0) return;
 
-                const cocok = (!fKategori || kat === fKategori)
-                    && (!fProjek || prj === fProjek)
-                    && (!fPosisi || pos === fPosisi);
+            const pertama = barisPekerja[0];
+            document.getElementById('slipNama').innerText = pertama.nama;
+            document.getElementById('slipTtdNama').innerText = pertama.nama;
+            document.getElementById('slipPosisi').innerText = pertama.posisi;
+            document.getElementById('slipPeriodeDisplay').innerText = document.getElementById('inputPeriode').value;
+            document.getElementById('slipTglCetak').innerText = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
-                row.style.display = cocok ? '' : 'none';
-                if (!cocok) return;
+            const tbodySlip = document.getElementById('slipTbodyProyek');
+            tbodySlip.innerHTML = '';
 
-                tampil++;
-                // ambil nilai kalkulasi dari row
-                const isHarian = kat === 'Pekerja Harian';
-                const data = isHarian ? hitungNilai(row) : hitungNilaiStaff(row);
-                totalLembur  += isHarian ? data.lembur : data.lembur;
-                totalBersih  += data.bersih;
-                totalKasbon  += data.kasbon;
+            let grandKotor = 0;
+            let grandKasbon = 0;
+
+            barisPekerja.forEach(item => {
+                const tarifLembur = (Number(item.upah) || 0) / 8;
+                const subPokok = (Number(item.hari) || 0) * (Number(item.upah) || 0);
+                const subLembur = (Number(item.lembur) || 0) * tarifLembur;
+                const subKotor = subPokok + subLembur + (Number(item.makan) || 0) + (Number(item.insentif) || 0);
+                grandKotor += subKotor;
+                grandKasbon += (Number(item.kasbon) || 0);
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-2 font-bold text-slate-800">${escapeHtml(item.projek)}</td>
+                    <td class="p-2 text-center">${item.hari} hari</td>
+                    <td class="p-2 text-right">${formatRp(item.upah)}</td>
+                    <td class="p-2 text-center">${item.lembur} jam (${formatRp(tarifLembur)}/jam)</td>
+                    <td class="p-2 text-right">${formatRp(item.makan)}</td>
+                    <td class="p-2 text-right font-bold text-emerald-800">${formatRp(subKotor)}</td>
+                `;
+                tbodySlip.appendChild(tr);
             });
 
-            document.getElementById('summaryJumlah').innerText = tampil + ' Orang';
-            document.getElementById('summaryLembur').innerText = totalLembur.toFixed(1) + ' Jam';
-            document.getElementById('summaryTotal').innerText  = formatRp(totalBersih);
-            document.getElementById('summaryKasbon').innerText = formatRp(totalKasbon);
-        }
+            const grandBersih = grandKotor - grandKasbon;
+            document.getElementById('slipTotalKotor').innerText = formatRp(grandKotor);
+            document.getElementById('slipKasbonNilai').innerText = '- ' + formatRp(grandKasbon);
+            document.getElementById('slipSisaDiterima').innerText = formatRp(grandBersih);
 
-        // ============================================================
-        // HITUNG BARIS PEKERJA HARIAN
-        // ============================================================
-        function hitungNilai(row) {
-            const hari   = parseFloat(row.querySelector('.inp-hari')?.value)   || 0;
-            const pokok  = parseFloat(row.querySelector('.inp-pokok')?.value)  || 0;
-            const jam    = parseFloat(row.querySelector('.inp-lembur')?.value) || 0;
-            const makan  = parseFloat(row.querySelector('.inp-makan')?.value)  || 0;
-            const ins    = parseFloat(row.querySelector('.inp-insentif')?.value)|| 0;
-            const kasbon = parseFloat(row.querySelector('.inp-kasbon')?.value) || 0;
-
-            const tarifLembur = pokok / 8; // upah/hari ÷ 8
-            const upahPokok   = hari * pokok;
-            const upahLembur  = jam * tarifLembur;
-            const totalUpah   = upahPokok + upahLembur + makan + ins;
-            const bersih      = totalUpah - kasbon;
-
-            return { hari, pokok, jam, tarifLembur, upahPokok, upahLembur, makan, ins, kasbon, totalUpah, bersih, lembur: jam };
-        }
-
-        function hitungBaris(el) {
-            const row = el.closest('tr');
-            const d = hitungNilai(row);
-
-            row.querySelector('.inp-tarif-display').innerText = formatRp(d.tarifLembur);
-            row.querySelector('.disp-total-upah').innerText   = formatRp(d.totalUpah);
-            row.querySelector('.disp-bersih').innerText       = formatRp(d.bersih);
-
-            jalankanFilter();
-        }
-
-        // ============================================================
-        // HITUNG BARIS STAFF KANTOR
-        // ============================================================
-        function hitungNilaiStaff(row) {
-            const hari    = parseFloat(row.querySelector('.inp-hari')?.value)   || 0;
-            const pokok   = parseFloat(row.querySelector('.inp-pokok')?.value)  || 0;
-            const jam     = parseFloat(row.querySelector('.inp-lembur')?.value) || 0;
-            const tarif   = parseFloat(row.querySelector('.inp-tarif')?.value)  || 0;
-            const kasbon  = parseFloat(row.querySelector('.inp-kasbon')?.value) || 0;
-
-            const lembur  = jam * tarif;
-            const bersih  = pokok + lembur - kasbon;
-
-            return { hari, pokok, jam, tarif, lembur, kasbon, bersih };
-        }
-
-        function hitungBarisStaff(el) {
-            const row = el.closest('tr');
-            const d = hitungNilaiStaff(row);
-
-            row.querySelector('.disp-total-lembur').innerText = formatRp(d.lembur);
-            row.querySelector('.disp-bersih').innerText       = formatRp(d.bersih);
-
-            jalankanFilter();
-        }
-
-        // ============================================================
-        // SLIP GAJI — PEKERJA HARIAN
-        // ============================================================
-        function bukaSlip(btn) {
-            const row  = btn.closest('tr');
-            const nama = row.querySelector('td:first-child p').innerText;
-            const uid  = row.querySelector('td:first-child span').innerText.replace('UID: ','');
-            const posisi  = row.dataset.posisi;
-            const projek  = row.dataset.projek;
-            const d = hitungNilai(row);
-
-            document.getElementById('slipNama').innerText    = nama;
-            document.getElementById('slipKategori').innerText = 'Pekerja Harian';
-            document.getElementById('slipPosisi').innerText  = posisi;
-            document.getElementById('slipProjek').innerText  = projek;
-            document.getElementById('slipRowProjek').style.display = projek && projek !== '-' ? 'flex' : 'none';
-
-            const box = document.getElementById('slipRincianBox');
-            box.innerHTML = baris('Upah Pokok Harian', formatRp(d.upahPokok),
-                            `${d.hari} hari × ${formatRp(d.pokok)}`)
-                + baris('Upah Lembur', formatRp(d.upahLembur),
-                            `${d.jam} jam × ${formatRp(d.tarifLembur)} (upah/hari÷8)`)
-                + baris('Uang Makan', formatRp(d.makan))
-                + baris('Insentif / Transport', formatRp(d.ins))
-                + `<div class="flex justify-between font-bold pt-1 border-t border-slate-200">
-                        <span class="text-slate-700">Total Upah</span>
-                        <span class="text-teal-700">${formatRp(d.totalUpah)}</span>
-                   </div>`
-                + (d.kasbon > 0 ? baris('(-) Kasbon', formatRp(d.kasbon), '', 'text-rose-600') : '');
-
-            const kNote = document.getElementById('slipKasbonNote');
-            kNote.style.display = d.kasbon > 0 ? '' : 'none';
-            document.getElementById('slipKasbonAmt').innerText = formatRp(d.kasbon);
-            document.getElementById('slipTotalBersih').innerText = formatRp(d.bersih);
-
-            bukaModal();
-        }
-
-        // ============================================================
-        // SLIP GAJI — STAFF KANTOR
-        // ============================================================
-        function bukaSlipStaff(btn) {
-            const row  = btn.closest('tr');
-            const nama = row.querySelector('td:first-child p').innerText;
-            const d = hitungNilaiStaff(row);
-
-            document.getElementById('slipNama').innerText    = nama;
-            document.getElementById('slipKategori').innerText = 'Staff Kantor';
-            document.getElementById('slipRowPosisi').style.display = 'none';
-            document.getElementById('slipRowProjek').style.display = 'none';
-
-            const box = document.getElementById('slipRincianBox');
-            box.innerHTML = baris('Gaji Pokok Bulanan', formatRp(d.pokok),
-                            `${d.hari} hari masuk`)
-                + baris('Upah Lembur', formatRp(d.lembur),
-                            `${d.jam} jam × ${formatRp(d.tarif)}`)
-                + (d.kasbon > 0 ? baris('(-) Kasbon', formatRp(d.kasbon), '', 'text-rose-600') : '');
-
-            const kNote = document.getElementById('slipKasbonNote');
-            kNote.style.display = d.kasbon > 0 ? '' : 'none';
-            document.getElementById('slipKasbonAmt').innerText = formatRp(d.kasbon);
-            document.getElementById('slipTotalBersih').innerText = formatRp(d.bersih);
-
-            bukaModal();
-        }
-
-        function baris(label, nilai, sub = '', kelas = 'text-slate-700') {
-            return `<div class="flex justify-between items-start">
-                <span class="${kelas}">${label}</span>
-                <div class="text-right">
-                    <span class="font-semibold ${kelas}">${nilai}</span>
-                    ${sub ? `<div class="text-[10px] text-slate-400">${sub}</div>` : ''}
-                </div>
-            </div>`;
-        }
-
-        function bukaModal() {
             document.getElementById('modalSlip').classList.remove('hidden');
             document.body.classList.add('slip-open');
         }
@@ -961,28 +700,15 @@
         function tutupSlip() {
             document.getElementById('modalSlip').classList.add('hidden');
             document.body.classList.remove('slip-open');
-            // Reset posisi/projek row agar slip staff tidak bocor ke harian
-            document.getElementById('slipRowPosisi').style.display = 'flex';
-            document.getElementById('slipRowProjek').style.display = 'flex';
         }
 
-        // ============================================================
-        // FORMAT & INIT
-        // ============================================================
-        function formatRp(n) {
-            return 'Rp ' + Number(n).toLocaleString('id-ID');
+        function escapeHtml(text) {
+            if (!text) return '';
+            return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
 
-        // Hitung semua baris pada load
-        document.querySelectorAll('#tbodyHarian .row-pekerja').forEach(row => {
-            hitungBaris(row.querySelector('.inp-hari'));
-        });
-        document.querySelectorAll('#tbodyStaff .row-pekerja').forEach(row => {
-            hitungBarisStaff(row.querySelector('.inp-hari'));
-        });
-        jalankanFilter();
+        // Render awal saat halaman dibuka
+        renderTabel();
     </script>
-
-<script src="projek-manager.js"></script>
 </body>
 </html>
