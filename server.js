@@ -1986,7 +1986,7 @@ const server = http.createServer((req, res) => {
             }
 
             // Validasi Tabrakan UID RFID Duplikat
-            const uidExists = dummyData.karyawanAktif.some(k => k.uid.toUpperCase() === uid);
+            const uidExists = dummyData.karyawanAktif.some(k => k.uid && k.uid.toUpperCase() === uid);
             if (uidExists) {
                 res.writeHead(302, { 'Location': '/karyawan?tab=aktif&msg=err_uid_duplikat' });
                 res.end();
@@ -2140,7 +2140,7 @@ const server = http.createServer((req, res) => {
             const target = dummyData.karyawanArsip[idx];
 
             // Validasi Tabrakan UID saat Restore (Cek apakah UID sudah dipakai oleh karyawan aktif lain)
-            const uidConflict = dummyData.karyawanAktif.some(k => k.uid.toUpperCase() === target.uid.toUpperCase());
+            const uidConflict = target.uid ? dummyData.karyawanAktif.some(k => k.uid && k.uid.toUpperCase() === target.uid.toUpperCase()) : false;
             if (uidConflict) {
                 res.writeHead(302, { 'Location': '/karyawan?tab=arsip&msg=err_restore_conflict' });
                 res.end();
