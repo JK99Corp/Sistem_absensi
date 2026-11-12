@@ -213,7 +213,7 @@ function renderLayout(title, activeMenu, content, currentUser = null) {
         { id: 'dashboard', href: '/dashboard', icon: 'fa-chart-bar', label: 'Dashboard' },
         { id: 'riwayat', href: '/riwayat', icon: 'fa-clipboard-list', label: 'Riwayat Absensi' },
         { id: 'rekap', href: '/rekap', icon: 'fa-calendar-week', label: 'Rekap Mingguan' },
-        { id: 'upah', href: '/upah', icon: 'fa-money-bill-wave', label: 'Upah & Lembur' },
+        { id: 'upah', href: '/upah', icon: 'fa-money-bill-wave', label: 'Form Transaksi' },
         { id: 'karyawan', href: '/karyawan', icon: 'fa-users', label: 'Karyawan' },
         { id: 'kartu-rfid', href: '/kartu-rfid', icon: 'fa-id-card-clip', label: 'Kartu RFID' },
         { id: 'device', href: '/device', icon: 'fa-desktop', label: 'Device' }
@@ -945,7 +945,7 @@ function renderUpah(filterKategori = '', currentUser = null) {
     const content = `
         <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
             <div>
-                <h2 class="text-2xl font-bold text-slate-800">Upah & Lembur Karyawan</h2>
+                <h2 class="text-2xl font-bold text-slate-800">Form Transaksi Karyawan</h2>
                 <p class="text-base text-slate-500 mt-0.5">
                     Perhitungan gaji pokok dan upah lembur otomatis untuk Staff Kantor & Pekerja Harian
                 </p>
@@ -1202,7 +1202,7 @@ function renderUpah(filterKategori = '', currentUser = null) {
         </script>
     `;
 
-    return renderLayout('Upah & Lembur', 'upah', content, currentUser);
+    return renderLayout('Form Transaksi', 'upah', content, currentUser);
 }
 
 function renderKaryawan(tab = 'aktif', notifMsg = '', currentUser = null, notifType = 'success') {
@@ -1475,7 +1475,7 @@ function renderKaryawan(tab = 'aktif', notifMsg = '', currentUser = null, notifT
                                        class="w-full border-2 border-slate-300 rounded-lg px-3 py-2 text-sm font-bold text-slate-800 bg-white">
                             </div>
                         </div>
-                        <p class="text-[11px] text-slate-500 italic">*Nominal ini dapat disesuaikan kembali sewaktu-waktu oleh staf keuangan di menu Upah & Lembur.</p>
+                        <p class="text-[11px] text-slate-500 italic">*Nominal ini dapat disesuaikan kembali sewaktu-waktu oleh staf keuangan di menu Form Transaksi.</p>
                     </div>
 
                     <div class="mb-5">

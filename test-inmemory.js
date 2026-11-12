@@ -89,7 +89,7 @@ async function runAudit() {
         { url: '/dashboard', title: 'Dashboard', check: '07:30' },
         { url: '/riwayat', title: 'Riwayat Absensi', check: 'Batas Masuk' },
         { url: '/rekap', title: 'Rekap Mingguan', check: 'Rekap Mingguan' },
-        { url: '/upah', title: 'Upah & Lembur (Semua)', check: 'Upah & Lembur Karyawan' },
+        { url: '/upah', title: 'Form Transaksi (Semua)', check: 'Form Transaksi' },
         { url: '/upah?kategori=Staff+Kantor', title: 'Upah (Filter Staff Kantor)', check: 'Staff Kantor' },
         { url: '/upah?kategori=Pekerja+Harian', title: 'Upah (Filter Pekerja Harian)', check: 'Pekerja Harian' },
         { url: '/karyawan?tab=aktif', title: 'Data Karyawan (Tab Aktif)', check: 'Karyawan Aktif' },
