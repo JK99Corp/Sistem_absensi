@@ -837,6 +837,18 @@ function renderDashboard(initKategori = '', initDevice = '', currentUser = null)
 }
 
 function renderUpah(filterKategori = '', currentUser = null) {
+    const upahHtmlPath = path.join(__dirname, 'preview', 'upah.html');
+    if (fs.existsSync(upahHtmlPath)) {
+        let html = fs.readFileSync(upahHtmlPath, 'utf8');
+        if (currentUser) {
+            html = html.replace(/<p class="text-sm font-bold text-slate-800 leading-tight truncate">.*?<\/p>/,
+                `<p class="text-sm font-bold text-slate-800 leading-tight truncate">${escapeHtml(currentUser.nama || currentUser.username)}</p>`);
+            html = html.replace(/<p class="text-\[11px\] font-semibold text-slate-500 capitalize">.*?<\/p>/,
+                `<p class="text-[11px] font-semibold text-slate-500 capitalize">${escapeHtml(currentUser.roleLabel || currentUser.role)}</p>`);
+        }
+        return html;
+    }
+
     let list = dummyData.karyawanUpah;
     if (filterKategori) {
         list = list.filter(k => k.kategori === filterKategori);
@@ -1889,7 +1901,10 @@ const server = http.createServer((req, res) => {
         } catch (_) {}
     }
     const parsedUrl = new URL(reqUrl, 'http://localhost:8000');
-    const pathname = parsedUrl.pathname.replace(/\/$/, '') || '/';
+    let pathname = parsedUrl.pathname.replace(/\/$/, '') || '/';
+    if (pathname.endsWith('.html') && pathname.length > 5) {
+        pathname = pathname.slice(0, -5);
+    }
     const query = Object.fromEntries(parsedUrl.searchParams.entries());
 
     // Handle Static Images (Logo)
