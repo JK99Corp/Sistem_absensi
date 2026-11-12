@@ -846,6 +846,19 @@ function renderUpah(filterKategori = '', currentUser = null) {
             html = html.replace(/<p class="text-\[11px\] font-semibold text-slate-500 capitalize">.*?<\/p>/,
                 `<p class="text-[11px] font-semibold text-slate-500 capitalize">${escapeHtml(currentUser.roleLabel || currentUser.role)}</p>`);
         }
+        // Sinkronisasi data proyek dan pekerja terkini dari database
+        if (dummyData && dummyData.daftarProjek && dummyData.daftarProjek.length > 0) {
+            html = html.replace(/const DAFTAR_PROJEK = \[.*?\];/s, `const DAFTAR_PROJEK = ${JSON.stringify(dummyData.daftarProjek)};`);
+        }
+        if (dummyData && dummyData.karyawanAktif && dummyData.karyawanAktif.length > 0) {
+            const listPekerjaDb = dummyData.karyawanAktif.map(k => ({
+                k: k.kode || k.uid || `JK-${k.id}`,
+                n: k.nama,
+                p: k.posisi || (k.kategori === 'Staff Kantor' ? 'STAFF KANTOR' : 'TUKANG')
+            }));
+            html = html.replace(/const DAFTAR_PEKERJA = \[.*?\];/s, `const DAFTAR_PEKERJA = ${JSON.stringify(listPekerjaDb)};`);
+            html = html.replace(/<span id="badgeTotalMasterPekerja">.*?<\/span>/, `<span id="badgeTotalMasterPekerja">${listPekerjaDb.length} Pekerja Terdaftar</span>`);
+        }
         return html;
     }
 

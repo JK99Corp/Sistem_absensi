@@ -36,9 +36,9 @@
             box-sizing: border-box;
         }
         .form-input-lg:focus {
-            border-color: #16a34a;
+            border-color: #0d9488;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.25);
             background: #ffffff;
         }
         .form-input-num {
@@ -128,7 +128,7 @@
                 <span>Rekap Kehadiran</span>
             </a>
             <a href="upah.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-bold bg-teal-600 text-white shadow-md">
-                <i class="fas fa-money-bill-wave w-5 text-center text-base"></i>
+                <i class="fas fa-file-invoice-dollar w-5 text-center text-base"></i>
                 <span>Form Transaksi</span>
             </a>
             <a href="karyawan.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-700/70 hover:text-white transition-colors">
@@ -172,7 +172,7 @@
 
                 <div>
                     <h2 class="text-sm md:text-base font-bold text-slate-800 leading-tight">Form Transaksi Karyawan</h2>
-                    <p class="text-[11px] text-slate-500 hidden sm:block">Input Absensi, Upah Harian, Lembur &amp; Cetak Slip Upah (Pekerja Harian &amp; Staff Kantor)</p>
+                    <p class="text-[11px] text-slate-500 hidden sm:block">Input Absensi, Upah Harian, Lembur &amp; Cetak Slip Upah Multi-Proyek (Pekerja Harian &amp; Staff Kantor)</p>
                 </div>
             </div>
 
@@ -212,10 +212,10 @@
                     <span class="text-xs font-bold text-slate-500 uppercase tracking-wide">Periode:</span>
                     <div class="flex items-center gap-2">
                         <input type="date" id="tglMulai" value="2026-10-24" onchange="updatePeriodeKalender()"
-                               class="border-2 border-slate-300 bg-white rounded-lg px-3 py-1.5 text-xs md:text-sm font-bold text-slate-800 focus:border-green-600 focus:outline-none cursor-pointer">
+                               class="border-2 border-slate-300 bg-white rounded-lg px-3 py-1.5 text-xs md:text-sm font-bold text-slate-800 focus:border-teal-600 focus:outline-none cursor-pointer">
                         <span class="text-xs font-bold text-slate-400">s/d</span>
                         <input type="date" id="tglSelesai" value="2026-11-06" onchange="updatePeriodeKalender()"
-                               class="border-2 border-slate-300 bg-white rounded-lg px-3 py-1.5 text-xs md:text-sm font-bold text-slate-800 focus:border-green-600 focus:outline-none cursor-pointer">
+                               class="border-2 border-slate-300 bg-white rounded-lg px-3 py-1.5 text-xs md:text-sm font-bold text-slate-800 focus:border-teal-600 focus:outline-none cursor-pointer">
                     </div>
                     <span id="labelPeriodeAktif" class="text-xs md:text-sm font-bold text-emerald-900 bg-emerald-100 px-3 py-1 rounded-lg">
                         24 Oktober - 06 Nopember 2026
@@ -223,8 +223,8 @@
                 </div>
 
                 <div class="text-xs text-slate-500 font-semibold flex items-center gap-1.5">
-                    <i class="fas fa-users text-emerald-600"></i>
-                    <span>252 Pekerja Terdaftar</span>
+                    <i class="fas fa-users text-teal-600"></i>
+                    <span id="badgeTotalMasterPekerja">252 Pekerja Terdaftar</span>
                 </div>
             </div>
 
@@ -238,39 +238,67 @@
                         <div class="w-8 h-8 rounded-lg bg-teal-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
                             <i class="fas fa-file-invoice-dollar"></i>
                         </div>
-                        <h3 class="text-base font-bold text-slate-900">Form Transaksi</h3>
+                        <div>
+                            <h3 class="text-base font-bold text-slate-900">Form Transaksi</h3>
+                            <p id="labelModeForm" class="text-[11px] text-slate-500 font-medium">Input Transaksi Baru</p>
+                        </div>
                     </div>
                     <button type="button" onclick="resetFormBaru()" 
-                            class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs inline-flex items-center gap-1.5 border border-slate-300 cursor-pointer transition-colors">
-                        <i class="fas fa-redo-alt"></i> Reset Form
+                            class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs inline-flex items-center gap-1.5 border border-slate-300 cursor-pointer transition-colors shadow-sm">
+                        <i class="fas fa-plus"></i> Transaksi Baru
                     </button>
                 </div>
 
                 <!-- 1. DATA PEKERJA -->
                 <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 md:p-5 mb-5">
-                    <h4 class="text-xs font-bold uppercase text-slate-500 tracking-wider mb-3">Data Pekerja</h4>
+                    <h4 class="text-xs font-bold uppercase text-slate-500 tracking-wider mb-3 flex items-center justify-between">
+                        <span>Data Pekerja</span>
+                        <span class="text-[11px] text-teal-700 font-semibold normal-case">Pilih dari dropdown atau ketik kode / nama</span>
+                    </h4>
 
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
-                        <div class="md:col-span-6">
-                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">
-                                Pekerja:
+                        <!-- Komponen Pencarian Pekerja (Searchable Combobox Bebas Bug) -->
+                        <div class="md:col-span-6 relative" id="wrapperCariPekerja">
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5 flex items-center justify-between">
+                                <span>Pekerja:</span>
+                                <span id="infoPekerjaTerpilih" class="text-[11px] font-mono text-emerald-700 font-extrabold normal-case hidden">
+                                    <i class="fas fa-check-circle"></i> Terverifikasi
+                                </span>
                             </label>
-                            <div class="relative">
-                                <input type="text" list="datalistPekerja" id="inputPekerja"
-                                       oninput="onPilihPekerja(this.value)"
-                                       placeholder="Cari kode atau nama pekerja..."
-                                       class="form-input-lg uppercase pl-10 font-bold text-slate-900 bg-white">
-                                <i class="fas fa-search absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
+
+                            <div class="relative flex items-center">
+                                <i class="fas fa-search absolute left-3.5 text-slate-400 text-sm pointer-events-none"></i>
+                                <input type="text" id="inputPekerja"
+                                       autocomplete="off"
+                                       onfocus="onFocusInputPekerja()"
+                                       oninput="handleInputPekerja(event)"
+                                       placeholder="Ketik kode (contoh: KANCIL-013) atau nama pekerja..."
+                                       class="form-input-lg uppercase pl-10 pr-10 font-bold text-slate-900 bg-white">
+                                <button type="button" id="btnClearPekerja" onclick="resetInputPekerjaManual()"
+                                        class="absolute right-3 text-slate-400 hover:text-slate-600 hidden text-sm cursor-pointer p-1"
+                                        title="Hapus pencarian">
+                                    <i class="fas fa-times-circle text-base"></i>
+                                </button>
                             </div>
-                            <datalist id="datalistPekerja"></datalist>
+
+                            <!-- Floating Dropdown Hasil Pencarian -->
+                            <div id="dropdownPekerjaPopup"
+                                 class="absolute left-0 right-0 top-full mt-1.5 bg-white border border-slate-300 rounded-xl shadow-2xl z-50 hidden max-h-72 overflow-y-auto divide-y divide-slate-100">
+                                <div class="px-3.5 py-2 bg-slate-100 text-[11px] font-bold text-slate-600 uppercase tracking-wider flex justify-between items-center sticky top-0 z-10 border-b border-slate-200">
+                                    <span>Pilih Pekerja</span>
+                                    <span id="labelTotalHasilPekerja" class="text-teal-700 font-extrabold">252 Pekerja</span>
+                                </div>
+                                <div id="listPekerjaItems" class="p-1"></div>
+                            </div>
                         </div>
 
+                        <!-- Dropdown Posisi -->
                         <div class="md:col-span-3">
                             <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">
                                 Posisi:
                             </label>
                             <select id="posisiPekerja" onchange="onUbahPosisi(this.value)"
-                                    class="form-input-lg font-bold bg-white cursor-pointer">
+                                    class="form-input-lg font-bold bg-white cursor-pointer border-2 border-slate-300 focus:border-teal-500">
                                 <option value="TUKANG">TUKANG</option>
                                 <option value="MANDOR">MANDOR</option>
                                 <option value="SEMI TUKANG">SEMI TUKANG</option>
@@ -283,6 +311,7 @@
                             </select>
                         </div>
 
+                        <!-- Upah Pokok Harian -->
                         <div class="md:col-span-3">
                             <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">
                                 Upah / Hari (Rp):
@@ -299,21 +328,21 @@
 
                 <!-- 2. RINCIAN PROYEK -->
                 <div class="mb-5">
-                    <h4 class="text-xs font-bold uppercase text-slate-500 tracking-wider mb-3">Rincian Proyek</h4>
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-xs font-bold uppercase text-slate-500 tracking-wider">
+                            Rincian Alokasi Proyek
+                        </h4>
+                        <span class="text-xs text-slate-500 font-medium">Bisa dialokasikan ke lebih dari 1 proyek (Multi-Proyek)</span>
+                    </div>
 
                     <div id="containerProyekList" class="space-y-3.5">
-                        <!-- Baris proyek dirender oleh JS -->
+                        <!-- Baris proyek dirender dinamis oleh JS -->
                     </div>
 
                     <div class="mt-3.5 flex flex-wrap items-center gap-3">
                         <button type="button" onclick="tambahBlokProyek()" 
-                                class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 px-4 rounded-xl text-xs md:text-sm shadow-sm inline-flex items-center gap-1.5 cursor-pointer transition-colors">
-                            <i class="fas fa-plus"></i> Tambah Proyek
-                        </button>
-                        <button type="button" id="btnHapusTerakhir" onclick="hapusBlokProyekTerakhir()" 
-                                class="bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold py-2.5 px-3.5 rounded-xl text-xs md:text-sm border border-rose-300 shadow-sm inline-flex items-center gap-1.5 cursor-pointer transition-colors"
-                                style="display: none;">
-                            <i class="fas fa-undo-alt text-rose-600"></i> Batal Tambah
+                                class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs md:text-sm shadow-sm inline-flex items-center gap-1.5 cursor-pointer transition-colors">
+                            <i class="fas fa-plus"></i> Tambah Proyek Lain
                         </button>
                     </div>
                 </div>
@@ -323,7 +352,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
                         <!-- Total Upah -->
                         <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
-                            <span class="text-xs text-slate-400 uppercase font-bold block mb-1">Total Upah:</span>
+                            <span class="text-xs text-slate-400 uppercase font-bold block mb-1">Total Upah Kotor:</span>
                             <div class="text-2xl font-black text-white" id="formTotalKotor">Rp 0</div>
                             <span class="text-[11px] text-slate-400 mt-1 block font-medium" id="formRincianHariLembur">0 Hari Kerja • 0 Jam Lembur</span>
                         </div>
@@ -331,7 +360,7 @@
                         <!-- Kasbon -->
                         <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
                             <label class="text-xs text-rose-400 uppercase font-bold block mb-1">
-                                Kasbon (Rp):
+                                Potongan Kasbon (Rp):
                             </label>
                             <input type="number" id="formKasbon" value="0" min="0" step="10000"
                                    oninput="hitungTotalForm()"
@@ -342,21 +371,24 @@
                         <!-- Sisa Diterima -->
                         <div class="bg-emerald-600 p-4 rounded-xl border border-emerald-400 text-white shadow-md">
                             <span class="text-xs uppercase font-extrabold text-emerald-100 block mb-1">
-                                Sisa Diterima:
+                                Sisa Gaji Yang Diterima:
                             </span>
                             <div class="text-3xl font-black tracking-tight" id="formSisaDiterima">Rp 0</div>
                         </div>
                     </div>
 
-                    <div class="flex flex-wrap items-center justify-end gap-3 mt-5 pt-4 border-t border-slate-800">
-                        <button type="button" onclick="simpanTransaksi(false)" 
-                                class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2.5 px-5 rounded-xl text-xs md:text-sm shadow cursor-pointer transition-colors inline-flex items-center gap-1.5">
-                            <i class="fas fa-save"></i> Simpan
-                        </button>
-                        <button type="button" onclick="simpanTransaksi(true)" 
-                                class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-2.5 px-6 rounded-xl text-xs md:text-sm shadow-md cursor-pointer transition-colors inline-flex items-center gap-2">
-                            <i class="fas fa-print text-base"></i> Simpan &amp; Cetak Slip
-                        </button>
+                    <div class="flex flex-wrap items-center justify-between gap-3 mt-5 pt-4 border-t border-slate-800">
+                        <span id="labelStatusEdit" class="text-xs font-semibold text-amber-300"></span>
+                        <div class="flex items-center gap-3">
+                            <button type="button" onclick="simpanTransaksi(false)" 
+                                    class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2.5 px-5 rounded-xl text-xs md:text-sm shadow cursor-pointer transition-colors inline-flex items-center gap-1.5">
+                                <i class="fas fa-save"></i> Simpan Transaksi
+                            </button>
+                            <button type="button" onclick="simpanTransaksi(true)" 
+                                    class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-2.5 px-6 rounded-xl text-xs md:text-sm shadow-md cursor-pointer transition-colors inline-flex items-center gap-2">
+                                <i class="fas fa-print text-base"></i> Simpan &amp; Cetak Slip
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -368,15 +400,16 @@
             <div id="areaTabelRekap" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-8">
                 
                 <div class="px-5 py-3.5 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-slate-50 no-print">
-                    <h3 class="text-sm md:text-base font-bold text-slate-900">
-                        Daftar Transaksi Periode Ini
+                    <h3 class="text-sm md:text-base font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fas fa-list-check text-teal-600"></i>
+                        <span>Daftar Transaksi Periode Ini</span>
                     </h3>
 
                     <div class="flex items-center gap-2.5">
                         <div class="relative">
                             <input type="text" id="filterTabelInput" oninput="renderDaftarTransaksi()"
-                                   placeholder="Cari pekerja / proyek..." 
-                                   class="text-xs font-semibold pl-8 pr-3 py-1.5 rounded-lg border border-slate-300 bg-white focus:outline-none focus:border-green-600 w-52">
+                                   placeholder="Cari kode, nama, proyek..." 
+                                   class="text-xs font-semibold pl-8 pr-3 py-1.5 rounded-lg border border-slate-300 bg-white focus:outline-none focus:border-teal-600 w-56">
                             <i class="fas fa-search absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
                         </div>
 
@@ -394,7 +427,7 @@
                                 <th class="p-3 text-center w-12">No</th>
                                 <th class="p-3">Pekerja</th>
                                 <th class="p-3">Posisi</th>
-                                <th class="p-3">Proyek &amp; Hari</th>
+                                <th class="p-3">Rincian Proyek &amp; Hari</th>
                                 <th class="p-3 text-right">Total Upah</th>
                                 <th class="p-3 text-right text-rose-300 bg-rose-900/50">Kasbon</th>
                                 <th class="p-3 text-right text-emerald-300 bg-emerald-950">Sisa Diterima</th>
@@ -457,14 +490,14 @@
                         </div>
                     </div>
 
-                    <!-- Rincian Multi-Proyek -->
+                    <!-- Rincian Proyek -->
                     <div class="py-3">
-                        <p class="text-[11px] font-black text-slate-700 uppercase mb-1.5">Rincian Pekerjaan &amp; Proyek:</p>
-                        <div class="border border-slate-300 rounded-lg overflow-hidden">
-                            <table class="w-full text-xs">
-                                <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-300">
+                        <p class="text-xs font-bold text-slate-700 uppercase mb-2">Rincian Perhitungan Per Proyek:</p>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-xs border border-slate-200">
+                                <thead class="bg-slate-100 text-slate-700 uppercase font-extrabold text-[10px]">
                                     <tr>
-                                        <th class="p-2 text-left">Nama Proyek</th>
+                                        <th class="p-2 text-left">Proyek</th>
                                         <th class="p-2 text-center">Hari</th>
                                         <th class="p-2 text-right">Upah/Hari</th>
                                         <th class="p-2 text-center">Lembur</th>
@@ -479,39 +512,37 @@
                         </div>
                     </div>
 
-                    <!-- Total Kotor, Kasbon, dan Bersih -->
-                    <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200 space-y-1 text-xs">
-                        <div class="flex justify-between">
-                            <span class="text-slate-600 font-medium">Total Upah Kotor:</span>
+                    <!-- Total Kotor, Kasbon, dan Sisa Diterima -->
+                    <div class="pt-3 border-t-2 border-slate-800 space-y-1.5 text-xs md:text-sm">
+                        <div class="flex justify-between font-bold text-slate-700">
+                            <span>Total Upah Kotor:</span>
                             <span class="font-bold text-slate-800" id="slipTotalKotor">Rp 0</span>
                         </div>
                         <div class="flex justify-between text-rose-600 font-semibold" id="slipRowKasbon">
                             <span>Potongan Kasbon:</span>
                             <span id="slipKasbonNilai">- Rp 0</span>
                         </div>
-                        <div class="flex justify-between items-center pt-2 border-t border-slate-300 font-black text-sm text-emerald-950">
-                            <span>TOTAL UPAH BERSIH DITERIMA:</span>
+                        <div class="flex justify-between font-extrabold text-base md:text-lg border-t border-slate-200 pt-2 text-slate-900 bg-emerald-50/70 p-2 rounded-lg">
+                            <span class="text-emerald-900">Sisa Gaji Yang Diterima:</span>
                             <span class="text-lg md:text-xl text-emerald-800 font-black" id="slipSisaDiterima">Rp 0</span>
                         </div>
                     </div>
 
                     <!-- Tanda Tangan -->
-                    <div class="grid grid-cols-2 gap-4 text-center text-xs mt-4 pt-3 border-t border-dashed border-slate-300">
+                    <div class="mt-6 pt-4 border-t border-slate-200 grid grid-cols-2 gap-4 text-center text-xs">
                         <div>
-                            <p class="text-slate-500 text-[11px]">Penerima,</p>
-                            <div class="h-10"></div>
+                            <p class="text-slate-500 mb-10">Penerima,</p>
                             <p class="font-bold underline text-slate-800" id="slipTtdNama">-</p>
                         </div>
                         <div>
                             <p class="text-slate-500 text-[11px]">Samarinda, <span id="slipTglCetak">--</span></p>
-                            <p class="text-slate-500 text-[11px]">Admin Keuangan,</p>
-                            <div class="h-10"></div>
-                            <p class="font-bold underline text-slate-800">PT JAYA KEDHATON</p>
+                            <p class="text-slate-500 mb-10">Administrasi Keuangan,</p>
+                            <p class="font-bold underline text-slate-800">PT. JAYA KEDHATON</p>
                         </div>
                     </div>
 
-                    <!-- Tombol Modal (No Print) -->
-                    <div class="flex gap-2.5 mt-5 no-print pt-2 border-t border-slate-100">
+                    <!-- Tombol Cetak / Tutup Modal -->
+                    <div class="mt-6 flex gap-3 no-print">
                         <button type="button" onclick="window.print()" class="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-xl text-xs md:text-sm shadow cursor-pointer transition-colors inline-flex items-center justify-center gap-2">
                             <i class="fas fa-print"></i> Cetak Slip Ini
                         </button>
@@ -525,26 +556,12 @@
         </main>
     </div>
 
-    <!-- DATALIST STANDAR NAMA PROYEK -->
-    <datalist id="listProjekDatalist">
-        <option value="FELISA ESTATE"></option>
-        <option value="RUKO PAK DEDI"></option>
-        <option value="GREEN HOUSE"></option>
-        <option value="PAGAR RING ROAD"></option>
-        <option value="PROYEK RTT SAMBOJA"></option>
-        <option value="ASPOL 2026"></option>
-        <option value="WORKSHOP RING ROAD"></option>
-        <option value="TAMAN BALKOT 2025"></option>
-        <option value="KANTOR DIGITAL MARKETING"></option>
-        <option value="GUDANG"></option>
-    </datalist>
-
     <!-- SCRIPT DATA & LOGIKA FORM TRANSAKSI -->
     <script>
-        // Data 252 Pekerja dari Sheet KODE Baris 1-285
+        // Data 252 Pekerja Resmi dari Sheet KODE
         const DAFTAR_PEKERJA = [{"k": "SUDIRO-001", "n": "IMAM MUHAMMAD SUDIRO", "p": "TUKANG"}, {"k": "SUDIRO-002", "n": "SUWITO", "p": "TUKANG"}, {"k": "SUDIRO-003", "n": "ARIS TARWADI", "p": "TUKANG"}, {"k": "SUDIRO-004", "n": "GUNARTO", "p": "TUKANG"}, {"k": "SUDIRO-005", "n": "DAVID BAYU SETIAWAN", "p": "TUKANG"}, {"k": "SUDIRO-006", "n": "ERVA BUDI SANTOSO", "p": "TUKANG"}, {"k": "SUDIRO-007", "n": "SUMADJI", "p": "TUKANG"}, {"k": "SUDIRO-008", "n": "MOH. MUKLIS", "p": "TUKANG"}, {"k": "SUDIRO-009", "n": "SUNAR", "p": "TUKANG"}, {"k": "SUDIRO-010", "n": "NARJUANTO", "p": "TUKANG"}, {"k": "SUDIRO-011", "n": "SURANI", "p": "TUKANG"}, {"k": "SUDIRO-012", "n": "PAULUS SUKAMTO", "p": "TUKANG"}, {"k": "SUDIRO-013", "n": "DONI SETIAWAN", "p": "TUKANG"}, {"k": "SUDIRO-014", "n": "FATQUL ROHMAN", "p": "TUKANG"}, {"k": "KANCIL-025", "n": "ACHMAD FRIADI", "p": "MANDOR"}, {"k": "KANCIL-017", "n": "AGUS SULIYANTO", "p": "TUKANG"}, {"k": "KANCIL-008", "n": "SUMARSONO", "p": "TUKANG"}, {"k": "KANCIL-013", "n": "MUSTOFA", "p": "TUKANG"}, {"k": "KANCIL-024", "n": "NUR HASAN", "p": "TUKANG"}, {"k": "KANCIL-014", "n": "DIDIK ANTO", "p": "TUKANG"}, {"k": "KANCIL-004", "n": "PANUT MULYONO", "p": "TUKANG"}, {"k": "KANCIL-003", "n": "BAHRUDIN", "p": "TUKANG"}, {"k": "KANCIL-018", "n": "SEGER", "p": "TUKANG"}, {"k": "KANCIL-012", "n": "EDI", "p": "TUKANG"}, {"k": "KANCIL-010", "n": "SAPOAN", "p": "SEMI TUKANG"}, {"k": "KANCIL-016", "n": "SURYO SETYAWAN", "p": "SEMI TUKANG"}, {"k": "KANCIL-009", "n": "EKO BUDI IRIAWAN", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-007", "n": "YOGI YUNISTIRA", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-001", "n": "TARI", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-022", "n": "AGUNG WIJAYA", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-021", "n": "SUKANI", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-011", "n": "MAULANA ABI SAPUTRA", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-002", "n": "ARI KURNIAWAN", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-005", "n": "VERI SETIAWAN", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-006", "n": "NICHOLAS ARIEL PRASETYO", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-015", "n": "ALDI CAHYO PRASETYO", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-026", "n": "ZAINAL ABIDIN", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-027", "n": "JOKO SUMARTO", "p": "TUKANG"}, {"k": "KANCIL-028", "n": "ENDRO NURSIYO", "p": "TUKANG"}, {"k": "KANCIL-029", "n": "SUMARI", "p": "TUKANG"}, {"k": "KANCIL-030", "n": "SISWANTO-KANCIL", "p": "TUKANG"}, {"k": "KANCIL-031", "n": "SUJIANTO", "p": "SEMI TUKANG"}, {"k": "KANCIL-019", "n": "SISWANTO", "p": "TUKANG"}, {"k": "KANCIL-020", "n": "RIQO YANUWAR SAPUTRA", "p": "TUKANG"}, {"k": "KANCIL-023", "n": "HENRI UTAMAN", "p": "TUKANG"}, {"k": "KANCIL-032", "n": "BOY SETIYAWAN", "p": "TUKANG"}, {"k": "KANCIL-033", "n": "SUMITO", "p": "TUKANG"}, {"k": "KANCIL-034", "n": "MUJIONO", "p": "TUKANG"}, {"k": "KANCIL-035", "n": "SUGENG TKG", "p": "TUKANG"}, {"k": "KANCIL-036", "n": "ALDO", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-037", "n": "CHOIRUL", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-038", "n": "NORWANA", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-039", "n": "GUNAWAN", "p": "TUKANG"}, {"k": "KANCIL-040", "n": "SUNARI", "p": "TUKANG"}, {"k": "KANCIL-041", "n": "KUDORI", "p": "TUKANG"}, {"k": "KANCIL-042", "n": "SUGIANTO", "p": "TUKANG"}, {"k": "KANCIL-043", "n": "ANDRIK SUSANTO", "p": "SEMI TUKANG"}, {"k": "KANCIL-044", "n": "TARJIANTO", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-045", "n": "DAMOKO", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-046", "n": "SUYONO", "p": "PEMBANTU TUKANG"}, {"k": "KANCIL-047", "n": "SUMARI", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-001", "n": "IMAM MUSTOFA", "p": "MANDOR"}, {"k": "TOPA-002", "n": "MARKANI", "p": "TUKANG"}, {"k": "TOPA-007", "n": "DIDIK RIFAI", "p": "TUKANG"}, {"k": "TOPA-012", "n": "SUDARSONO", "p": "TUKANG"}, {"k": "TOPA-016", "n": "GUNAJI", "p": "TUKANG"}, {"k": "TOPA-008", "n": "DIMAS DANU TIRTO", "p": "SEMI TUKANG"}, {"k": "TOPA-013", "n": "SUGIYONO", "p": "SEMI TUKANG"}, {"k": "TOPA-003", "n": "RAMADHANI PITRI PRATIKNO", "p": "SEMI TUKANG"}, {"k": "TOPA-004", "n": "YUDHA EKA RAMADHANI", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-005", "n": "LUKI ANDRIAN ARISANDI", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-006", "n": "KOSIM", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-009", "n": "KHOIRUL ROZIQIN", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-010", "n": "YOYOK SUSANTO", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-011", "n": "DIDIK AGUNG BAKTIAR", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-017", "n": "VIXI ANDRIAN", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-018", "n": "AHMAD MUKHLISON", "p": "TUKANG"}, {"k": "TOPA-019", "n": "AGUS SUNARKO", "p": "TUKANG"}, {"k": "TOPA-020", "n": "FIRSGIAN IBNU NAFIS", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-015", "n": "MIRUN", "p": "TUKANG"}, {"k": "TOPA-014", "n": "OMAR HADI", "p": "PEMBANTU TUKANG"}, {"k": "TOPA-021", "n": "SUDARSONO/DARSO", "p": "TUKANG"}, {"k": "TOPA-022", "n": "DODIK AGUNG BAKTIAR", "p": "PEMBANTU TUKANG"}, {"k": "GDG-001", "n": "BAGUS SETIAWAN", "p": "TUKANG"}, {"k": "GDG-002", "n": "MARTIN", "p": "RKS"}, {"k": "GDG-003", "n": "MEBA", "p": "PEMBANTU TUKANG"}, {"k": "GDG-004", "n": "HADI", "p": "PEMBANTU TUKANG"}, {"k": "GDG-005", "n": "ABDUL SUKUR", "p": "TUKANG"}, {"k": "GDG-006", "n": "KALIS", "p": "PEMBANTU TUKANG"}, {"k": "GDG-007", "n": "JATMIKO", "p": "PEMBANTU TUKANG"}, {"k": "GDG-008", "n": "SONDONG", "p": "TUKANG"}, {"k": "GDG-009", "n": "WAHID", "p": "TUKANG"}, {"k": "ALI-001", "n": "ALI MUHAMMAD", "p": "MANDOR"}, {"k": "ALI-011", "n": "MUHARDI WILONOTO", "p": "TUKANG"}, {"k": "ALI-002", "n": "JUREMI", "p": "TUKANG"}, {"k": "ALI-005", "n": "TRIWOKO", "p": "TUKANG"}, {"k": "ALI-017", "n": "DINO MARGO SAPUTRO", "p": "TUKANG"}, {"k": "ALI-019", "n": "M. ZAENURI", "p": "TUKANG"}, {"k": "ALI-007", "n": "ANDI PAMILU IRAWAN", "p": "TUKANG"}, {"k": "ALI-003", "n": "JOKO DWI PURNOMO", "p": "TUKANG"}, {"k": "ALI-013", "n": "RENDI MAULANA", "p": "PEMBANTU TUKANG"}, {"k": "ALI-014", "n": "DENI ADE PUTRA", "p": "PEMBANTU TUKANG"}, {"k": "ALI-018", "n": "M. RIFKI HIDAYAT", "p": "PEMBANTU TUKANG"}, {"k": "ALI-006", "n": "WAHYU AGUNG SETIAWAN", "p": "PEMBANTU TUKANG"}, {"k": "ALI-021", "n": "MUSTOFA", "p": "PEMBANTU TUKANG"}, {"k": "ALI-022", "n": "EDI NUGROHO", "p": "TUKANG"}, {"k": "ALI-023", "n": "AGUS PRASTIAWAN", "p": "TUKANG"}, {"k": "ALI-024", "n": "AHMAD ZAINURI", "p": "TUKANG"}, {"k": "ALI-025", "n": "ARIS WIBOWO", "p": "PEMBANTU TUKANG"}, {"k": "ALI-026", "n": "DWI SANTOSO", "p": "TUKANG"}, {"k": "ALI-027", "n": "MARULI HENY DIATMIKO", "p": "TUKANG"}, {"k": "ALI-028", "n": "PUNGKY ARI W", "p": "PEMBANTU TUKANG"}, {"k": "ALI-029", "n": "SLAMET B", "p": "TUKANG"}, {"k": "ALI-030", "n": "SUMANI", "p": "TUKANG"}, {"k": "ALI-031", "n": "YANTO RIADI", "p": "TUKANG"}, {"k": "ALI-032", "n": "SUYITNO", "p": "TUKANG"}, {"k": "ALI-004", "n": "EDI MUSTONO", "p": "TUKANG"}, {"k": "ALI-009", "n": "ONIK SETIAWAN", "p": "TUKANG"}, {"k": "ALI-010", "n": "PAERAN", "p": "PEMBANTU TUKANG"}, {"k": "ALI-012", "n": "YUDA KRIS SANDINI", "p": "PEMBANTU TUKANG"}, {"k": "ALI-015", "n": "SUYITNO", "p": "TUKANG"}, {"k": "ALI-016", "n": "IRFAN ANDREAN SAPUTRA", "p": "PEMBANTU TUKANG"}, {"k": "ALI-020", "n": "JANI", "p": "PEMBANTU TUKANG"}, {"k": "ALI-008", "n": "RIDHO BAGUS SUMANTRI", "p": "PEMBANTU TUKANG"}, {"k": "KEBUN-001", "n": "JAFAR ARBA", "p": "TUKANG"}, {"k": "KEBUN-002", "n": "ALBERTUS J MUDA", "p": "PEMBANTU TUKANG"}, {"k": "KEBUN-003", "n": "AHMAD MISBAQUL MUNIR", "p": "TUKANG"}, {"k": "KEBUN-004", "n": "DOMINIKUS D MUDA", "p": "PEMBANTU TUKANG"}, {"k": "KEBUN-005", "n": "ONIX", "p": "PEMBANTU TUKANG"}, {"k": "KEBUN-006", "n": "FABIANUS KOPO MUDA", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-021", "n": "ASROFI", "p": "MANDOR"}, {"k": "ASROFI-001", "n": "MASUDI/HADI", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-002", "n": "SUPRI", "p": "TUKANG"}, {"k": "ASROFI-022", "n": "RUDIANTO", "p": "TUKANG"}, {"k": "ASROFI-019", "n": "PRAYOKO", "p": "TUKANG"}, {"k": "ASROFI-007", "n": "ROKIM", "p": "TUKANG"}, {"k": "ASROFI-014", "n": "BASRI", "p": "TUKANG"}, {"k": "ASROFI-015", "n": "UJANG SUKIRMAN", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-016", "n": "AHMAD SUKUR", "p": "TUKANG"}, {"k": "ASROFI-017", "n": "SULANI", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-018", "n": "MAT RODLI", "p": "SEMI TUKANG"}, {"k": "ASROFI-020", "n": "MISNI", "p": "TUKANG"}, {"k": "ASROFI-006", "n": "MASNGUT", "p": "TUKANG"}, {"k": "ASROFI-008", "n": "RIO YUMAS OKTAVIANO", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-009", "n": "SUGIANTA", "p": "TUKANG"}, {"k": "ASROFI-010", "n": "IMAM SOPINGI", "p": "SEMI TUKANG"}, {"k": "ASROFI-011", "n": "DADANG RANU TANTOWI", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-012", "n": "NUR EFFENDI", "p": "TUKANG"}, {"k": "ASROFI-013", "n": "KHOIRI", "p": "TUKANG"}, {"k": "ASROFI-031", "n": "DWI NURWANTO", "p": "TUKANG"}, {"k": "ASROFI-032", "n": "SAFARI", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-033", "n": "ILHAM", "p": "TUKANG"}, {"k": "ASROFI-034", "n": "SRIANTO", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-035", "n": "RIAS", "p": "TUKANG"}, {"k": "ASROFI-036", "n": "NANDA AJI PANGESTU", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-037", "n": "NURHUDA", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-023", "n": "ANGGA PRADANA", "p": "TUKANG"}, {"k": "ASROFI-024", "n": "AGUS JARWANTO", "p": "TUKANG"}, {"k": "ASROFI-025", "n": "ALI MUSTOFA", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-026", "n": "HARIYANTO", "p": "TUKANG"}, {"k": "ASROFI-027", "n": "SUGENG", "p": "TUKANG"}, {"k": "ASROFI-028", "n": "MISYADI", "p": "TUKANG"}, {"k": "ASROFI-029", "n": "JOKO SUWITO", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-030", "n": "IMAM NAHROWI", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-038", "n": "HENDRO", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-039", "n": "ADI SONDONG", "p": "TUKANG"}, {"k": "asrofi-040", "n": "AHMAD BG", "p": "TUKANG"}, {"k": "ASROFI-041", "n": "AHMAD SHAIFUL BASHOR", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-042", "n": "JATMIKO WAHYUDIONO", "p": "PEMBANTU TUKANG"}, {"k": "ASROFI-003", "n": "AGUS SUPRAPTO", "p": "TUKANG"}, {"k": "ASROFI-004", "n": "EKA WAHYU PUTRA", "p": "SEMI TUKANG"}, {"k": "ASROFI-005", "n": "JOHAN P", "p": "SEMI TUKANG"}, {"k": "ASROFI-046", "n": "FAJAR", "p": "PEMBANTU TUKANG"}, {"k": "KASUN-001", "n": "KASUN", "p": "MANDOR"}, {"k": "KASUN-005", "n": "MIFTAHUL HUDA", "p": "TUKANG"}, {"k": "KASUN-004", "n": "NANANG ATHO ILLAHI", "p": "PEMBANTU TUKANG"}, {"k": "KASUN-003", "n": "M. HARUN", "p": "SEMI TUKANG"}, {"k": "KASUN-002", "n": "MUNAWIR", "p": "TUKANG"}, {"k": "GIPSUM-001", "n": "AGUS JALI", "p": "CAT"}, {"k": "GIPSUM-002", "n": "SUGENG WALUYO", "p": "CAT"}, {"k": "GIPSUM-003", "n": "RICO YANUAR SAPUTRO", "p": "TUKANG"}, {"k": "GIPSUM-004", "n": "HENRI UTAMAN", "p": "TUKANG"}, {"k": "GIPSUM-005", "n": "EDI PURWANTO", "p": "TUKANG"}, {"k": "GIPSUM-006", "n": "ANDRIANUS LEBA", "p": "PEMBANTU TUKANG"}, {"k": "MEP-001", "n": "AHMAD TAOFIK", "p": "MEP"}, {"k": "MEP-002", "n": "HENDI", "p": "MEP"}, {"k": "MEP-003", "n": "OBY NURJAMAN", "p": "MEP"}, {"k": "MEP-004", "n": "SAEFUL ANWAR", "p": "MEP"}, {"k": "LAS-001", "n": "EKO ANDRIANTO", "p": "MANDOR"}, {"k": "LAS-002", "n": "ASEP SUNJAYA", "p": "TUKANG"}, {"k": "LAS-003", "n": "DEDI IRAWAN", "p": "PEMBANTU TUKANG"}, {"k": "LAS-004", "n": "RAJIDIN", "p": "PEMBANTU TUKANG"}, {"k": "LAS-005", "n": "RUSDIANSYAH", "p": "TUKANG"}, {"k": "NUR-001", "n": "NURSAID", "p": "MANDOR"}, {"k": "NUR-002", "n": "MASIRIN", "p": "TUKANG"}, {"k": "NUR-003", "n": "JUARI", "p": "TUKANG"}, {"k": "NUR-004", "n": "AHMAD SOLEH", "p": "PEMBANTU TUKANG"}, {"k": "NUR-005", "n": "YOGA ABDI PAMBUDI", "p": "PEMBANTU TUKANG"}, {"k": "NUR-006", "n": "MARDA ADITYA", "p": "PEMBANTU TUKANG"}, {"k": "NUR-007", "n": "SAIFUL ANAM", "p": "PEMBANTU TUKANG"}, {"k": "NUR-008", "n": "DENI ARI SANDIA", "p": "PEMBANTU TUKANG"}, {"k": "NUR-009", "n": "TEDO EMBUN SAPUTRA", "p": "TUKANG"}, {"k": "NUR-010", "n": "DJUBAIDI", "p": "PEMBANTU TUKANG"}, {"k": "NUR-011", "n": "SUTAJI", "p": "TUKANG"}, {"k": "NUR-012", "n": "SRINANTO", "p": "PEMBANTU TUKANG"}, {"k": "NUR-013", "n": "SOIMIN", "p": "TUKANG"}, {"k": "NUR-014", "n": "SUTOYO", "p": "PEMBANTU TUKANG"}, {"k": "NUR-015", "n": "JAYADI", "p": "TUKANG"}, {"k": "NUR-016", "n": "JOKO HOGI PUTRA WIANGGA", "p": "PEMBANTU TUKANG"}, {"k": "MEBEL-001", "n": "AHMAD TAMSIR", "p": "MANDOR INTERIOR"}, {"k": "MEBEL-002", "n": "SAPAWI", "p": "TUKANG"}, {"k": "MEBEL-003", "n": "ANDIKA FANI RISTANTO", "p": "TUKANG"}, {"k": "NARDI-001", "n": "ADITIA RUDIANTO", "p": "TUKANG"}, {"k": "NARDI-002", "n": "DARSONO", "p": "TUKANG"}, {"k": "NARDI-003", "n": "PURWAJI", "p": "TUKANG"}, {"k": "NARDI-004", "n": "NURHAMID", "p": "TUKANG"}, {"k": "NARDI-005", "n": "WAHYUDI", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-006", "n": "NAUFAL YUFRON TRI A", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-007", "n": "REGITA PRAMUJI", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-008", "n": "NARDI", "p": "MANDOR"}, {"k": "NARDI-009", "n": "WARDI", "p": "WAKIL MANDOR"}, {"k": "NARDI-010", "n": "MARTONO", "p": "TUKANG"}, {"k": "NARDI-011", "n": "NYAMIN", "p": "TUKANG"}, {"k": "NARDI-012", "n": "SETO", "p": "TUKANG"}, {"k": "NARDI-013", "n": "SUWARNO", "p": "TUKANG"}, {"k": "NARDI-014", "n": "WARSONO", "p": "TUKANG"}, {"k": "NARDI-015", "n": "TEGUH", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-016", "n": "NUR ALI", "p": "SEMI TUKANG"}, {"k": "NARDI-017", "n": "HERMANTO", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-018", "n": "BEJO", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-019", "n": "DENI", "p": "TUKANG"}, {"k": "NARDI-020", "n": "SOLIKIN", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-021", "n": "GIMO", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-022", "n": "ABDUL HALIM", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-023", "n": "MUH. YUSUF", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-024", "n": "MOCH ABDUL MA'ALI", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-025", "n": "KONI ARI WIBISONO", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-026", "n": "GINANJAR ARDI SAPUTRA", "p": "TUKANG"}, {"k": "NARDI-027", "n": "USUF ROHANI", "p": "TUKANG"}, {"k": "NARDI-028", "n": "SURYONO", "p": "TUKANG"}, {"k": "NARDI-029", "n": "NURUDIN", "p": "TUKANG"}, {"k": "NARDI-030", "n": "ANTOK MURDIONO", "p": "TUKANG"}, {"k": "NARDI-031", "n": "SUPRIYANTO MBAH", "p": "TUKANG"}, {"k": "NARDI-032", "n": "SUPRIYANTO 2", "p": "TUKANG"}, {"k": "NARDI-033", "n": "ANTON DWI CAHYONO", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-034", "n": "SUPOMO", "p": "TUKANG"}, {"k": "NARDI-035", "n": "MOH YUSUF", "p": "TUKANG"}, {"k": "NARDI-036", "n": "ACHMAD HUDA", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-037", "n": "SLAMET BUDIYONO", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-038", "n": "SUKARSONO", "p": "PEMBANTU TUKANG"}, {"k": "NARDI-039", "n": "SUJAK", "p": "TUKANG"}, {"k": "NARDI-040", "n": "PUTJIANTO", "p": "TUKANG"}];
 
-        // Standar Upah berdasarkan Posisi
+        // Standar Upah Berdasarkan Posisi
         const STANDAR_UPAH = {
             'MANDOR': 200000,
             'MANDOR INTERIOR': 200000,
@@ -557,12 +574,49 @@
             'RKS': 120000
         };
 
-        // Data Proyek Aktif di Form Saat Ini
+        // Daftar 30 Proyek Resmi PT. Jaya Kedhaton
+        const DAFTAR_PROJEK = [
+            'FELISA ESTATE',
+            'RUKO PAK DEDI',
+            'GREEN HOUSE',
+            'GREEN HOUSE TANAH MERAH',
+            'PAGAR RING ROAD',
+            'WORKSHOP RING ROAD',
+            'ASPOL 2026',
+            'ASPOL TAHAP 1',
+            'JATANRAS POLRES',
+            'PENJARA POLRES SAMARINDA',
+            'POLIKLINIK POLRES',
+            'PROYEK RTT SAMBOJA',
+            'RTT JUANDA 6',
+            'RTT BALIKPAPAN',
+            'RTT CITRA GADING',
+            'RTT LOA BAKUNG',
+            'RTT PAK FENDI',
+            'RTT PAK ZAINAL SAWO',
+            'RTT POLDA BALIKPAPAN',
+            'TAMAN BALKOT 2025',
+            'TANAH MERAH',
+            'BATU BESAUNG',
+            'GUDANG SENTRAL',
+            'KANTOR AW SYAHRANIE',
+            'RENOV RTT SERUNI',
+            'SERVIS RTT MEDITRAN',
+            'SERVIS RTT WIKA',
+            'SERVIS SEI KAPIH',
+            'BORONGAN JUANDA',
+            'BORONGAN ASPOL'
+        ];
+
+        // State Form Saat Ini
+        let editingTrxId = null;
+        let selectedPekerjaKode = '';
+        let selectedPekerjaNama = '';
         let currentProjekList = [
             { projek: 'FELISA ESTATE', hari: 6, lembur: 6, makan: 30000, insentif: 0 }
         ];
 
-        // Daftar Transaksi yang Disimpan di Periode Ini (Dilengkapi contoh awal Mustofa dkk)
+        // Daftar Transaksi Awal
         let transaksiList = [
             {
                 id: 1,
@@ -600,9 +654,9 @@
             }
         ];
 
-        // Muat dari penyimpanan lokal jika ada
+        // Load storage
         try {
-            const savedTrx = localStorage.getItem('jaya_transaksi_upah_v2');
+            const savedTrx = localStorage.getItem('jaya_transaksi_upah_v3');
             if (savedTrx) {
                 const parsed = JSON.parse(savedTrx);
                 if (Array.isArray(parsed) && parsed.length > 0) {
@@ -613,7 +667,7 @@
 
         function simpanKeStorage() {
             try {
-                localStorage.setItem('jaya_transaksi_upah_v2', JSON.stringify(transaksiList));
+                localStorage.setItem('jaya_transaksi_upah_v3', JSON.stringify(transaksiList));
             } catch (_) {}
         }
 
@@ -621,47 +675,202 @@
             return 'Rp ' + Math.round(Number(val) || 0).toLocaleString('id-ID');
         }
 
-        // Isi Datalist Pekerja saat halaman dimuat
-        function inisialisasiDatalist() {
-            const dl = document.getElementById('datalistPekerja');
-            dl.innerHTML = '';
-            DAFTAR_PEKERJA.forEach(p => {
-                const opt = document.createElement('option');
-                opt.value = `(${p.k}) ${p.n}`;
-                dl.appendChild(opt);
-            });
+        function escapeHtml(text) {
+            if (!text) return '';
+            return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
 
-        // Saat pengguna mengetik atau memilih dari datalist
-        function onPilihPekerja(val) {
-            if (!val) return;
-            const clean = val.trim().toUpperCase();
-            
-            // Cocokkan apakah mengandung kode atau nama
-            const match = DAFTAR_PEKERJA.find(p => {
-                const full = `(${p.k}) ${p.n}`.toUpperCase();
-                return full === clean || p.k.toUpperCase() === clean || p.n.toUpperCase() === clean || full.includes(clean);
-            });
+        // =========================================================================
+        // A. AUTOCOMPLETE & DROPDOWN PENCARIAN PEKERJA (BEBAS BUG)
+        // =========================================================================
+        let currentHasilPekerja = [];
+        let focusedPekerjaIndex = -1;
 
-            if (match) {
-                document.getElementById('posisiPekerja').value = match.p;
-                
-                // Set Upah Pokok standar sesuai posisi
-                const upahStd = STANDAR_UPAH[match.p] || 140000;
-                document.getElementById('upahPerHari').value = upahStd;
-                
-                hitungTotalForm();
+        function onFocusInputPekerja() {
+            const val = document.getElementById('inputPekerja').value.trim();
+            handlePencarianPekerja(val);
+        }
+
+        function handleInputPekerja(e) {
+            const val = e.target.value.trim();
+            handlePencarianPekerja(val);
+        }
+
+        function handlePencarianPekerja(keyword) {
+            const q = (keyword || '').trim().toUpperCase();
+            const btnClear = document.getElementById('btnClearPekerja');
+            if (btnClear) btnClear.style.display = q ? 'inline-block' : 'none';
+
+            if (!q) {
+                // Tampilkan 25 pekerja pertama sebagai default options
+                currentHasilPekerja = DAFTAR_PEKERJA.slice(0, 25);
+            } else {
+                currentHasilPekerja = DAFTAR_PEKERJA.filter(p => {
+                    const k = (p.k || '').toUpperCase();
+                    const n = (p.n || '').toUpperCase();
+                    const pos = (p.p || '').toUpperCase();
+                    return k.includes(q) || n.includes(q) || pos.includes(q);
+                }).slice(0, 40);
             }
+
+            renderDropdownPekerjaPopup(q);
         }
 
-        // Saat posisi diubah manual lewat dropdown
+        function renderDropdownPekerjaPopup(keyword) {
+            const popup = document.getElementById('dropdownPekerjaPopup');
+            const container = document.getElementById('listPekerjaItems');
+            const labelTotal = document.getElementById('labelTotalHasilPekerja');
+            if (!popup || !container) return;
+
+            focusedPekerjaIndex = -1;
+
+            if (currentHasilPekerja.length === 0) {
+                container.innerHTML = `
+                    <div class="p-4 text-center text-slate-400 text-xs">
+                        <i class="fas fa-search text-2xl mb-1.5 block text-slate-300"></i>
+                        Tidak ditemukan pekerja dengan kata kunci "<strong>${escapeHtml(keyword)}</strong>".
+                        <p class="text-[11px] text-slate-500 mt-1 italic">Anda tetap bisa menyimpan dengan nama ini sebagai pekerja baru.</p>
+                    </div>
+                `;
+                labelTotal.innerText = '0 Pekerja';
+                popup.classList.remove('hidden');
+                return;
+            }
+
+            labelTotal.innerText = `${currentHasilPekerja.length} Pekerja`;
+            container.innerHTML = currentHasilPekerja.map((p, idx) => {
+                let badgeColor = 'bg-blue-100 text-blue-800';
+                if (p.p.includes('MANDOR')) badgeColor = 'bg-emerald-100 text-emerald-800';
+                else if (p.p.includes('PEMBANTU')) badgeColor = 'bg-slate-200 text-slate-800';
+                else if (p.p.includes('SEMI')) badgeColor = 'bg-amber-100 text-amber-800';
+
+                const upahStd = STANDAR_UPAH[p.p] || 140000;
+
+                return `
+                    <div class="px-3.5 py-2 hover:bg-teal-50 cursor-pointer transition-colors flex items-center justify-between rounded-lg item-dropdown-pekerja"
+                         data-idx="${idx}"
+                         onmousedown="pilihPekerjaByIndex(${idx})">
+                        <div class="flex items-center gap-2.5 overflow-hidden">
+                            <span class="bg-slate-800 text-white font-mono text-[11px] px-2 py-0.5 rounded font-extrabold tracking-wider shrink-0">
+                                ${escapeHtml(p.k)}
+                            </span>
+                            <div class="truncate">
+                                <p class="font-extrabold text-slate-900 text-xs sm:text-sm leading-tight truncate">${escapeHtml(p.n)}</p>
+                                <span class="text-[10px] font-bold px-2 py-0.2 rounded ${badgeColor} inline-block mt-0.5">${escapeHtml(p.p)}</span>
+                            </div>
+                        </div>
+                        <div class="text-right shrink-0 pl-2">
+                            <span class="text-xs font-bold text-slate-700">${formatRp(upahStd)}</span>
+                            <span class="text-[10px] text-slate-400 block">/ hari</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            popup.classList.remove('hidden');
+        }
+
+        function pilihPekerjaByIndex(idx) {
+            const p = currentHasilPekerja[idx];
+            if (!p) return;
+
+            selectedPekerjaKode = p.k;
+            selectedPekerjaNama = p.n;
+
+            document.getElementById('inputPekerja').value = `(${p.k}) ${p.n}`;
+            document.getElementById('posisiPekerja').value = p.p;
+
+            const upahStd = STANDAR_UPAH[p.p] || 140000;
+            document.getElementById('upahPerHari').value = upahStd;
+
+            const infoPekerja = document.getElementById('infoPekerjaTerpilih');
+            if (infoPekerja) infoPekerja.classList.remove('hidden');
+
+            const btnClear = document.getElementById('btnClearPekerja');
+            if (btnClear) btnClear.style.display = 'inline-block';
+
+            tutupDropdownPekerja();
+            hitungTotalForm();
+        }
+
+        function resetInputPekerjaManual() {
+            selectedPekerjaKode = '';
+            selectedPekerjaNama = '';
+            document.getElementById('inputPekerja').value = '';
+            const infoPekerja = document.getElementById('infoPekerjaTerpilih');
+            if (infoPekerja) infoPekerja.classList.add('hidden');
+            const btnClear = document.getElementById('btnClearPekerja');
+            if (btnClear) btnClear.style.display = 'none';
+            tutupDropdownPekerja();
+            document.getElementById('inputPekerja').focus();
+        }
+
+        function tutupDropdownPekerja() {
+            const popup = document.getElementById('dropdownPekerjaPopup');
+            if (popup) popup.classList.add('hidden');
+        }
+
+        // Tutup dropdown jika klik di luar
+        document.addEventListener('click', (e) => {
+            const wrapper = document.getElementById('wrapperCariPekerja');
+            if (wrapper && !wrapper.contains(e.target)) {
+                tutupDropdownPekerja();
+            }
+        });
+
+        // Keyboard navigasi untuk pencarian pekerja
+        document.getElementById('inputPekerja').addEventListener('keydown', (e) => {
+            const popup = document.getElementById('dropdownPekerjaPopup');
+            if (!popup || popup.classList.contains('hidden')) {
+                if (e.key === 'ArrowDown') {
+                    onFocusInputPekerja();
+                }
+                return;
+            }
+
+            const items = popup.querySelectorAll('.item-dropdown-pekerja');
+            if (items.length === 0) return;
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                focusedPekerjaIndex = (focusedPekerjaIndex + 1) % items.length;
+                highlightFocusedItem(items);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                focusedPekerjaIndex = (focusedPekerjaIndex - 1 + items.length) % items.length;
+                highlightFocusedItem(items);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (focusedPekerjaIndex >= 0 && focusedPekerjaIndex < currentHasilPekerja.length) {
+                    pilihPekerjaByIndex(focusedPekerjaIndex);
+                } else if (currentHasilPekerja.length > 0) {
+                    pilihPekerjaByIndex(0);
+                }
+            } else if (e.key === 'Escape') {
+                tutupDropdownPekerja();
+            }
+        });
+
+        function highlightFocusedItem(items) {
+            items.forEach((it, i) => {
+                if (i === focusedPekerjaIndex) {
+                    it.classList.add('bg-teal-100');
+                    it.scrollIntoView({ block: 'nearest' });
+                } else {
+                    it.classList.remove('bg-teal-100');
+                }
+            });
+        }
+
         function onUbahPosisi(pos) {
             const upahStd = STANDAR_UPAH[pos] || 140000;
             document.getElementById('upahPerHari').value = upahStd;
             hitungTotalForm();
         }
 
-        // Render Blok-Blok Proyek di Form
+        // =========================================================================
+        // B. MANAJEMEN RINCIAN PROYEK (MULTI-PROYEK LENGKAP & ANTI-BUG)
+        // =========================================================================
         function renderBlokProyek() {
             const container = document.getElementById('containerProyekList');
             container.innerHTML = '';
@@ -673,44 +882,67 @@
                 const subLembur = (Number(item.lembur) || 0) * tarifLembur;
                 const subTotal = subPokok + subLembur + (Number(item.makan) || 0) + (Number(item.insentif) || 0);
 
+                // Cek apakah proyek cocok dengan daftar resmi
+                const matchResmi = DAFTAR_PROJEK.find(p => p.toUpperCase() === (item.projek || '').toUpperCase());
+                const isCustom = !matchResmi && Boolean(item.projek);
+
                 const card = document.createElement('div');
-                card.className = 'p-4 md:p-5 rounded-xl border ' + (idx === 0 ? 'border-slate-200 bg-slate-50/70' : 'border-amber-200 bg-amber-50/40') + ' relative shadow-sm';
-                
+                card.className = 'p-4 md:p-5 rounded-xl border ' + (idx === 0 ? 'border-slate-300 bg-slate-50/70' : 'border-amber-200 bg-amber-50/50') + ' relative shadow-sm';
+
+                // Tombol Hapus (tersedia jika ada lebih dari 1 proyek)
                 let btnHapusHtml = '';
-                if (idx > 0) {
-                    btnHapusHtml = `<button type="button" onclick="hapusBlokProyek(${idx})" 
+                if (currentProjekList.length > 1) {
+                    btnHapusHtml = `
+                        <button type="button" onclick="hapusBlokProyek(${idx})" 
                                 class="text-rose-600 hover:text-rose-800 hover:bg-rose-50 font-bold text-xs px-2.5 py-1 rounded-lg border border-rose-200 transition-colors inline-flex items-center gap-1.5 cursor-pointer"
                                 title="Hapus Proyek #${idx + 1}">
                             <i class="fas fa-trash-alt text-[10px]"></i>
-                            <span>Hapus</span>
-                        </button>`;
+                            <span>Hapus Proyek Ini</span>
+                        </button>
+                    `;
                 } else {
-                    btnHapusHtml = `<span class="bg-slate-100 text-slate-600 text-xs font-semibold px-2.5 py-1 rounded-md border border-slate-200">
-                            Proyek Utama
-                        </span>`;
+                    btnHapusHtml = `<span class="bg-slate-200 text-slate-700 text-[11px] font-bold px-2.5 py-1 rounded-md">Proyek Utama</span>`;
                 }
+
+                // Opsi Dropdown Proyek
+                const optionsProjek = DAFTAR_PROJEK.map(p => {
+                    const sel = matchResmi && matchResmi === p ? 'selected' : '';
+                    return `<option value="${escapeHtml(p)}" ${sel}>${escapeHtml(p)}</option>`;
+                }).join('');
 
                 card.innerHTML = `
                     <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200/80">
                         <div class="flex items-center gap-2">
-                            <span class="w-6 h-6 rounded-lg ${idx === 0 ? 'bg-emerald-600' : 'bg-amber-600'} text-white font-bold text-xs flex items-center justify-center">
+                            <span class="w-6 h-6 rounded-lg ${idx === 0 ? 'bg-teal-600' : 'bg-amber-600'} text-white font-bold text-xs flex items-center justify-center">
                                 ${idx + 1}
                             </span>
-                            <span class="font-bold text-slate-800 text-sm">Proyek #${idx + 1}</span>
+                            <span class="font-bold text-slate-800 text-sm">Alokasi Proyek #${idx + 1}</span>
                         </div>
                         ${btnHapusHtml}
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-end">
-                        <!-- Nama Proyek -->
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-start">
+                        <!-- Dropdown Pilihan Proyek -->
                         <div class="md:col-span-4">
                             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
-                                Proyek:
+                                Pilihan Proyek:
                             </label>
-                            <input type="text" list="listProjekDatalist" value="${escapeHtml(item.projek)}"
-                                   oninput="updateProjekField(${idx}, 'projek', this.value)"
-                                   placeholder="Pilih atau ketik proyek..."
-                                   class="form-input-lg uppercase font-bold text-slate-900 bg-white">
+                            <select onchange="onPilihDropdownProjek(${idx}, this.value)"
+                                    class="form-input-lg font-bold text-slate-900 bg-white cursor-pointer border-2 border-slate-300 focus:border-teal-500">
+                                <option value="">-- PILIH PROYEK JAYA KEDHATON --</option>
+                                ${optionsProjek}
+                                <option value="__CUSTOM__" ${isCustom ? 'selected' : ''}>+ KETIK PROYEK BARU LAINNYA...</option>
+                            </select>
+
+                            <!-- Kotak input teks jika memilih proyek kustom/baru -->
+                            <div id="wrapperCustomProjek_${idx}" class="mt-2 ${isCustom ? '' : 'hidden'}">
+                                <input type="text"
+                                       value="${isCustom ? escapeHtml(item.projek) : ''}"
+                                       oninput="updateProjekField(${idx}, 'projek', this.value)"
+                                       placeholder="Ketik nama proyek baru..."
+                                       class="form-input-lg uppercase font-bold text-slate-900 bg-amber-50/80 border-2 border-amber-400">
+                                <span class="text-[10px] text-amber-800 font-medium block mt-1">Nama proyek khusus/baru akan tersimpan</span>
+                            </div>
                         </div>
 
                         <!-- Hari Kerja -->
@@ -755,28 +987,34 @@
                     </div>
 
                     <!-- Subtotal baris ini -->
-                    <div class="mt-3 pt-2.5 border-t border-slate-200/80 flex items-center justify-between text-xs">
-                        <span class="text-slate-500 font-medium" id="teks-perhitungan-${idx}">
+                    <div class="mt-3 pt-2.5 border-t border-slate-200/80 flex flex-wrap items-center justify-between text-xs gap-2">
+                        <span class="text-slate-600 font-medium" id="teks-perhitungan-${idx}">
                             ${item.hari} hari @ ${formatRp(upah)}${item.lembur > 0 ? ' + ' + item.lembur + ' jam lembur' : ''}
                         </span>
-                        <div class="font-bold text-slate-700">
-                            Subtotal: <span id="subtotal-projek-${idx}" class="text-emerald-700 font-extrabold text-sm md:text-base">${formatRp(subTotal)}</span>
+                        <div class="font-bold text-slate-800">
+                            Subtotal Proyek: <span id="subtotal-projek-${idx}" class="text-emerald-700 font-extrabold text-sm md:text-base">${formatRp(subTotal)}</span>
                         </div>
                     </div>
                 `;
                 container.appendChild(card);
             });
+        }
 
-            // Tampilkan tombol Batal Tambah Proyek Terakhir jika ada proyek tambahan
-            const btnBatal = document.getElementById('btnHapusTerakhir');
-            if (btnBatal) {
-                btnBatal.style.display = currentProjekList.length > 1 ? 'inline-flex' : 'none';
+        function onPilihDropdownProjek(idx, val) {
+            const wrapper = document.getElementById('wrapperCustomProjek_' + idx);
+            if (val === '__CUSTOM__') {
+                if (wrapper) wrapper.classList.remove('hidden');
+                currentProjekList[idx].projek = '';
+            } else {
+                if (wrapper) wrapper.classList.add('hidden');
+                currentProjekList[idx].projek = val;
             }
+            hitungTotalForm();
         }
 
         function updateProjekField(idx, key, val) {
             if (key === 'projek') {
-                currentProjekList[idx][key] = val;
+                currentProjekList[idx][key] = val.trim();
             } else {
                 currentProjekList[idx][key] = parseFloat(val) || 0;
             }
@@ -784,8 +1022,12 @@
         }
 
         function tambahBlokProyek() {
+            // Pilih proyek berikutnya yang belum dipilih
+            const projekSudah = currentProjekList.map(p => p.projek);
+            const calonProjek = DAFTAR_PROJEK.find(p => !projekSudah.includes(p)) || 'PROYEK TAMBAHAN';
+
             currentProjekList.push({
-                projek: '',
+                projek: calonProjek,
                 hari: 0,
                 lembur: 0,
                 makan: 0,
@@ -796,21 +1038,15 @@
         }
 
         function hapusBlokProyek(idx) {
-            if (idx === 0) return; // Proyek utama tidak dihapus
+            if (currentProjekList.length <= 1) return;
             currentProjekList.splice(idx, 1);
             renderBlokProyek();
             hitungTotalForm();
         }
 
-        function hapusBlokProyekTerakhir() {
-            if (currentProjekList.length > 1) {
-                currentProjekList.pop();
-                renderBlokProyek();
-                hitungTotalForm();
-            }
-        }
-
-        // Hitung total kotor, kasbon, dan sisa diterima pada form
+        // =========================================================================
+        // C. HITUNG TOTAL FORM & LOGIKA TRANSAKSI
+        // =========================================================================
         function hitungTotalForm() {
             const upah = parseFloat(document.getElementById('upahPerHari').value) || 0;
             const tarifLembur = upah / 8;
@@ -831,13 +1067,12 @@
                 totalHari += Number(item.hari) || 0;
                 totalLembur += Number(item.lembur) || 0;
 
-                // Perbarui tampilan subtotal dan teks perhitungan di masing-masing kartu proyek
                 const elSub = document.getElementById('subtotal-projek-' + idx);
                 if (elSub) elSub.innerText = formatRp(subTotal);
 
                 const elHitung = document.getElementById('teks-perhitungan-' + idx);
                 if (elHitung) {
-                    elHitung.innerText = item.hari + ' hari @ ' + formatRp(upah) + (item.lembur > 0 ? ' + ' + item.lembur + ' jam lembur' : '');
+                    elHitung.innerText = `${item.hari} hari @ ${formatRp(upah)}${item.lembur > 0 ? ' + ' + item.lembur + ' jam lembur' : ''}`;
                 }
             });
 
@@ -845,12 +1080,19 @@
             const sisaDiterima = totalKotor - kasbon;
 
             document.getElementById('formTotalKotor').innerText = formatRp(totalKotor);
-            document.getElementById('formRincianHariLembur').innerText = totalHari + ' Hari Kerja • ' + totalLembur + ' Jam Lembur';
-            document.getElementById('formSisaDiterima').innerText = formatRp(sisaDiterima);
+            document.getElementById('formRincianHariLembur').innerText = `${totalHari} Hari Kerja • ${totalLembur} Jam Lembur`;
+            
+            const elSisa = document.getElementById('formSisaDiterima');
+            elSisa.innerText = formatRp(sisaDiterima);
+            if (sisaDiterima < 0) {
+                elSisa.innerHTML = `${formatRp(sisaDiterima)} <span class="text-xs bg-rose-900 text-rose-200 px-2 py-0.5 rounded font-bold block mt-1">Kasbon Lebih Besar</span>`;
+            }
         }
 
-        // Bersihkan Form untuk input pekerja baru
         function resetFormBaru() {
+            editingTrxId = null;
+            selectedPekerjaKode = '';
+            selectedPekerjaNama = '';
             document.getElementById('inputPekerja').value = '';
             document.getElementById('posisiPekerja').value = 'TUKANG';
             document.getElementById('upahPerHari').value = 140000;
@@ -860,10 +1102,26 @@
             ];
             renderBlokProyek();
             hitungTotalForm();
+
+            const infoPekerja = document.getElementById('infoPekerjaTerpilih');
+            if (infoPekerja) infoPekerja.classList.add('hidden');
+
+            const btnClear = document.getElementById('btnClearPekerja');
+            if (btnClear) btnClear.style.display = 'none';
+
+            const labelMode = document.getElementById('labelModeForm');
+            if (labelMode) labelMode.innerText = 'Input Transaksi Baru';
+
+            const labelStatus = document.getElementById('labelStatusEdit');
+            if (labelStatus) labelStatus.innerText = '';
+
+            tutupDropdownPekerja();
             document.getElementById('inputPekerja').focus();
         }
 
-        // Simpan transaksi pekerja ke tabel
+        // =========================================================================
+        // D. SIMPAN & RENDER DAFTAR TRANSAKSI
+        // =========================================================================
         function simpanTransaksi(langsungCetak) {
             const inputVal = document.getElementById('inputPekerja').value.trim();
             if (!inputVal) {
@@ -872,14 +1130,16 @@
                 return;
             }
 
-            let kode = '';
-            let nama = inputVal;
+            let kode = selectedPekerjaKode;
+            let nama = selectedPekerjaNama || inputVal;
+
+            // Jika user mengetik langsung tanpa memilih dari list, coba ekstrak format "(KODE) NAMA"
             const matchReg = inputVal.match(/^\(([^)]+)\)\s*(.*)$/);
             if (matchReg) {
                 kode = matchReg[1].trim();
                 nama = matchReg[2].trim();
-            } else {
-                const matchP = DAFTAR_PEKERJA.find(p => p.k.toUpperCase() === inputVal.toUpperCase());
+            } else if (!kode) {
+                const matchP = DAFTAR_PEKERJA.find(p => p.k.toUpperCase() === inputVal.toUpperCase() || p.n.toUpperCase() === inputVal.toUpperCase());
                 if (matchP) {
                     kode = matchP.k;
                     nama = matchP.n;
@@ -890,32 +1150,32 @@
             const upahPerHari = parseFloat(document.getElementById('upahPerHari').value) || 0;
             const kasbon = parseFloat(document.getElementById('formKasbon').value) || 0;
 
-            const projekList = JSON.parse(JSON.stringify(currentProjekList));
+            // Validasi proyek
+            const projekList = currentProjekList.map(p => ({
+                projek: (p.projek || 'PROYEK').trim(),
+                hari: Number(p.hari) || 0,
+                lembur: Number(p.lembur) || 0,
+                makan: Number(p.makan) || 0,
+                insentif: Number(p.insentif) || 0
+            }));
 
-            const idxAda = transaksiList.findIndex(t => (t.kode && t.kode === kode) || (t.nama.toUpperCase() === nama.toUpperCase()));
-            
-            let idTrx = Date.now();
+            let idTrx = editingTrxId || Date.now();
+            const idxAda = transaksiList.findIndex(t => t.id === idTrx || (t.kode && t.kode === kode) || (t.nama.toUpperCase() === nama.toUpperCase()));
+
+            const trxData = {
+                id: idTrx,
+                kode: kode,
+                nama: nama,
+                posisi: posisi,
+                upahPerHari: upahPerHari,
+                projekList: projekList,
+                kasbon: kasbon
+            };
+
             if (idxAda >= 0) {
-                idTrx = transaksiList[idxAda].id;
-                transaksiList[idxAda] = {
-                    id: idTrx,
-                    kode: kode || transaksiList[idxAda].kode,
-                    nama: nama,
-                    posisi: posisi,
-                    upahPerHari: upahPerHari,
-                    projekList: projekList,
-                    kasbon: kasbon
-                };
+                transaksiList[idxAda] = trxData;
             } else {
-                transaksiList.unshift({
-                    id: idTrx,
-                    kode: kode,
-                    nama: nama,
-                    posisi: posisi,
-                    upahPerHari: upahPerHari,
-                    projekList: projekList,
-                    kasbon: kasbon
-                });
+                transaksiList.unshift(trxData);
             }
 
             simpanKeStorage();
@@ -924,11 +1184,17 @@
             if (langsungCetak) {
                 bukaSlipById(idTrx);
             } else {
-                alert('Data upah untuk ' + nama + ' berhasil disimpan ke tabel!');
+                alert(`Data transaksi upah untuk ${nama} (${kode || 'Pekerja'}) berhasil disimpan!`);
             }
+
+            // Kembalikan ke mode baru
+            editingTrxId = null;
+            const labelMode = document.getElementById('labelModeForm');
+            if (labelMode) labelMode.innerText = 'Input Transaksi Baru';
+            const labelStatus = document.getElementById('labelStatusEdit');
+            if (labelStatus) labelStatus.innerText = '';
         }
 
-        // Render tabel daftar transaksi di bawah form
         function renderDaftarTransaksi() {
             const tbody = document.getElementById('tbodyDaftarTransaksi');
             const keyword = (document.getElementById('filterTabelInput').value || '').trim().toUpperCase();
@@ -958,7 +1224,7 @@
                     const sub = subPokok + subLembur + (Number(p.makan) || 0) + (Number(p.insentif) || 0);
                     totKotor += sub;
                     totHari += Number(p.hari) || 0;
-                    ringkasanProjek.push('<strong>' + escapeHtml(p.projek || 'PROYEK') + '</strong>: ' + p.hari + ' hari' + (p.lembur > 0 ? ', ' + p.lembur + 'j lembur' : ''));
+                    ringkasanProjek.push(`<span class="font-extrabold text-slate-800">${escapeHtml(p.projek || 'PROYEK')}</span>: ${p.hari} hari${p.lembur > 0 ? ', ' + p.lembur + 'j lembur' : ''}`);
                 });
 
                 const bersih = totKotor - (trx.kasbon || 0);
@@ -973,7 +1239,7 @@
                     <td class="p-3.5 text-center font-bold text-slate-400 bg-slate-50/50">${nomor++}</td>
                     <td class="p-3.5">
                         <div class="font-extrabold text-slate-900 text-sm">
-                            ${trx.kode ? `<span class="inline-block bg-slate-800 text-white font-mono text-[11px] px-2 py-0.5 rounded-md mr-1.5">${escapeHtml(trx.kode)}</span>` : ''}
+                            ${trx.kode ? `<span class="inline-block bg-slate-800 text-white font-mono text-[11px] px-2 py-0.5 rounded-md mr-1.5 font-bold">${escapeHtml(trx.kode)}</span>` : ''}
                             ${escapeHtml(trx.nama)}
                         </div>
                     </td>
@@ -1023,10 +1289,13 @@
             document.getElementById('totalGrandBersih').innerText = formatRp(grandBersih);
         }
 
-        // Muat data transaksi ke form atas untuk diedit
         function editTrxKeForm(idTrx) {
             const trx = transaksiList.find(t => t.id === idTrx);
             if (!trx) return;
+
+            editingTrxId = idTrx;
+            selectedPekerjaKode = trx.kode || '';
+            selectedPekerjaNama = trx.nama || '';
 
             document.getElementById('inputPekerja').value = trx.kode ? `(${trx.kode}) ${trx.nama}` : trx.nama;
             document.getElementById('posisiPekerja').value = trx.posisi;
@@ -1037,21 +1306,34 @@
             renderBlokProyek();
             hitungTotalForm();
 
+            const infoPekerja = document.getElementById('infoPekerjaTerpilih');
+            if (infoPekerja) infoPekerja.classList.remove('hidden');
+
+            const btnClear = document.getElementById('btnClearPekerja');
+            if (btnClear) btnClear.style.display = 'inline-block';
+
+            const labelMode = document.getElementById('labelModeForm');
+            if (labelMode) labelMode.innerText = `Mengedit Transaksi: ${trx.nama}`;
+
+            const labelStatus = document.getElementById('labelStatusEdit');
+            if (labelStatus) labelStatus.innerText = `*Sedang mengedit data ${trx.nama}. Klik Simpan untuk memperbarui.`;
+
             document.getElementById('areaInputForm').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Hapus transaksi
         function hapusTrx(idTrx) {
             const trx = transaksiList.find(t => t.id === idTrx);
             if (!trx) return;
-            if (confirm('Yakin ingin menghapus transaksi upah ' + trx.nama + '?')) {
+            if (confirm(`Yakin ingin menghapus transaksi upah ${trx.nama}?`)) {
                 transaksiList = transaksiList.filter(t => t.id !== idTrx);
                 simpanKeStorage();
                 renderDaftarTransaksi();
             }
         }
 
-        // Buka Slip Gaji berdasarkan ID transaksi
+        // =========================================================================
+        // E. CETAK SLIP GAJI MULTI-PROJEK (FORMAT JAYA KEDHATON)
+        // =========================================================================
         function bukaSlipById(idTrx) {
             const trx = transaksiList.find(t => t.id === idTrx);
             if (!trx) return;
@@ -1101,12 +1383,9 @@
             document.body.classList.remove('slip-open');
         }
 
-        function escapeHtml(text) {
-            if (!text) return '';
-            return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-        }
-
-        // Kalender Periode
+        // =========================================================================
+        // F. KALENDER PERIODE & UTILITIES
+        // =========================================================================
         function updatePeriodeKalender() {
             const d1 = document.getElementById('tglMulai').value;
             const d2 = document.getElementById('tglSelesai').value;
@@ -1119,15 +1398,15 @@
                 return parseInt(parts[2], 10) + ' ' + bulan[parseInt(parts[1], 10) - 1] + ' ' + parts[0];
             };
 
-            const teksHasil = formatTgl(d1) + ' - ' + formatTgl(d2);
+            const teksHasil = `${formatTgl(d1)} - ${formatTgl(d2)}`;
             document.getElementById('labelPeriodeAktif').innerText = teksHasil;
             try {
-                localStorage.setItem('jaya_periode_kalender_v2', JSON.stringify({ d1, d2, teks: teksHasil }));
+                localStorage.setItem('jaya_periode_kalender_v3', JSON.stringify({ d1, d2, teks: teksHasil }));
             } catch (_) {}
         }
 
         try {
-            const savedCal = localStorage.getItem('jaya_periode_kalender_v2');
+            const savedCal = localStorage.getItem('jaya_periode_kalender_v3');
             if (savedCal) {
                 const parsed = JSON.parse(savedCal);
                 if (parsed.d1) document.getElementById('tglMulai').value = parsed.d1;
@@ -1136,7 +1415,6 @@
             }
         } catch (_) {}
 
-        // Toggle Sidebar Navigasi
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebarNav');
             const wrapper = document.getElementById('mainContentWrapper');
@@ -1151,7 +1429,7 @@
                 wrapper.classList.add('ml-64');
                 if (labelBtn) labelBtn.innerText = 'Sembunyikan Menu';
                 if (btn) {
-                    btn.classList.remove('bg-emerald-700', 'hover:bg-emerald-800');
+                    btn.classList.remove('bg-teal-700', 'hover:bg-teal-800');
                     btn.classList.add('bg-slate-800', 'hover:bg-slate-900');
                 }
                 localStorage.setItem('sidebar_drop_left', 'buka');
@@ -1162,7 +1440,7 @@
                 if (labelBtn) labelBtn.innerText = 'Buka Menu Samping';
                 if (btn) {
                     btn.classList.remove('bg-slate-800', 'hover:bg-slate-900');
-                    btn.classList.add('bg-emerald-700', 'hover:bg-emerald-800');
+                    btn.classList.add('bg-teal-700', 'hover:bg-teal-800');
                 }
                 localStorage.setItem('sidebar_drop_left', 'tutup');
             }
@@ -1180,12 +1458,11 @@
                 if (labelBtn) labelBtn.innerText = 'Buka Menu Samping';
                 if (btn) {
                     btn.classList.remove('bg-slate-800', 'hover:bg-slate-900');
-                    btn.classList.add('bg-emerald-700', 'hover:bg-emerald-800');
+                    btn.classList.add('bg-teal-700', 'hover:bg-teal-800');
                 }
             }
         }
 
-        // Jam Realtime
         function updateJamHeader() {
             const el = document.getElementById('waktuRealtime');
             if (el) {
@@ -1196,15 +1473,22 @@
         setInterval(updateJamHeader, 1000);
         updateJamHeader();
 
-        // Inisialisasi awal saat halaman dibuka
-        inisialisasiDatalist();
+        // Inisialisasi awal halaman
         renderBlokProyek();
         hitungTotalForm();
         renderDaftarTransaksi();
 
-        // Contoh awal jika baru buka, arahkan fokus ke input pekerja
-        onPilihPekerja('(KANCIL-013) MUSTOFA');
+        // Contoh awal jika baru dibuka
+        selectedPekerjaKode = 'KANCIL-013';
+        selectedPekerjaNama = 'MUSTOFA';
         document.getElementById('inputPekerja').value = '(KANCIL-013) MUSTOFA';
+        document.getElementById('posisiPekerja').value = 'TUKANG';
+        document.getElementById('upahPerHari').value = 140000;
+        const infoAwal = document.getElementById('infoPekerjaTerpilih');
+        if (infoAwal) infoAwal.classList.remove('hidden');
+        const btnClearAwal = document.getElementById('btnClearPekerja');
+        if (btnClearAwal) btnClearAwal.style.display = 'inline-block';
+        hitungTotalForm();
     </script>
 </body>
 </html>
