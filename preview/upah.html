@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Transaksi - PT Jaya Kedhaton</title>
+    <title>Sistem Absensi Jaya Kedhaton - Upah & Lembur</title>
     <link rel="icon" type="image/png" href="images/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -128,8 +128,8 @@
                 <span>Rekap Kehadiran</span>
             </a>
             <a href="upah.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-bold bg-teal-600 text-white shadow-md">
-                <i class="fas fa-file-invoice-dollar w-5 text-center text-base"></i>
-                <span>Form Transaksi</span>
+                <i class="fas fa-money-bill-wave w-5 text-center text-base"></i>
+                <span>Upah & Lembur</span>
             </a>
             <a href="karyawan.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-700/70 hover:text-white transition-colors">
                 <i class="fas fa-users w-5 text-center text-base"></i>
@@ -171,8 +171,8 @@
                 <div class="h-6 w-px bg-slate-200 hidden sm:block"></div>
 
                 <div>
-                    <h2 class="text-sm md:text-base font-bold text-slate-800 leading-tight">Form Transaksi &mdash; Upah & Lembur Karyawan</h2>
-                    <p class="text-[11px] text-slate-500 hidden sm:block">Input Absensi, Lembur &amp; Cetak Slip Gaji (Pekerja Harian &amp; Staff Kantor)</p>
+                    <h2 class="text-sm md:text-base font-bold text-slate-800 leading-tight">Upah & Lembur Karyawan &mdash; Form Transaksi</h2>
+                    <p class="text-[11px] text-slate-500 hidden sm:block">Input Absensi, Upah Harian, Lembur &amp; Cetak Slip Upah (Pekerja Harian &amp; Staff Kantor)</p>
                 </div>
             </div>
 
@@ -238,7 +238,7 @@
                         <div class="w-8 h-8 rounded-lg bg-teal-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
                             <i class="fas fa-file-invoice-dollar"></i>
                         </div>
-                        <h3 class="text-base font-bold text-slate-900">Form Transaksi</h3>
+                        <h3 class="text-base font-bold text-slate-900">Form Transaksi Upah & Lembur</h3>
                     </div>
                     <button type="button" onclick="resetFormBaru()" 
                             class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs inline-flex items-center gap-1.5 border border-slate-300 cursor-pointer transition-colors">
@@ -437,7 +437,7 @@
                         <p class="text-[11px] text-slate-600 uppercase font-bold tracking-wide">Design Build, General Contractor, Interior</p>
                         <p class="text-[10px] text-slate-500">Jl. AW. Syahranie No. 36 A Samarinda</p>
                         <div class="mt-2 inline-block bg-slate-900 text-white font-extrabold text-[11px] uppercase px-4 py-0.5 rounded tracking-widest">
-                            Slip Gaji &amp; Upah Pekerja
+                            Slip Upah &amp; Lembur Pekerja
                         </div>
                     </div>
 
@@ -452,7 +452,7 @@
                             <span class="font-bold text-slate-800" id="slipPosisi">-</span>
                         </div>
                         <div class="col-span-2">
-                            <span class="text-slate-500 block text-[11px]">Periode Gaji:</span>
+                            <span class="text-slate-500 block text-[11px]">Periode Upah:</span>
                             <span class="font-semibold text-slate-700" id="slipPeriodeDisplay">-</span>
                         </div>
                     </div>
@@ -490,7 +490,7 @@
                             <span id="slipKasbonNilai">- Rp 0</span>
                         </div>
                         <div class="flex justify-between items-center pt-2 border-t border-slate-300 font-black text-sm text-emerald-950">
-                            <span>SISA UPAH DITERIMA:</span>
+                            <span>TOTAL UPAH BERSIH DITERIMA:</span>
                             <span class="text-lg md:text-xl text-emerald-800 font-black" id="slipSisaDiterima">Rp 0</span>
                         </div>
                     </div>
