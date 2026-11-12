@@ -256,100 +256,93 @@
                     </button>
                 </div>
 
-                <!-- 1. DATA PEKERJA (TAMPILAN MODERN & RAPI) -->
-                <div class="bg-white border border-slate-200 rounded-2xl p-4 md:p-5 mb-5 shadow-xs">
-                    <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
-                        <div class="flex items-center gap-2.5">
-                            <span class="w-6 h-6 rounded-lg bg-teal-600 text-white flex items-center justify-center text-xs font-black shadow-xs">1</span>
-                            <div>
-                                <h4 class="text-xs font-black uppercase text-slate-800 tracking-wider flex items-center gap-2">
-                                    <span>Identitas Pekerja</span>
-                                    <span id="infoPekerjaTerpilih" class="hidden text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 normal-case border border-emerald-300">
-                                        <i class="fas fa-check-circle text-emerald-600"></i> Terverifikasi
-                                    </span>
-                                </h4>
-                                <p class="text-[11px] text-slate-400 font-medium">Pilih dari database 252 pekerja resmi atau masukkan secara langsung</p>
-                            </div>
-                        </div>
-                        <span class="hidden sm:inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200/60">
-                            <i class="fas fa-keyboard text-slate-400"></i> Tekan <kbd class="px-1.5 py-0.5 text-[10px] bg-white border border-slate-300 rounded shadow-2xs font-mono font-bold text-slate-700">↓</kbd> untuk buka daftar
-                        </span>
+                <!-- 1. DATA PEKERJA (KONSISTEN DENGAN RINCIAN PROYEK) -->
+                <div class="mb-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-xs font-bold uppercase text-slate-500 tracking-wider">
+                            Data Pekerja
+                        </h4>
+                        <span class="text-xs text-slate-500 font-medium">Pilih dari dropdown atau ketik kode / nama</span>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
-                        <!-- Komponen Pencarian Pekerja (Searchable Combobox Bebas Bug) -->
-                        <div class="md:col-span-6 relative" id="wrapperCariPekerja">
-                            <label for="inputPekerja" class="block text-xs font-bold text-slate-700 uppercase mb-1.5">
-                                Pilih / Cari Pekerja:
-                            </label>
+                    <div class="p-4 md:p-5 rounded-xl border border-slate-300 bg-slate-50/70 relative shadow-sm">
+                        <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200/80">
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-lg bg-teal-600 text-white font-bold text-xs flex items-center justify-center">
+                                    <i class="fas fa-user text-xs"></i>
+                                </span>
+                                <span class="font-bold text-slate-800 text-sm">Identitas Pekerja</span>
+                            </div>
+                            <span id="infoPekerjaTerpilih" class="hidden bg-emerald-100 text-emerald-800 text-[11px] font-bold px-2.5 py-1 rounded-md border border-emerald-300">
+                                <i class="fas fa-check-circle mr-1"></i> Terverifikasi
+                            </span>
+                        </div>
 
-                            <div class="relative flex items-center group">
-                                <i class="fas fa-search absolute left-3.5 text-slate-400 group-focus-within:text-teal-600 text-sm pointer-events-none transition-colors"></i>
-                                <input type="text" id="inputPekerja"
-                                       autocomplete="off"
-                                       onfocus="onFocusInputPekerja()"
-                                       oninput="handleInputPekerja(event)"
-                                       placeholder="Ketik kode (misal: KANCIL-013) atau nama pekerja..."
-                                       class="form-input-lg uppercase pl-10 pr-20 font-bold text-slate-900 bg-slate-50/50 hover:bg-white focus:bg-white border-2 border-slate-300 focus:border-teal-500 rounded-xl transition-all">
-                                
-                                <div class="absolute right-2.5 flex items-center gap-1">
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-start">
+                            <!-- Komponen Pencarian Pekerja (Searchable Combobox Bebas Bug) -->
+                            <div class="md:col-span-6 relative" id="wrapperCariPekerja">
+                                <label for="inputPekerja" class="block text-xs font-bold text-slate-700 uppercase mb-1">
+                                    Pekerja:
+                                </label>
+
+                                <div class="relative flex items-center">
+                                    <i class="fas fa-search absolute left-3.5 text-slate-400 text-sm pointer-events-none"></i>
+                                    <input type="text" id="inputPekerja"
+                                           autocomplete="off"
+                                           onfocus="onFocusInputPekerja()"
+                                           oninput="handleInputPekerja(event)"
+                                           placeholder="Ketik kode (contoh: KANCIL-013) atau nama pekerja..."
+                                           class="form-input-lg uppercase pl-10 pr-10 font-bold text-slate-900 bg-white">
                                     <button type="button" id="btnClearPekerja" onclick="resetInputPekerjaManual()"
-                                            class="text-slate-400 hover:text-rose-600 hidden text-sm cursor-pointer p-1 rounded-md transition-colors"
-                                            title="Hapus / Reset">
+                                            class="absolute right-3 text-slate-400 hover:text-slate-600 hidden text-sm cursor-pointer p-1"
+                                            title="Hapus pencarian">
                                         <i class="fas fa-times-circle text-base"></i>
                                     </button>
-                                    <button type="button" onclick="toggleDropdownPekerja()"
-                                            class="text-slate-400 hover:text-teal-600 text-xs p-1.5 rounded-md hover:bg-slate-100 cursor-pointer transition-colors"
-                                            title="Buka / Tutup Daftar Pekerja">
-                                        <i class="fas fa-chevron-down"></i>
-                                    </button>
+                                </div>
+
+                                <!-- Floating Dropdown Hasil Pencarian -->
+                                <div id="dropdownPekerjaPopup"
+                                     class="absolute left-0 right-0 top-full mt-1.5 bg-white border border-slate-300 rounded-xl shadow-2xl z-50 hidden max-h-72 overflow-y-auto divide-y divide-slate-100">
+                                    <div class="px-3.5 py-2 bg-slate-100 text-[11px] font-bold text-slate-600 uppercase tracking-wider flex justify-between items-center sticky top-0 z-10 border-b border-slate-200">
+                                        <span>Pilih Pekerja</span>
+                                        <span id="labelTotalHasilPekerja" class="text-teal-700 font-extrabold">252 Pekerja</span>
+                                    </div>
+                                    <div id="listPekerjaItems" class="p-1"></div>
                                 </div>
                             </div>
 
-                            <!-- Floating Dropdown Hasil Pencarian -->
-                            <div id="dropdownPekerjaPopup"
-                                 class="absolute left-0 right-0 top-full mt-1.5 bg-white border border-slate-300 rounded-xl shadow-2xl z-50 hidden max-h-72 overflow-y-auto divide-y divide-slate-100">
-                                <div class="px-3.5 py-2.5 bg-slate-50 text-[11px] font-bold text-slate-600 uppercase tracking-wider flex justify-between items-center sticky top-0 z-10 border-b border-slate-200">
-                                    <span class="flex items-center gap-1.5 text-slate-700">
-                                        <i class="fas fa-users text-teal-600"></i> Pilih Pekerja
-                                    </span>
-                                    <span id="labelTotalHasilPekerja" class="px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 border border-teal-200 font-extrabold text-[10px]">252 Pekerja</span>
-                                </div>
-                                <div id="listPekerjaItems" class="p-1"></div>
+                            <!-- Dropdown Posisi -->
+                            <div class="md:col-span-3">
+                                <label for="posisiPekerja" class="block text-xs font-bold text-slate-700 uppercase mb-1">
+                                    Posisi:
+                                </label>
+                                <select id="posisiPekerja" onchange="onUbahPosisi(this.value)"
+                                        class="form-input-lg font-bold bg-white cursor-pointer border-2 border-slate-300 focus:border-teal-500">
+                                    <option value="">-- PILIH / DARI PEKERJA --</option>
+                                    <option value="TUKANG">TUKANG</option>
+                                    <option value="MANDOR">MANDOR</option>
+                                    <option value="SEMI TUKANG">SEMI TUKANG</option>
+                                    <option value="PEMBANTU TUKANG">PEMBANTU TUKANG</option>
+                                    <option value="MANDOR INTERIOR">MANDOR INTERIOR</option>
+                                    <option value="WAKIL MANDOR">WAKIL MANDOR</option>
+                                    <option value="MEP">MEP</option>
+                                    <option value="CAT">CAT</option>
+                                    <option value="RKS">RKS</option>
+                                </select>
                             </div>
-                        </div>
 
-                        <!-- Dropdown Posisi -->
-                        <div class="md:col-span-3">
-                            <label for="posisiPekerja" class="block text-xs font-bold text-slate-700 uppercase mb-1.5">
-                                Posisi / Jabatan:
-                            </label>
-                            <select id="posisiPekerja" onchange="onUbahPosisi(this.value)"
-                                    class="form-input-lg font-bold bg-white cursor-pointer border-2 border-slate-300 focus:border-teal-500 rounded-xl transition-all">
-                                <option value="">-- PILIH / DARI PEKERJA --</option>
-                                <option value="TUKANG">TUKANG</option>
-                                <option value="MANDOR">MANDOR</option>
-                                <option value="SEMI TUKANG">SEMI TUKANG</option>
-                                <option value="PEMBANTU TUKANG">PEMBANTU TUKANG</option>
-                                <option value="MANDOR INTERIOR">MANDOR INTERIOR</option>
-                                <option value="WAKIL MANDOR">WAKIL MANDOR</option>
-                                <option value="MEP">MEP</option>
-                                <option value="CAT">CAT</option>
-                                <option value="RKS">RKS</option>
-                            </select>
-                        </div>
-
-                        <!-- Upah Pokok Harian -->
-                        <div class="md:col-span-3">
-                            <label for="upahPerHari" class="block text-xs font-bold text-slate-700 uppercase mb-1.5">
-                                Upah Pokok / Hari:
-                            </label>
-                            <input type="number" id="upahPerHari" value="0" placeholder="0" step="5000" min="0"
-                                   oninput="hitungTotalForm()"
-                                   class="form-input-lg form-input-num text-slate-900 font-bold bg-white border-2 border-slate-300 focus:border-teal-500 rounded-xl transition-all">
-                            <p class="text-[11px] text-amber-800 font-bold mt-1 text-right" id="labelTarifLemburInfo">
-                                Lembur: Rp 0 / jam
-                            </p>
+                            <!-- Upah Pokok Harian -->
+                            <div class="md:col-span-3">
+                                <label for="upahPerHari" class="block text-xs font-bold text-slate-700 uppercase mb-1">
+                                    Upah / Hari (Rp):
+                                </label>
+                                <input type="number" id="upahPerHari" value="0" placeholder="0" step="5000" min="0"
+                                       oninput="hitungTotalForm()"
+                                       class="form-input-lg form-input-num text-slate-900 font-bold bg-white">
+                                <p class="text-[11px] text-amber-800 font-bold mt-1 text-right" id="labelTarifLemburInfo">
+                                    Lembur: Rp 0 / jam
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
