@@ -299,6 +299,7 @@
                             </label>
                             <select id="posisiPekerja" onchange="onUbahPosisi(this.value)"
                                     class="form-input-lg font-bold bg-white cursor-pointer border-2 border-slate-300 focus:border-teal-500">
+                                <option value="">-- PILIH / DARI PEKERJA --</option>
                                 <option value="TUKANG">TUKANG</option>
                                 <option value="MANDOR">MANDOR</option>
                                 <option value="SEMI TUKANG">SEMI TUKANG</option>
@@ -316,11 +317,11 @@
                             <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">
                                 Upah / Hari (Rp):
                             </label>
-                            <input type="number" id="upahPerHari" value="140000" step="5000" min="0"
+                            <input type="number" id="upahPerHari" value="0" placeholder="0" step="5000" min="0"
                                    oninput="hitungTotalForm()"
                                    class="form-input-lg form-input-num text-slate-900 font-bold bg-white">
                             <p class="text-[11px] text-amber-800 font-bold mt-1 text-right" id="labelTarifLemburInfo">
-                                Lembur: Rp 17.500 / jam
+                                Lembur: Rp 0 / jam
                             </p>
                         </div>
                     </div>
@@ -613,7 +614,7 @@
         let selectedPekerjaKode = '';
         let selectedPekerjaNama = '';
         let currentProjekList = [
-            { projek: 'FELISA ESTATE', hari: 6, lembur: 6, makan: 30000, insentif: 0 }
+            { projek: 'FELISA ESTATE', hari: 0, lembur: 0, makan: 0, insentif: 0 }
         ];
 
         // Daftar Transaksi Awal
@@ -702,15 +703,15 @@
             if (btnClear) btnClear.style.display = q ? 'inline-block' : 'none';
 
             if (!q) {
-                // Tampilkan 25 pekerja pertama sebagai default options
-                currentHasilPekerja = DAFTAR_PEKERJA.slice(0, 25);
+                // Tampilkan seluruh 252 pekerja resmi
+                currentHasilPekerja = [...DAFTAR_PEKERJA];
             } else {
                 currentHasilPekerja = DAFTAR_PEKERJA.filter(p => {
                     const k = (p.k || '').toUpperCase();
                     const n = (p.n || '').toUpperCase();
                     const pos = (p.p || '').toUpperCase();
                     return k.includes(q) || n.includes(q) || pos.includes(q);
-                }).slice(0, 40);
+                });
             }
 
             renderDropdownPekerjaPopup(q);
@@ -744,7 +745,7 @@
                 else if (p.p.includes('PEMBANTU')) badgeColor = 'bg-slate-200 text-slate-800';
                 else if (p.p.includes('SEMI')) badgeColor = 'bg-amber-100 text-amber-800';
 
-                const upahStd = STANDAR_UPAH[p.p] || 140000;
+                const upahStd = STANDAR_UPAH[p.p] || 0;
 
                 return `
                     <div class="px-3.5 py-2 hover:bg-teal-50 cursor-pointer transition-colors flex items-center justify-between rounded-lg item-dropdown-pekerja"
@@ -778,9 +779,9 @@
             selectedPekerjaNama = p.n;
 
             document.getElementById('inputPekerja').value = `(${p.k}) ${p.n}`;
-            document.getElementById('posisiPekerja').value = p.p;
+            document.getElementById('posisiPekerja').value = p.p || '';
 
-            const upahStd = STANDAR_UPAH[p.p] || 140000;
+            const upahStd = STANDAR_UPAH[p.p] || 0;
             document.getElementById('upahPerHari').value = upahStd;
 
             const infoPekerja = document.getElementById('infoPekerjaTerpilih');
@@ -797,11 +798,14 @@
             selectedPekerjaKode = '';
             selectedPekerjaNama = '';
             document.getElementById('inputPekerja').value = '';
+            document.getElementById('posisiPekerja').value = '';
+            document.getElementById('upahPerHari').value = 0;
             const infoPekerja = document.getElementById('infoPekerjaTerpilih');
             if (infoPekerja) infoPekerja.classList.add('hidden');
             const btnClear = document.getElementById('btnClearPekerja');
             if (btnClear) btnClear.style.display = 'none';
             tutupDropdownPekerja();
+            hitungTotalForm();
             document.getElementById('inputPekerja').focus();
         }
 
@@ -863,8 +867,12 @@
         }
 
         function onUbahPosisi(pos) {
-            const upahStd = STANDAR_UPAH[pos] || 140000;
-            document.getElementById('upahPerHari').value = upahStd;
+            if (!pos) {
+                document.getElementById('upahPerHari').value = 0;
+            } else {
+                const upahStd = STANDAR_UPAH[pos] || 0;
+                document.getElementById('upahPerHari').value = upahStd;
+            }
             hitungTotalForm();
         }
 
@@ -1094,11 +1102,11 @@
             selectedPekerjaKode = '';
             selectedPekerjaNama = '';
             document.getElementById('inputPekerja').value = '';
-            document.getElementById('posisiPekerja').value = 'TUKANG';
-            document.getElementById('upahPerHari').value = 140000;
+            document.getElementById('posisiPekerja').value = '';
+            document.getElementById('upahPerHari').value = 0;
             document.getElementById('formKasbon').value = 0;
             currentProjekList = [
-                { projek: 'FELISA ESTATE', hari: 6, lembur: 0, makan: 30000, insentif: 0 }
+                { projek: 'FELISA ESTATE', hari: 0, lembur: 0, makan: 0, insentif: 0 }
             ];
             renderBlokProyek();
             hitungTotalForm();
@@ -1473,22 +1481,9 @@
         setInterval(updateJamHeader, 1000);
         updateJamHeader();
 
-        // Inisialisasi awal halaman
-        renderBlokProyek();
-        hitungTotalForm();
+        // Inisialisasi awal halaman (Form Bersih Tanpa Autofill Default)
         renderDaftarTransaksi();
-
-        // Contoh awal jika baru dibuka
-        selectedPekerjaKode = 'KANCIL-013';
-        selectedPekerjaNama = 'MUSTOFA';
-        document.getElementById('inputPekerja').value = '(KANCIL-013) MUSTOFA';
-        document.getElementById('posisiPekerja').value = 'TUKANG';
-        document.getElementById('upahPerHari').value = 140000;
-        const infoAwal = document.getElementById('infoPekerjaTerpilih');
-        if (infoAwal) infoAwal.classList.remove('hidden');
-        const btnClearAwal = document.getElementById('btnClearPekerja');
-        if (btnClearAwal) btnClearAwal.style.display = 'inline-block';
-        hitungTotalForm();
+        resetFormBaru();
     </script>
 </body>
 </html>
