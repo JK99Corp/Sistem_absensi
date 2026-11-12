@@ -1237,13 +1237,14 @@ function renderKaryawan(tab = 'aktif', notifMsg = '', currentUser = null, notifT
             ? '<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-800"><i class="fas fa-hammer mr-1 text-[10px]"></i> Pekerja Harian</span>'
             : '<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-blue-100 text-blue-800"><i class="fas fa-briefcase mr-1 text-[10px]"></i> Staff Kantor</span>';
 
+        const searchMeta = escapeHtml(((p.nama || '') + ' ' + (p.uid || '') + ' ' + (p.noHp || '') + ' ' + (p.kategori || '')).toLowerCase());
         if (!isTabArsip) {
             const upahKet = isHarian
                 ? `<p class="font-bold text-slate-800">Rp ${Number(p.upahHarian || 120000).toLocaleString('id-ID')} / hari</p><span class="text-xs text-amber-700 font-semibold">+ Lembur Rp ${Number(p.tarifLembur || 25000).toLocaleString('id-ID')}/jam</span>`
                 : '<span class="text-slate-500 font-medium">Gaji Bulanan Tetap</span>';
 
             return `
-                <tr class="hover:bg-slate-50 transition-colors">
+                <tr class="row-karyawan hover:bg-slate-50 transition-colors" data-search="${searchMeta}">
                     <td class="px-5 py-4 text-base text-slate-500">${i + 1}</td>
                     <td class="px-5 py-4">
                         <p class="text-base font-bold text-slate-900">${escapeHtml(p.nama)}</p>
@@ -1275,7 +1276,7 @@ function renderKaryawan(tab = 'aktif', notifMsg = '', currentUser = null, notifT
             `;
         } else {
             return `
-                <tr class="hover:bg-slate-50 transition-colors">
+                <tr class="row-karyawan hover:bg-slate-50 transition-colors" data-search="${searchMeta}">
                     <td class="px-5 py-4 text-base text-slate-500">${i + 1}</td>
                     <td class="px-5 py-4">
                         <p class="text-base font-bold text-slate-900">${escapeHtml(p.nama)}</p>
@@ -1348,6 +1349,31 @@ function renderKaryawan(tab = 'aktif', notifMsg = '', currentUser = null, notifT
             </a>
         </div>
 
+        <!-- Search & Filter Bar Cepat -->
+        <div class="bg-white rounded-xl shadow-sm p-4 mb-6 border border-slate-200">
+            <div class="flex flex-wrap items-center gap-4 justify-between">
+                <div class="flex-1 min-w-[260px] relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                        <i class="fas fa-search"></i>
+                    </span>
+                    <input type="text" id="cariKaryawanInput" oninput="filterTabelKaryawan()"
+                           placeholder="Cari nama pekerja, kode (contoh: SUDIRO-001), UID kartu, atau kontak..."
+                           class="w-full pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-teal-500 transition-colors">
+                </div>
+                <div class="flex items-center gap-3">
+                    <select id="filterKategoriSelect" onchange="filterTabelKaryawan()"
+                            class="border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-700 bg-white focus:outline-none focus:border-teal-500 cursor-pointer">
+                        <option value="">Semua Kategori</option>
+                        <option value="Staff Kantor">Staff Kantor</option>
+                        <option value="Pekerja Harian">Pekerja Harian</option>
+                    </select>
+                    <span id="counterKaryawan" class="text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-2 rounded-lg whitespace-nowrap">
+                        Menampilkan ${list.length} karyawan
+                    </span>
+                </div>
+            </div>
+        </div>
+
         <!-- Tabel Daftar Karyawan -->
         <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
             <div class="overflow-x-auto">
@@ -1370,8 +1396,14 @@ function renderKaryawan(tab = 'aktif', notifMsg = '', currentUser = null, notifT
                             `}
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
-                        ${rows || '<tr><td colspan="8" class="px-6 py-12 text-center text-slate-400">Belum ada data.</td></tr>'}
+                    <tbody id="tableKaryawanBody" class="divide-y divide-slate-100">
+                        ${rows || ''}
+                        <tr id="emptyKaryawanRow" style="display: none;">
+                            <td colspan="8" class="px-6 py-12 text-center text-slate-400">
+                                <i class="fas fa-search text-3xl mb-2 block text-slate-300"></i>
+                                Tidak ada data karyawan yang cocok dengan pencarian.
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -1504,6 +1536,28 @@ function renderKaryawan(tab = 'aktif', notifMsg = '', currentUser = null, notifT
             function isiUidOtomatis() {
                 const hex = Math.floor(Math.random() * 0xFFFFFFFF).toString(16).toUpperCase().padStart(8, '0');
                 document.getElementById('inputUidRfid').value = hex;
+            }
+
+            function filterTabelKaryawan() {
+                const keyword = (document.getElementById('cariKaryawanInput')?.value || '').toLowerCase().trim();
+                const kategori = (document.getElementById('filterKategoriSelect')?.value || '').toLowerCase();
+                const rows = document.querySelectorAll('#tableKaryawanBody tr.row-karyawan');
+                let count = 0;
+                rows.forEach(tr => {
+                    const searchData = tr.getAttribute('data-search') || '';
+                    const matchKey = !keyword || searchData.includes(keyword);
+                    const matchKat = !kategori || searchData.includes(kategori);
+                    if (matchKey && matchKat) {
+                        tr.style.display = '';
+                        count++;
+                    } else {
+                        tr.style.display = 'none';
+                    }
+                });
+                const counter = document.getElementById('counterKaryawan');
+                if (counter) counter.textContent = 'Menampilkan ' + count + ' karyawan';
+                const emptyRow = document.getElementById('emptyKaryawanRow');
+                if (emptyRow) emptyRow.style.display = count === 0 ? '' : 'none';
             }
         </script>
     `;
@@ -1911,7 +1965,7 @@ const server = http.createServer((req, res) => {
     if (pathname === '/images/logo.png' || pathname === '/images/logo.jpg' || pathname === '/logo.png' || pathname === '/logo.jpg') {
         const logoPath = path.join(__dirname, 'public', 'images', 'logo.png');
         if (fs.existsSync(logoPath)) {
-            res.writeHead(200, { 'Content-Type': 'image/png', 'Cache-Control': 'no-cache, no-store, must-revalidate' });
+            res.writeHead(200, { 'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800' });
             res.end(fs.readFileSync(logoPath));
             return;
         }
