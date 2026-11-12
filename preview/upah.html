@@ -362,8 +362,8 @@
 
                     <div class="mt-3.5 flex flex-wrap items-center gap-3">
                         <button type="button" onclick="tambahBlokProyek()" 
-                                class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs md:text-sm shadow-sm inline-flex items-center gap-1.5 cursor-pointer transition-colors">
-                            <i class="fas fa-plus"></i> Tambah Proyek Lain
+                                class="bg-white hover:bg-teal-50 text-teal-700 font-bold py-2.5 px-4 rounded-xl text-xs md:text-sm border-2 border-dashed border-teal-300 hover:border-teal-500 shadow-2xs inline-flex items-center gap-2 cursor-pointer transition-all">
+                            <i class="fas fa-plus-circle text-teal-600 text-sm"></i> Tambah Alokasi Proyek Lain
                         </button>
                     </div>
                 </div>
@@ -634,7 +634,7 @@
         let selectedPekerjaKode = '';
         let selectedPekerjaNama = '';
         let currentProjekList = [
-            { projek: 'FELISA ESTATE', hari: 0, lembur: 0, makan: 0, insentif: 0 }
+            { projek: '', hari: 0, lembur: 0, makan: 0, insentif: 0 }
         ];
 
         // Daftar Transaksi Awal
@@ -926,7 +926,7 @@
                 const isCustom = !matchResmi && Boolean(item.projek);
 
                 const card = document.createElement('div');
-                card.className = 'p-4 md:p-5 rounded-xl border ' + (idx === 0 ? 'border-slate-300 bg-slate-50/70' : 'border-amber-200 bg-amber-50/50') + ' relative shadow-sm';
+                card.className = 'p-4 md:p-5 rounded-xl border border-slate-300 bg-slate-50/70 relative shadow-sm';
 
                 // Tombol Hapus (tersedia jika ada lebih dari 1 proyek)
                 let btnHapusHtml = '';
@@ -952,7 +952,7 @@
                 card.innerHTML = `
                     <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200/80">
                         <div class="flex items-center gap-2">
-                            <span class="w-6 h-6 rounded-lg ${idx === 0 ? 'bg-teal-600' : 'bg-amber-600'} text-white font-bold text-xs flex items-center justify-center">
+                            <span class="w-6 h-6 rounded-lg bg-teal-600 text-white font-bold text-xs flex items-center justify-center">
                                 ${idx + 1}
                             </span>
                             <span class="font-bold text-slate-800 text-sm">Alokasi Proyek #${idx + 1}</span>
@@ -979,8 +979,8 @@
                                        value="${isCustom ? escapeHtml(item.projek) : ''}"
                                        oninput="updateProjekField(${idx}, 'projek', this.value)"
                                        placeholder="Ketik nama proyek baru..."
-                                       class="form-input-lg uppercase font-bold text-slate-900 bg-amber-50/80 border-2 border-amber-400">
-                                <span class="text-[10px] text-amber-800 font-medium block mt-1">Nama proyek khusus/baru akan tersimpan</span>
+                                       class="form-input-lg uppercase font-bold text-slate-900 bg-white border-2 border-slate-300 focus:border-teal-500">
+                                <span class="text-[10px] text-slate-500 font-medium block mt-1">Nama proyek baru akan tersimpan otomatis</span>
                             </div>
                         </div>
 
@@ -996,12 +996,12 @@
 
                         <!-- Jam Lembur -->
                         <div class="md:col-span-2">
-                            <label class="block text-xs font-bold text-amber-900 uppercase mb-1">
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
                                 Lembur (Jam):
                             </label>
                             <input type="number" min="0" step="0.5" value="${item.lembur}"
                                    oninput="updateProjekField(${idx}, 'lembur', this.value)"
-                                   class="form-input-lg form-input-num text-center text-amber-900 font-bold bg-white">
+                                   class="form-input-lg form-input-num text-center text-slate-900 font-bold bg-white">
                         </div>
 
                         <!-- Uang Makan -->
@@ -1061,12 +1061,8 @@
         }
 
         function tambahBlokProyek() {
-            // Pilih proyek berikutnya yang belum dipilih
-            const projekSudah = currentProjekList.map(p => p.projek);
-            const calonProjek = DAFTAR_PROJEK.find(p => !projekSudah.includes(p)) || 'PROYEK TAMBAHAN';
-
             currentProjekList.push({
-                projek: calonProjek,
+                projek: '',
                 hari: 0,
                 lembur: 0,
                 makan: 0,
@@ -1137,7 +1133,7 @@
             document.getElementById('upahPerHari').value = 0;
             document.getElementById('formKasbon').value = 0;
             currentProjekList = [
-                { projek: 'FELISA ESTATE', hari: 0, lembur: 0, makan: 0, insentif: 0 }
+                { projek: '', hari: 0, lembur: 0, makan: 0, insentif: 0 }
             ];
             renderBlokProyek();
             hitungTotalForm();
@@ -1167,6 +1163,14 @@
                 alert('Silakan pilih atau ketik data pekerja terlebih dahulu!');
                 document.getElementById('inputPekerja').focus();
                 return;
+            }
+
+            // Validasi kelengkapan proyek
+            for (let i = 0; i < currentProjekList.length; i++) {
+                if (!currentProjekList[i].projek || currentProjekList[i].projek.trim() === '') {
+                    alert(`Silakan pilih proyek pada Alokasi Proyek #${i + 1}!`);
+                    return;
+                }
             }
 
             let kode = selectedPekerjaKode;
