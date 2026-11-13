@@ -802,9 +802,14 @@
             selectedPekerjaNama = p.n;
 
             document.getElementById('inputPekerja').value = `(${p.k}) ${p.n}`;
-            document.getElementById('posisiPekerja').value = p.p || '';
 
-            const upahStd = STANDAR_UPAH[p.p] || 0;
+            // Case-insensitive matching untuk dropdown posisi
+            const posTarget = (p.p || '').trim().toUpperCase();
+            const selectPosisi = document.getElementById('posisiPekerja');
+            const matchOpt = Array.from(selectPosisi.options).find(o => o.value.trim().toUpperCase() === posTarget);
+            selectPosisi.value = matchOpt ? matchOpt.value : '';
+
+            const upahStd = STANDAR_UPAH[posTarget] || STANDAR_UPAH[p.p] || 0;
             document.getElementById('upahPerHari').value = upahStd;
 
             const infoPekerja = document.getElementById('infoPekerjaTerpilih');

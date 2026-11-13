@@ -854,7 +854,7 @@ function renderUpah(filterKategori = '', currentUser = null) {
             const listPekerjaDb = dummyData.karyawanAktif.map(k => ({
                 k: k.kode || k.uid || `JK-${k.id}`,
                 n: k.nama,
-                p: k.posisi || (k.kategori === 'Staff Kantor' ? 'STAFF KANTOR' : 'TUKANG')
+                p: (k.posisi || (k.kategori === 'Staff Kantor' ? 'STAFF KANTOR' : 'TUKANG')).toUpperCase()
             }));
             html = html.replace(/const DAFTAR_PEKERJA = \[.*?\];/s, `const DAFTAR_PEKERJA = ${JSON.stringify(listPekerjaDb)};`);
             html = html.replace(/<span id="badgeTotalMasterPekerja">.*?<\/span>/, `<span id="badgeTotalMasterPekerja">${listPekerjaDb.length} Pekerja Terdaftar</span>`);
