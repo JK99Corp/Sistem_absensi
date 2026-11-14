@@ -435,6 +435,12 @@
                             <i class="fas fa-search absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
                         </div>
 
+                        <button type="button" onclick="eksporRekapExcel()" 
+                                class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-1.5 px-3.5 rounded-lg text-xs shadow-sm inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+                                title="Ekspor seluruh rekap transaksi ke format spreadsheet Microsoft Excel / CSV">
+                            <i class="fas fa-file-excel"></i> Ekspor Excel
+                        </button>
+
                         <button type="button" onclick="window.print()" 
                                 class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-1.5 px-3.5 rounded-lg text-xs shadow-sm inline-flex items-center gap-1.5 cursor-pointer">
                             <i class="fas fa-print"></i> Cetak Rekap
@@ -492,7 +498,7 @@
                         <p class="text-[11px] text-slate-600 uppercase font-bold tracking-wide">Design Build, General Contractor, Interior</p>
                         <p class="text-[10px] text-slate-500">Jl. AW. Syahranie No. 36 A Samarinda</p>
                         <div class="mt-2 inline-block bg-slate-900 text-white font-extrabold text-[11px] uppercase px-4 py-0.5 rounded tracking-widest">
-                            Slip Upah &amp; Lembur Pekerja
+                            Slip Bukti Transaksi Upah Pekerja
                         </div>
                     </div>
 
@@ -677,7 +683,7 @@
             }
         ];
 
-        // Load storage
+        // Load storage lokal terlebih dahulu
         try {
             const savedTrx = localStorage.getItem('jaya_transaksi_upah_v3');
             if (savedTrx) {
@@ -688,10 +694,36 @@
             }
         } catch (_) {}
 
+        // Sinkronisasi otomatis dari database server (jika online lewat HTTP/HTTPS)
+        if (typeof window !== 'undefined' && window.location && window.location.protocol.startsWith('http')) {
+            fetch('/api/transaksi')
+                .then(r => r.json())
+                .then(res => {
+                    if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+                        transaksiList = res.data;
+                        try {
+                            localStorage.setItem('jaya_transaksi_upah_v3', JSON.stringify(transaksiList));
+                        } catch (_) {}
+                        renderDaftarTransaksi();
+                    }
+                })
+                .catch(() => {});
+        }
+
         function simpanKeStorage() {
+            // 1. Simpan di LocalStorage browser (akses offline)
             try {
                 localStorage.setItem('jaya_transaksi_upah_v3', JSON.stringify(transaksiList));
             } catch (_) {}
+
+            // 2. Sinkronkan permanen ke Database Backend Server (jika online)
+            if (typeof window !== 'undefined' && window.location && window.location.protocol.startsWith('http')) {
+                fetch('/api/transaksi', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ transaksiSemua: transaksiList })
+                }).catch(() => {});
+            }
         }
 
         function formatRp(val) {
@@ -1210,8 +1242,25 @@
                 insentif: Number(p.insentif) || 0
             }));
 
+            const tglMulai = document.getElementById('tglMulai').value;
+            const tglSelesai = document.getElementById('tglSelesai').value;
+            const labelPeriode = (document.getElementById('labelPeriodeAktif') ? document.getElementById('labelPeriodeAktif').innerText : '').trim();
+
             let idTrx = editingTrxId || Date.now();
-            const idxAda = transaksiList.findIndex(t => t.id === idTrx || (t.kode && t.kode === kode) || (t.nama.toUpperCase() === nama.toUpperCase()));
+            let idxAda = -1;
+
+            if (editingTrxId) {
+                // Sedang mengedit transaksi yang dipilih
+                idxAda = transaksiList.findIndex(t => t.id === editingTrxId);
+            } else {
+                // Transaksi baru: cegah menimpa riwayat masa lalu
+                // Hanya update jika pekerja yang SAMA di rentang periode tanggal yang SAMA
+                idxAda = transaksiList.findIndex(t => {
+                    const periodeSama = t.tglMulai === tglMulai && t.tglSelesai === tglSelesai;
+                    const pekerjaSama = (t.kode && kode && t.kode === kode) || (t.nama && nama && t.nama.toUpperCase() === nama.toUpperCase());
+                    return periodeSama && pekerjaSama;
+                });
+            }
 
             const trxData = {
                 id: idTrx,
@@ -1219,8 +1268,12 @@
                 nama: nama,
                 posisi: posisi,
                 upahPerHari: upahPerHari,
+                tglMulai: tglMulai,
+                tglSelesai: tglSelesai,
+                periodeTeks: labelPeriode,
                 projekList: projekList,
-                kasbon: kasbon
+                kasbon: kasbon,
+                updatedAt: new Date().toISOString()
             };
 
             if (idxAda >= 0) {
@@ -1258,7 +1311,7 @@
             let nomor = 1;
 
             transaksiList.forEach(trx => {
-                const teksCari = (trx.kode + ' ' + trx.nama + ' ' + trx.posisi + ' ' + trx.projekList.map(p => p.projek).join(' ')).toUpperCase();
+                const teksCari = (trx.kode + ' ' + trx.nama + ' ' + trx.posisi + ' ' + (trx.periodeTeks || '') + ' ' + trx.projekList.map(p => p.projek).join(' ')).toUpperCase();
                 if (keyword && !teksCari.includes(keyword)) {
                     return;
                 }
@@ -1293,6 +1346,7 @@
                             ${trx.kode ? `<span class="inline-block bg-slate-800 text-white font-mono text-[11px] px-2 py-0.5 rounded-md mr-1.5 font-bold">${escapeHtml(trx.kode)}</span>` : ''}
                             ${escapeHtml(trx.nama)}
                         </div>
+                        ${trx.periodeTeks ? `<div class="text-[10px] text-teal-800 font-bold bg-teal-50 border border-teal-200/60 px-1.5 py-0.5 rounded-md inline-flex items-center gap-1 mt-1"><i class="far fa-calendar-alt text-[9px]"></i> ${escapeHtml(trx.periodeTeks)}</div>` : ''}
                     </td>
                     <td class="p-3.5">
                         <span class="inline-block bg-slate-100 border border-slate-300 text-slate-700 text-xs font-bold px-2.5 py-1 rounded-md uppercase">
@@ -1353,6 +1407,12 @@
             document.getElementById('upahPerHari').value = trx.upahPerHari;
             document.getElementById('formKasbon').value = trx.kasbon || 0;
 
+            if (trx.tglMulai && trx.tglSelesai) {
+                document.getElementById('tglMulai').value = trx.tglMulai;
+                document.getElementById('tglSelesai').value = trx.tglSelesai;
+                updatePeriodeKalender();
+            }
+
             currentProjekList = JSON.parse(JSON.stringify(trx.projekList));
             renderBlokProyek();
             hitungTotalForm();
@@ -1383,6 +1443,83 @@
         }
 
         // =========================================================================
+        // EKSPOR REKAP TRANSAKSI KE MICROSOFT EXCEL / CSV
+        // =========================================================================
+        function eksporRekapExcel() {
+            if (!transaksiList || transaksiList.length === 0) {
+                alert('Belum ada data transaksi upah untuk diekspor!');
+                return;
+            }
+
+            const labelPeriode = (document.getElementById('labelPeriodeAktif') ? document.getElementById('labelPeriodeAktif').innerText : 'Periode').trim();
+            const barisCsv = [];
+
+            // Header Kolom Excel
+            barisCsv.push(['NO', 'KODE', 'NAMA PEKERJA', 'POSISI', 'RINCIAN PROYEK & HARI KERJA', 'TOTAL HARI', 'TOTAL LEMBUR (JAM)', 'UPAH PER HARI (RP)', 'TOTAL UPAH KOTOR (RP)', 'POTONGAN KASBON (RP)', 'SISA DITERIMA (RP)', 'PERIODE TRANSAKSI']);
+
+            let no = 1;
+            let grandKotor = 0;
+            let grandKasbon = 0;
+            let grandBersih = 0;
+
+            transaksiList.forEach(trx => {
+                const tarifLembur = (trx.upahPerHari || 0) / 8;
+                let totKotor = 0;
+                let totHari = 0;
+                let totLembur = 0;
+                const rincianStr = [];
+
+                trx.projekList.forEach(p => {
+                    const subPokok = (Number(p.hari) || 0) * (trx.upahPerHari || 0);
+                    const subLembur = (Number(p.lembur) || 0) * tarifLembur;
+                    const sub = subPokok + subLembur + (Number(p.makan) || 0) + (Number(p.insentif) || 0);
+                    totKotor += sub;
+                    totHari += Number(p.hari) || 0;
+                    totLembur += Number(p.lembur) || 0;
+                    rincianStr.push(`${p.projek || 'PROYEK'} (${p.hari} hr, ${p.lembur} jam)`);
+                });
+
+                const kasbon = Number(trx.kasbon) || 0;
+                const bersih = totKotor - kasbon;
+
+                grandKotor += totKotor;
+                grandKasbon += kasbon;
+                grandBersih += bersih;
+
+                barisCsv.push([
+                    no++,
+                    trx.kode || '-',
+                    `"${(trx.nama || '').replace(/"/g, '""')}"`,
+                    `"${(trx.posisi || '').replace(/"/g, '""')}"`,
+                    `"${rincianStr.join('; ')}"`,
+                    totHari,
+                    totLembur,
+                    trx.upahPerHari || 0,
+                    totKotor,
+                    kasbon,
+                    bersih,
+                    `"${trx.periodeTeks || labelPeriode}"`
+                ]);
+            });
+
+            // Baris Grand Total
+            barisCsv.push(['', '', 'TOTAL KESELURUHAN', '', '', '', '', '', grandKotor, grandKasbon, grandBersih, '']);
+
+            // BOM UTF-8 (\uFEFF) untuk kompatibilitas sempurna dengan Microsoft Excel di Windows
+            const csvContent = '\uFEFF' + barisCsv.map(row => row.join(';')).join('\r\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const safePeriode = labelPeriode.replace(/[^a-zA-Z0-9]/g, '_');
+            a.href = url;
+            a.download = `Rekap_Transaksi_Upah_JayaKedhaton_${safePeriode}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // =========================================================================
         // E. CETAK SLIP GAJI MULTI-PROJEK (FORMAT JAYA KEDHATON)
         // =========================================================================
         function bukaSlipById(idTrx) {
@@ -1393,7 +1530,7 @@
             document.getElementById('slipNama').innerText = trx.kode ? `(${trx.kode}) ${trx.nama}` : trx.nama;
             document.getElementById('slipTtdNama').innerText = trx.nama;
             document.getElementById('slipPosisi').innerText = trx.posisi;
-            document.getElementById('slipPeriodeDisplay').innerText = document.getElementById('labelPeriodeAktif').innerText;
+            document.getElementById('slipPeriodeDisplay').innerText = trx.periodeTeks || document.getElementById('labelPeriodeAktif').innerText;
             document.getElementById('slipTglCetak').innerText = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
             const tbody = document.getElementById('slipTbodyProyek');

@@ -846,9 +846,12 @@ function renderUpah(filterKategori = '', currentUser = null) {
             html = html.replace(/<p class="text-\[11px\] font-semibold text-slate-500 capitalize">.*?<\/p>/,
                 `<p class="text-[11px] font-semibold text-slate-500 capitalize">${escapeHtml(currentUser.roleLabel || currentUser.role)}</p>`);
         }
-        // Sinkronisasi data proyek dan pekerja terkini dari database
+        // Sinkronisasi data proyek, pekerja, dan transaksi terkini dari database
         if (dummyData && dummyData.daftarProjek && dummyData.daftarProjek.length > 0) {
             html = html.replace(/const DAFTAR_PROJEK = \[.*?\];/s, `const DAFTAR_PROJEK = ${JSON.stringify(dummyData.daftarProjek)};`);
+        }
+        if (dummyData && dummyData.transaksiUpah && dummyData.transaksiUpah.length > 0) {
+            html = html.replace(/let transaksiList = \[.*?\];/s, `let transaksiList = ${JSON.stringify(dummyData.transaksiUpah)};`);
         }
         if (dummyData && dummyData.karyawanAktif && dummyData.karyawanAktif.length > 0) {
             const listPekerjaDb = dummyData.karyawanAktif.map(k => ({
@@ -2038,6 +2041,101 @@ const server = http.createServer((req, res) => {
             'Location': '/login'
         });
         res.end();
+        return;
+    }
+
+    // API: GET & POST /api/transaksi
+    if (pathname === '/api/transaksi') {
+        if (req.method === 'GET') {
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.end(JSON.stringify({ success: true, data: dummyData.transaksiUpah || [] }));
+            return;
+        }
+
+        if (req.method === 'POST') {
+            let body = '';
+            req.on('data', chunk => body += chunk);
+            req.on('end', () => {
+                try {
+                    const payload = JSON.parse(body);
+                    if (!dummyData.transaksiUpah) dummyData.transaksiUpah = [];
+
+                    if (payload.transaksiSemua && Array.isArray(payload.transaksiSemua)) {
+                        dummyData.transaksiUpah = payload.transaksiSemua;
+                        saveToDisk();
+                        if (currentUser) {
+                            addAuditLog(currentUser.username, 'SYNC_TRANSAKSI', `Sinkronisasi ${dummyData.transaksiUpah.length} transaksi upah`, clientIp);
+                        }
+                        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                        res.end(JSON.stringify({ success: true, count: dummyData.transaksiUpah.length }));
+                        return;
+                    }
+
+                    const trx = payload;
+                    if (!trx || !trx.nama) {
+                        res.writeHead(400, { 'Content-Type': 'application/json' });
+                        res.end(JSON.stringify({ success: false, error: 'Data transaksi tidak valid' }));
+                        return;
+                    }
+
+                    let idTrx = trx.id || Date.now();
+                    trx.id = idTrx;
+
+                    let idx = dummyData.transaksiUpah.findIndex(t => t.id === idTrx);
+                    if (idx === -1 && trx.tglMulai && trx.tglSelesai) {
+                        idx = dummyData.transaksiUpah.findIndex(t =>
+                            t.tglMulai === trx.tglMulai &&
+                            t.tglSelesai === trx.tglSelesai &&
+                            ((t.kode && trx.kode && t.kode === trx.kode) || (t.nama && trx.nama && t.nama.toUpperCase() === trx.nama.toUpperCase()))
+                        );
+                    }
+
+                    if (idx >= 0) {
+                        dummyData.transaksiUpah[idx] = { ...dummyData.transaksiUpah[idx], ...trx };
+                    } else {
+                        dummyData.transaksiUpah.unshift(trx);
+                    }
+
+                    saveToDisk();
+                    if (currentUser) {
+                        addAuditLog(currentUser.username, 'SIMPAN_TRANSAKSI', `Menyimpan transaksi upah: ${trx.nama} (${trx.kode || '-'})`, clientIp);
+                    }
+
+                    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                    res.end(JSON.stringify({ success: true, data: trx }));
+                } catch (err) {
+                    res.writeHead(500, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ success: false, error: err.message }));
+                }
+            });
+            return;
+        }
+    }
+
+    // API: POST /api/transaksi/hapus
+    if (pathname === '/api/transaksi/hapus' && req.method === 'POST') {
+        let body = '';
+        req.on('data', chunk => body += chunk);
+        req.on('end', () => {
+            try {
+                const payload = JSON.parse(body);
+                const targetId = payload.id;
+                if (!dummyData.transaksiUpah) dummyData.transaksiUpah = [];
+                const prev = dummyData.transaksiUpah.length;
+                dummyData.transaksiUpah = dummyData.transaksiUpah.filter(t => t.id != targetId);
+                if (dummyData.transaksiUpah.length !== prev) {
+                    saveToDisk();
+                    if (currentUser) {
+                        addAuditLog(currentUser.username, 'HAPUS_TRANSAKSI', `Menghapus transaksi upah ID: ${targetId}`, clientIp);
+                    }
+                }
+                res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                res.end(JSON.stringify({ success: true }));
+            } catch (err) {
+                res.writeHead(500, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ success: false, error: err.message }));
+            }
+        });
         return;
     }
 
