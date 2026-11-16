@@ -51,12 +51,62 @@ function handleRequest(req, res) {
     }
     const query = Object.fromEntries(parsedUrl.searchParams.entries());
 
-    // 1. Static Assets Handler (Logo PNG Transparan)
+    // 1. Static Assets Handler (Logo, Favicon, & Frontend Client Scripts)
+    if (reqUrl.includes('..') || pathname.includes('..')) {
+        res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+        res.end('Akses Ditolak');
+        return;
+    }
+
+    if (pathname === '/favicon.ico') {
+        const logoPath = path.join(__dirname, '..', '..', 'public', 'images', 'logo.png');
+        if (fs.existsSync(logoPath)) {
+            res.writeHead(200, { 'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=86400' });
+            res.end(fs.readFileSync(logoPath));
+            return;
+        }
+        res.writeHead(204);
+        res.end();
+        return;
+    }
+
     if (pathname === '/images/logo.png' || pathname === '/images/logo.jpg' || pathname === '/logo.png' || pathname === '/logo.jpg') {
         const logoPath = path.join(__dirname, '..', '..', 'public', 'images', 'logo.png');
         if (fs.existsSync(logoPath)) {
             res.writeHead(200, { 'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800' });
             res.end(fs.readFileSync(logoPath));
+            return;
+        }
+    }
+
+    const staticMimes = {
+        '.js': 'application/javascript; charset=utf-8',
+        '.json': 'application/json; charset=utf-8',
+        '.css': 'text/css; charset=utf-8',
+        '.png': 'image/png',
+        '.jpg': 'image/jpeg',
+        '.jpeg': 'image/jpeg',
+        '.svg': 'image/svg+xml',
+        '.ico': 'image/x-icon'
+    };
+    const ext = path.extname(pathname).toLowerCase();
+    if (staticMimes[ext]) {
+        const publicCandidate = path.join(__dirname, '..', '..', 'public', pathname);
+        const previewCandidate = path.join(__dirname, '..', '..', 'preview', path.basename(pathname));
+
+        let targetFile = null;
+        if (fs.existsSync(publicCandidate) && fs.statSync(publicCandidate).isFile()) {
+            targetFile = publicCandidate;
+        } else if (fs.existsSync(previewCandidate) && fs.statSync(previewCandidate).isFile()) {
+            targetFile = previewCandidate;
+        }
+
+        if (targetFile) {
+            res.writeHead(200, {
+                'Content-Type': staticMimes[ext],
+                'Cache-Control': 'public, max-age=3600'
+            });
+            res.end(fs.readFileSync(targetFile));
             return;
         }
     }

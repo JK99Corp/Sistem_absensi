@@ -21,7 +21,7 @@ function handleLoginSubmit(req, res, clientIp) {
         if (userFound) {
             addAuditLog(userFound.username, 'LOGIN', 'Berhasil login ke sistem melalui Portal Keamanan', clientIp);
             res.writeHead(302, {
-                'Set-Cookie': `auth_user=${encodeURIComponent(userFound.username)}; Path=/; HttpOnly`,
+                'Set-Cookie': `auth_user=${encodeURIComponent(userFound.username)}; Path=/; HttpOnly; SameSite=Lax`,
                 'Location': '/dashboard'
             });
             res.end();

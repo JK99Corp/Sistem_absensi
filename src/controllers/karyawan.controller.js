@@ -536,6 +536,8 @@ function handleRestoreKaryawan(req, res, currentUser, clientIp, targetId) {
         }
 
         const restored = dummyData.karyawanArsip.splice(idx, 1)[0];
+        delete restored.deletedAt;
+        delete restored.keterangan;
         dummyData.karyawanAktif.push({
             ...restored,
             status: 'Aktif'

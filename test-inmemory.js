@@ -18,6 +18,9 @@ if (fs.existsSync(logoPath)) {
     process.exit(1);
 }
 
+// Simpan snapshot database awal untuk teardown steril
+const initialStorageSnapshot = fs.readFileSync(path.join(__dirname, 'database', 'storage.json'), 'utf8');
+
 // 2. Audit Server Router secara langsung tanpa network socket
 let serverInstance;
 const originalListen = require('http').Server.prototype.listen;
@@ -52,11 +55,17 @@ function simulateRequest(method, urlStr, postData = null, cookie = 'auth_user=su
 
         res.writeHead = function(code, h) {
             statusCode = code;
-            if (h) Object.assign(headers, h);
+            if (h) {
+                for (const [k, v] of Object.entries(h)) {
+                    headers[k] = v;
+                    headers[k.toLowerCase()] = v;
+                }
+            }
             return res;
         };
 
         res.setHeader = function(key, val) {
+            headers[key] = val;
             headers[key.toLowerCase()] = val;
             return res;
         };
@@ -251,38 +260,39 @@ async function runAudit() {
         ? '✅ [BUGFIX 10] Endpoint tidak terdaftar mengembalikan status resmi HTTP 404' 
         : '❌ 404 handler belum tepat!');
 
-    // Bersihkan data sampah pengujian
-    const cleanStorage = JSON.parse(fs.readFileSync('database/storage.json', 'utf8'));
-    cleanStorage.karyawanAktif = cleanStorage.karyawanAktif.filter(k => 
-        k.nama !== 'Suryanto' && 
-        k.nama !== 'MinusCheck' && 
-        k.nama !== xssName
-    );
-    cleanStorage.kartu = cleanStorage.kartu.filter(c => 
-        c.pemilik !== 'Suryanto' && 
-        c.pemilik !== 'MinusCheck' && 
-        c.pemilik !== xssName
-    );
-    cleanStorage.karyawanUpah = cleanStorage.karyawanUpah.filter(u => 
-        u.nama !== 'Suryanto' && 
-        u.nama !== 'MinusCheck' && 
-        u.nama !== xssName
-    );
-    if (cleanStorage.pekerjaHarian) {
-        cleanStorage.pekerjaHarian = cleanStorage.pekerjaHarian.filter(p => 
-            p.nama !== 'Suryanto' && 
-            p.nama !== 'MinusCheck' && 
-            p.nama !== xssName
-        );
-    }
-    if (cleanStorage.auditLogs) {
-        cleanStorage.auditLogs = cleanStorage.auditLogs.filter(l => 
-            !l.keterangan.includes(xssName) && 
-            !l.keterangan.includes('MinusCheck') && 
-            !l.keterangan.includes('Suryanto')
-        );
-    }
-    fs.writeFileSync('database/storage.json', JSON.stringify(cleanStorage, null, 2), 'utf8');
+    // [AUDIT 9] Menguji Pelayanan Asset Statis & Script Client:
+    console.log('\n[AUDIT 9] Menguji Pelayanan Asset Statis & Script Frontend:');
+    const resJs1 = await simulateRequest('GET', '/transaksi-upah.js', null, '');
+    console.log(resJs1.statusCode === 200 && resJs1.headers['content-type']?.includes('javascript')
+        ? '✅ [STATIC 1] Script /transaksi-upah.js berhasil disajikan (HTTP 200, JS MIME)'
+        : '❌ Script transaksi-upah.js gagal disajikan');
+
+    const resJs2 = await simulateRequest('GET', '/projek-manager.js', null, '');
+    console.log(resJs2.statusCode === 200 && resJs2.headers['content-type']?.includes('javascript')
+        ? '✅ [STATIC 2] Script /projek-manager.js berhasil disajikan (HTTP 200, JS MIME)'
+        : '❌ Script projek-manager.js gagal disajikan');
+
+    const resJson = await simulateRequest('GET', '/pekerja_kode.json', null, '');
+    console.log(resJson.statusCode === 200 && resJson.headers['content-type']?.includes('json')
+        ? '✅ [STATIC 3] Data master /pekerja_kode.json berhasil disajikan (HTTP 200, JSON MIME)'
+        : '❌ Data pekerja_kode.json gagal disajikan');
+
+    const resSec = await simulateRequest('GET', '/../database/storage.json', null, '');
+    console.log(resSec.statusCode === 403
+        ? '✅ [STATIC 4] Path Traversal Protection aktif (HTTP 403 Forbidden)'
+        : '❌ Path Traversal lolos!');
+
+    // [AUDIT 10] Menguji Pengamanan Cookie Session:
+    console.log('\n[AUDIT 10] Menguji Atribut Keamanan Cookie Sesi:');
+    const resLoginCookie = await simulateRequest('POST', '/login', 'username=superadmin&password=kedhaton2026!', '');
+    const setCookie = resLoginCookie.headers['set-cookie'] || '';
+    console.log(setCookie.includes('HttpOnly') && setCookie.includes('SameSite=Lax')
+        ? '✅ [COOKIE] Cookie sesi terproteksi dengan HttpOnly & SameSite=Lax'
+        : '❌ Atribut keamanan cookie belum lengkap!');
+
+    // Teardown steril: Kembalikan kondisi storage.json persis seperti snapshot awal
+    fs.writeFileSync(path.join(__dirname, 'database', 'storage.json'), initialStorageSnapshot, 'utf8');
+    require('./src/db/storage').loadFromDisk();
 
     console.log('\n======================================================');
     console.log('🌟 HASIL AUDIT: SELURUH SISTEM 100% LOLOS & TANGGUH!');

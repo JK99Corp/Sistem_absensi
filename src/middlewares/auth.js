@@ -19,7 +19,7 @@ function getCurrentUser(req) {
 }
 
 function addAuditLog(username, aksi, keterangan, ip = '127.0.0.1') {
-    const user = REGISTERED_USERS.find(u => u.username === username) || { nama: username, roleLabel: 'Pengguna' };
+    const user = REGISTERED_USERS.find(u => u.username.toLowerCase() === (username || '').toLowerCase()) || { nama: username, roleLabel: 'Pengguna' };
     const now = new Date();
     const pad = n => String(n).padStart(2, '0');
     const waktu = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;

@@ -14,7 +14,8 @@ function escapeHtml(str) {
 }
 
 function formatRupiahNum(n) {
-    return 'Rp ' + Number(n).toLocaleString('id-ID');
+    const num = Number(n);
+    return 'Rp ' + (isNaN(num) ? 0 : num).toLocaleString('id-ID');
 }
 
 function cleanIp(ip) {

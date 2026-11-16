@@ -86,11 +86,11 @@ function renderLayout(title, activeMenu, content, currentUser = null) {
         <header class="bg-white shadow-sm px-8 py-3.5 flex items-center justify-between sticky top-0 z-40">
             <div class="flex items-center gap-3 text-sm text-slate-600">
                 <div class="w-9 h-9 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold text-sm shadow-sm">
-                    ${user.nama.charAt(0)}
+                    ${escapeHtml(user.nama ? user.nama.charAt(0) : 'U')}
                 </div>
                 <div>
-                    <div class="font-bold text-slate-800 leading-tight">${user.nama}</div>
-                    <div class="text-xs text-slate-500">${user.roleLabel} &bull; <span class="font-mono text-slate-400">@${user.username}</span></div>
+                    <div class="font-bold text-slate-800 leading-tight">${escapeHtml(user.nama)}</div>
+                    <div class="text-xs text-slate-500">${escapeHtml(user.roleLabel)} &bull; <span class="font-mono text-slate-400">@${escapeHtml(user.username)}</span></div>
                 </div>
                 ${isSuperAdmin
             ? '<span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-teal-100 text-teal-800 border border-teal-200"><i class="fas fa-lock-open mr-1"></i> Izin Audit Penuh</span>'
