@@ -275,6 +275,13 @@ async function runAudit() {
             p.nama !== xssName
         );
     }
+    if (cleanStorage.auditLogs) {
+        cleanStorage.auditLogs = cleanStorage.auditLogs.filter(l => 
+            !l.keterangan.includes(xssName) && 
+            !l.keterangan.includes('MinusCheck') && 
+            !l.keterangan.includes('Suryanto')
+        );
+    }
     fs.writeFileSync('database/storage.json', JSON.stringify(cleanStorage, null, 2), 'utf8');
 
     console.log('\n======================================================');
