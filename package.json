@@ -4,7 +4,9 @@
   "description": "Prototype Website Absensi Digital Dual-ESP32 PT Jaya Kedhaton",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node test-inmemory.js",
+    "test:security": "node test-security.js"
   },
   "dependencies": {
     "pg": "^8.13.1"
