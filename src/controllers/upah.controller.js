@@ -37,7 +37,8 @@ function renderUpah(filterKategori = '', currentUser = null) {
         };
     </script>
 `;
-        html = html.replace('<script src="transaksi-upah.js"></script>', `${serverDataScript}    <script src="transaksi-upah.js"></script>`);
+        const cacheBuster = `transaksi-upah.js?v=${Date.now()}`;
+        html = html.replace(/<script src="transaksi-upah\.js.*?"><\/script>/, `${serverDataScript}    <script src="${cacheBuster}"></script>`);
         if (listPekerjaDb.length > 0) {
             html = html.replace(/<span id="badgeTotalMasterPekerja">.*?<\/span>/, `<span id="badgeTotalMasterPekerja">${listPekerjaDb.length} Pekerja Terdaftar</span>`);
         }

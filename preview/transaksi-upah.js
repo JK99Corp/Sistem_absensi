@@ -825,17 +825,17 @@
                     </td>
                     <td class="p-3.5 text-center no-print">
                         <div class="inline-flex items-center gap-1.5">
-                            <button type="button" onclick="bukaSlipById(${trx.id})" 
+                            <button type="button" onclick="bukaSlipById('${trx.id}')" 
                                     class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-2.5 py-1.5 rounded-lg text-xs shadow-sm cursor-pointer"
                                     title="Cetak Slip Gaji">
                                 <i class="fas fa-file-invoice"></i> Slip
                             </button>
-                            <button type="button" onclick="editTrxKeForm(${trx.id})" 
+                            <button type="button" onclick="editTrxKeForm('${trx.id}')" 
                                     class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-2.5 py-1.5 rounded-lg text-xs border border-slate-300 cursor-pointer"
                                     title="Muat kembali data ke form di atas untuk diedit">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button type="button" onclick="hapusTrx(${trx.id})" 
+                            <button type="button" onclick="hapusTrx('${trx.id}')" 
                                      class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold px-2.5 py-1.5 rounded-lg text-xs border border-rose-200 cursor-pointer"
                                      title="Hapus dari daftar">
                                 <i class="fas fa-trash-alt"></i>
@@ -1165,42 +1165,73 @@
         }
 
         function bukaSlipById(idTrx) {
-            const trx = transaksiList.find(t => t.id === idTrx);
-            if (!trx) return;
+            try {
+                console.log('[SLIP] Membuka slip untuk ID:', idTrx);
+                
+                // Cari transaksi dengan pencocokan string untuk mencegah mismatch tipe data (number vs string)
+                let trx = transaksiList.find(t => String(t.id) === String(idTrx));
+                
+                // Fallback jika tidak ditemukan di memori lokal, coba cari di window.SERVER_DATA
+                if (!trx && typeof window !== 'undefined' && window.SERVER_DATA && Array.isArray(window.SERVER_DATA.transaksiList)) {
+                    trx = window.SERVER_DATA.transaksiList.find(t => String(t.id) === String(idTrx));
+                }
 
-            const tglCetakLengkap = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-            const tglCetakSingkat = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+                if (!trx) {
+                    console.warn('[SLIP] Data transaksi tidak ditemukan untuk ID:', idTrx);
+                    alert('Data transaksi tidak ditemukan (ID: ' + idTrx + ')');
+                    return;
+                }
 
-            const elPenerima = document.getElementById('slipLembarPenerima');
-            const elKeuangan = document.getElementById('slipLembarKeuangan');
+                const tglCetakLengkap = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                const tglCetakSingkat = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
 
-            if (elPenerima) {
-                elPenerima.innerHTML = renderSlipLembar(trx, {
-                    label: 'UNTUK PENERIMA',
-                    sub: 'Lembar Pekerja / Karyawan',
-                    badgeClass: 'bg-emerald-900 text-white'
-                }, tglCetakLengkap, tglCetakSingkat);
+                const elPenerima = document.getElementById('slipLembarPenerima');
+                const elKeuangan = document.getElementById('slipLembarKeuangan');
+
+                if (elPenerima) {
+                    elPenerima.innerHTML = renderSlipLembar(trx, {
+                        label: 'UNTUK PENERIMA',
+                        sub: 'Lembar Pekerja / Karyawan',
+                        badgeClass: 'bg-emerald-900 text-white'
+                    }, tglCetakLengkap, tglCetakSingkat);
+                }
+
+                if (elKeuangan) {
+                    elKeuangan.innerHTML = renderSlipLembar(trx, {
+                        label: 'BUKTI BUAT STAF KEUANGAN',
+                        sub: 'Lembar Arsip Dokumen Keuangan',
+                        badgeClass: 'bg-slate-900 text-white'
+                    }, tglCetakLengkap, tglCetakSingkat);
+                }
+
+                // Kompatibilitas mundur jika browser memuat template DOM lama
+                const elOldNama = document.getElementById('slipNama');
+                if (elOldNama) elOldNama.innerText = trx.kode ? `(${trx.kode}) ${trx.nama}` : trx.nama;
+                const elOldPosisi = document.getElementById('slipPosisi');
+                if (elOldPosisi) elOldPosisi.innerText = trx.posisi || '-';
+                const elOldPeriode = document.getElementById('slipPeriodeDisplay');
+                if (elOldPeriode) elOldPeriode.innerText = trx.periodeTeks || '-';
+                const elOldTtdNama = document.getElementById('slipTtdNama');
+                if (elOldTtdNama) elOldTtdNama.innerText = trx.nama;
+
+                // Pastikan @page diatur ke landscape saat modal slip dibuka
+                let dynamicPrintStyle = document.getElementById('dynamicPrintPageStyle');
+                if (!dynamicPrintStyle) {
+                    dynamicPrintStyle = document.createElement('style');
+                    dynamicPrintStyle.id = 'dynamicPrintPageStyle';
+                    document.head.appendChild(dynamicPrintStyle);
+                }
+                dynamicPrintStyle.innerHTML = '@page { size: A4 landscape; margin: 5mm 6mm; }';
+
+                const modal = document.getElementById('modalSlip');
+                if (modal) {
+                    modal.classList.remove('hidden');
+                }
+                document.body.classList.add('slip-open');
+            } catch (err) {
+                console.error('[SLIP ERROR] Terjadi kesalahan saat membuka slip:', err);
+                alert('Gagal membuka slip: ' + err.message);
             }
-
-            if (elKeuangan) {
-                elKeuangan.innerHTML = renderSlipLembar(trx, {
-                    label: 'BUKTI BUAT STAF KEUANGAN',
-                    sub: 'Lembar Arsip Dokumen Keuangan',
-                    badgeClass: 'bg-slate-900 text-white'
-                }, tglCetakLengkap, tglCetakSingkat);
-            }
-
-            // Pastikan @page diatur ke landscape saat modal slip dibuka
-            let dynamicPrintStyle = document.getElementById('dynamicPrintPageStyle');
-            if (!dynamicPrintStyle) {
-                dynamicPrintStyle = document.createElement('style');
-                dynamicPrintStyle.id = 'dynamicPrintPageStyle';
-                document.head.appendChild(dynamicPrintStyle);
-            }
-            dynamicPrintStyle.innerHTML = '@page { size: A4 landscape; margin: 5mm 6mm; }';
-
-            document.getElementById('modalSlip').classList.remove('hidden');
-            document.body.classList.add('slip-open');
         }
 
         function tutupSlip() {
@@ -1301,3 +1332,12 @@
         // Inisialisasi awal halaman (Form Bersih Tanpa Autofill Default)
         renderDaftarTransaksi();
         resetFormBaru();
+
+        // Expose fungsi secara global ke window untuk event handler inline
+        if (typeof window !== 'undefined') {
+            window.bukaSlipById = bukaSlipById;
+            window.tutupSlip = tutupSlip;
+            window.simpanTransaksi = simpanTransaksi;
+            window.editTrxKeForm = editTrxKeForm;
+            window.hapusTrx = hapusTrx;
+        }

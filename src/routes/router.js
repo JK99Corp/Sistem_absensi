@@ -103,9 +103,12 @@ function handleRequest(req, res) {
         }
 
         if (targetFile) {
+            const cacheControl = (ext === '.js' || ext === '.json')
+                ? 'no-cache, no-store, must-revalidate'
+                : 'public, max-age=3600';
             res.writeHead(200, {
                 'Content-Type': staticMimes[ext],
-                'Cache-Control': 'public, max-age=3600'
+                'Cache-Control': cacheControl
             });
             res.end(fs.readFileSync(targetFile));
             return;
