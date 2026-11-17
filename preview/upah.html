@@ -54,11 +54,11 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
         }
 
-        /* Mode Cetak Slip & Rekap Sempurna (Tidak Terpotong) */
+        /* Mode Cetak Slip 2 Rangkap & Rekap (Format Landscape A4 Hemat Kertas) */
         @media print {
             @page {
-                size: A4 portrait;
-                margin: 8mm 10mm;
+                size: A4 landscape;
+                margin: 5mm 6mm;
             }
             aside, header, #areaPetunjuk, #areaKalender, #areaInputForm, #areaTabelRekap, .no-print { 
                 display: none !important; 
@@ -74,6 +74,8 @@
                 color: #000000 !important;
                 margin: 0 !important;
                 padding: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
             body.slip-open main > div:not(#modalSlip) { 
                 display: none !important; 
@@ -89,13 +91,35 @@
             }
             body.slip-open #modalSlip > div {
                 box-shadow: none !important;
-                border: 2px solid #0f172a !important;
-                border-radius: 8px !important;
+                border: none !important;
+                border-radius: 0 !important;
                 width: 100% !important;
                 max-width: 100% !important;
-                margin: 0 auto !important;
-                padding: 18px 24px !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+            }
+            body.slip-open #slipPrintWrapper {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 8mm !important;
+                width: 100% !important;
                 page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+            body.slip-open .slip-box {
+                border: 1.5px solid #0f172a !important;
+                border-radius: 6px !important;
+                padding: 8px 12px !important;
+                background: white !important;
+                box-shadow: none !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                height: 100% !important;
+                min-height: 178mm !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
             }
         }
     </style>
@@ -521,119 +545,58 @@
             </div>
 
             <!-- ============================================================ -->
-            <!-- MODAL SLIP GAJI GABUNGAN MULTI-PROJEK (RAPI & TIDAK TERPOTONG) -->
+            <!-- MODAL SLIP GAJI 2 RANGKAP (1 KERTAS LANDSCAPE: PENERIMA & KEUANGAN) -->
             <!-- ============================================================ -->
-            <div id="modalSlip" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden overflow-y-auto p-3 sm:p-4 md:p-6 flex justify-center items-start sm:items-center">
-                <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-5 sm:p-6 text-slate-800 relative my-auto border-2 border-slate-300">
+            <div id="modalSlip" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden overflow-y-auto p-2 sm:p-4 lg:p-6 flex justify-center items-start">
+                <div class="bg-white rounded-2xl shadow-2xl w-full max-w-7xl p-4 sm:p-6 text-slate-800 relative my-auto border border-slate-300">
                     
-                    <!-- Tombol Tutup (Hanya Layar) -->
-                    <button onclick="tutupSlip()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-2xl font-bold cursor-pointer no-print w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-100 transition-colors">
-                        &times;
-                    </button>
-
-                    <!-- Kop Surat Jaya Kedhaton -->
-                    <div class="border-b-2 border-slate-800 pb-3 text-center">
-                        <img src="images/logo.png" alt="Logo" class="w-12 h-12 mx-auto object-contain mb-1">
-                        <h3 class="text-lg md:text-xl font-black text-slate-900 tracking-wider uppercase">PT. JAYA KEDHATON</h3>
-                        <p class="text-[11px] text-slate-600 uppercase font-bold tracking-wide">Design Build, General Contractor, Interior</p>
-                        <p class="text-[10px] text-slate-500">Jl. AW. Syahranie No. 36 A Samarinda</p>
-                        <div class="mt-2 inline-block bg-slate-900 text-white font-extrabold text-[11px] uppercase px-4 py-0.5 rounded tracking-widest">
-                            Slip Bukti Transaksi Upah Pekerja
-                        </div>
-                    </div>
-
-                    <!-- Identitas Pekerja -->
-                    <div class="py-3 text-xs md:text-sm grid grid-cols-2 gap-2 border-b border-slate-200">
+                    <!-- Header Modal & Kontrol (Hanya Layar, No-Print) -->
+                    <div class="flex flex-wrap items-center justify-between pb-4 mb-4 border-b border-slate-200 no-print gap-3">
                         <div>
-                            <span class="text-slate-500 block text-[11px]">Nama Pekerja:</span>
-                            <span class="font-bold text-sm md:text-base text-slate-900" id="slipNama">-</span>
-                        </div>
-                        <div>
-                            <span class="text-slate-500 block text-[11px]">Posisi / Jabatan:</span>
-                            <span class="font-bold text-slate-800" id="slipPosisi">-</span>
-                        </div>
-                        <div class="col-span-2">
-                            <span class="text-slate-500 block text-[11px]">Periode Upah:</span>
-                            <span class="font-semibold text-slate-700" id="slipPeriodeDisplay">-</span>
-                        </div>
-                    </div>
-
-                    <!-- Rincian Proyek -->
-                    <div class="py-3">
-                        <p class="text-xs font-bold text-slate-700 uppercase mb-2">Rincian Perhitungan Per Proyek:</p>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-xs border border-slate-200">
-                                <thead class="bg-slate-100 text-slate-700 uppercase font-extrabold text-[10px]">
-                                    <tr>
-                                        <th class="p-2 text-left">Proyek</th>
-                                        <th class="p-2 text-center">Hari</th>
-                                        <th class="p-2 text-right">Upah/Hari</th>
-                                        <th class="p-2 text-center">Lembur</th>
-                                        <th class="p-2 text-right">Makan</th>
-                                        <th class="p-2 text-right">Transport</th>
-                                        <th class="p-2 text-right">Insentif</th>
-                                        <th class="p-2 text-right">Subtotal</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="slipTbodyProyek" class="divide-y divide-slate-100">
-                                    <!-- Diisi JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Total Kotor, Kasbon, dan Sisa Diterima -->
-                    <div class="pt-3 border-t-2 border-slate-800 space-y-1.5 text-xs md:text-sm">
-                        <div class="flex justify-between font-bold text-slate-700">
-                            <span>Total Upah Kotor:</span>
-                            <span class="font-bold text-slate-800" id="slipTotalKotor">Rp 0</span>
-                        </div>
-                        <div class="flex justify-between text-rose-600 font-semibold" id="slipRowKasbon">
-                            <div>
-                                <span>Potongan Kasbon:</span>
-                                <div id="slipKasbonKetDisplay" class="text-[11px] text-slate-500 font-normal italic"></div>
+                            <div class="flex items-center gap-2">
+                                <span class="bg-emerald-100 text-emerald-800 font-bold text-xs px-2.5 py-1 rounded-md flex items-center gap-1.5">
+                                    <i class="fas fa-file-invoice-dollar"></i> Cetak 2 Rangkap (Hemat Kertas)
+                                </span>
+                                <span class="bg-slate-100 text-slate-700 font-semibold text-xs px-2.5 py-1 rounded-md">
+                                    Format: A4 Landscape
+                                </span>
                             </div>
-                            <span id="slipKasbonNilai">- Rp 0</span>
+                            <h3 class="text-base sm:text-lg font-bold text-slate-900 mt-1">Pratinjau Slip Upah Pekerja PT. Jaya Kedhaton</h3>
+                            <p class="text-xs text-slate-500">Hasil print memuat 2 lembar berdampingan dalam 1 kertas landscape: <strong>Lembar Penerima</strong> &amp; <strong>Bukti Staf Keuangan</strong> (Tanda tangan khusus Penerima).</p>
                         </div>
-                        <div class="flex justify-between font-extrabold text-base md:text-lg border-t border-slate-200 pt-2 text-slate-900 bg-emerald-50/70 p-2.5 rounded-lg">
-                            <span class="text-emerald-900">Sisa Gaji Yang Diterima:</span>
-                            <span class="text-lg md:text-xl text-emerald-800 font-black" id="slipSisaDiterima">Rp 0</span>
-                        </div>
-                        <!-- Rincian Penyerahan: Transfer & Cash -->
-                        <div class="grid grid-cols-2 gap-2.5 pt-2 border-t border-dashed border-slate-300">
-                            <div class="bg-sky-50 border border-sky-200 p-2.5 rounded-lg">
-                                <span class="text-[10px] uppercase font-bold text-sky-800 block">Ditransfer ke Rekening:</span>
-                                <span class="font-extrabold text-sky-900 text-sm md:text-base font-mono" id="slipTransferNilai">Rp 0</span>
-                            </div>
-                            <div class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg">
-                                <span class="text-[10px] uppercase font-bold text-amber-800 block">Diterima Tunai (Cash):</span>
-                                <span class="font-black text-amber-900 text-sm md:text-base font-mono" id="slipCashNilai">Rp 0</span>
-                            </div>
+                        <div class="flex items-center gap-2">
+                            <button type="button" onclick="window.print()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-4 py-2 rounded-xl text-xs sm:text-sm shadow cursor-pointer transition-colors inline-flex items-center gap-2">
+                                <i class="fas fa-print"></i> Cetak Slip (Landscape)
+                            </button>
+                            <button type="button" onclick="tutupSlip()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-xl text-xs sm:text-sm cursor-pointer transition-colors">
+                                &times; Tutup
+                            </button>
                         </div>
                     </div>
 
-                    <!-- Tanda Tangan -->
-                    <div class="mt-6 pt-4 border-t border-slate-200 grid grid-cols-2 gap-4 text-center text-xs">
-                        <div>
-                            <p class="text-slate-500 mb-10">Penerima,</p>
-                            <p class="font-bold underline text-slate-800" id="slipTtdNama">-</p>
+                    <!-- CONTAINER 2 RANGKAP SLIP (SIDE-BY-SIDE DALAM PRINT LANDSCAPE) -->
+                    <div id="slipPrintWrapper" class="grid grid-cols-1 xl:grid-cols-2 gap-5 relative">
+                        <!-- Lembar 1: UNTUK PENERIMA -->
+                        <div id="slipLembarPenerima" class="slip-box bg-white rounded-xl border border-slate-300 p-4 sm:p-5 flex flex-col justify-between relative shadow-sm">
+                            <!-- Diisi oleh JS -->
                         </div>
-                        <div>
-                            <p class="text-slate-500 text-[11px]">Samarinda, <span id="slipTglCetak">--</span></p>
-                            <p class="text-slate-500 mb-10">Administrasi Keuangan,</p>
-                            <p class="font-bold underline text-slate-800">PT. JAYA KEDHATON</p>
+
+                        <!-- Lembar 2: BUKTI BUAT STAF KEUANGAN -->
+                        <div id="slipLembarKeuangan" class="slip-box bg-white rounded-xl border border-slate-300 p-4 sm:p-5 flex flex-col justify-between relative shadow-sm">
+                            <!-- Diisi oleh JS -->
                         </div>
                     </div>
 
-                    <!-- Tombol Cetak / Tutup Modal -->
-                    <div class="mt-6 flex gap-3 no-print">
-                        <button type="button" onclick="window.print()" class="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-xl text-xs md:text-sm shadow cursor-pointer transition-colors inline-flex items-center justify-center gap-2">
-                            <i class="fas fa-print"></i> Cetak Slip Ini
+                    <!-- Footer Tombol Cetak Bawah (No-Print) -->
+                    <div class="mt-6 pt-4 border-t border-slate-200 flex justify-end gap-3 no-print">
+                        <button type="button" onclick="tutupSlip()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-5 py-2.5 rounded-xl text-xs sm:text-sm cursor-pointer transition-colors">
+                            Batal
                         </button>
-                        <button type="button" onclick="tutupSlip()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-xl text-xs md:text-sm cursor-pointer transition-colors">
-                            Tutup
+                        <button type="button" onclick="window.print()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-6 py-2.5 rounded-xl text-xs sm:text-sm shadow cursor-pointer transition-colors inline-flex items-center gap-2">
+                            <i class="fas fa-print"></i> Cetak 1 Lembar Landscape
                         </button>
                     </div>
+
                 </div>
             </div>
 

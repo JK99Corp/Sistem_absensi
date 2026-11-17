@@ -12,6 +12,7 @@
 database/*.tmp
 scratch/
 scratch_*.js
+~$*
 
 # OS Metadata
 .DS_Store
