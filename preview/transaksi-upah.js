@@ -1083,10 +1083,6 @@
             document.body.classList.add('slip-open');
         }
 
-            document.getElementById('modalSlip').classList.remove('hidden');
-            document.body.classList.add('slip-open');
-        }
-
         function tutupSlip() {
             document.getElementById('modalSlip').classList.add('hidden');
             document.body.classList.remove('slip-open');
