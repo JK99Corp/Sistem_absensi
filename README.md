@@ -1,67 +1,119 @@
-# Sistem_absensi
+# Sistem Absensi Digital Dual-ESP32 PT. Jaya Kedhaton
 
-## Sistem Absensi Digital Dual-ESP32 PT Jaya Kedhaton
+[![Enterprise CI Pipeline](https://github.com/JK99Corp/Sistem_absensi/actions/workflows/ci.yml/badge.svg)](https://github.com/JK99Corp/Sistem_absensi/actions)
+![Node Version](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-emerald)
+![Security Audit](https://img.shields.io/badge/Security_Audit-100%25_PASS-success)
+![Architecture](https://img.shields.io/badge/Architecture-Clean_Layered_(Enterprise)-blue)
+![Platform](https://img.shields.io/badge/Platform-Windows_%7C_macOS_%7C_Linux-indigo)
 
-Prototype website monitoring & absensi masuk untuk sistem hardware **Dual-ESP32 (RFID RC522 + Kamera ESP32-S3 OV5640)**.
-
-Sistem dirancang dengan antarmuka yang sangat **bersih, teks besar, kontras tinggi, dan ramah pengguna** untuk memudahkan staf kantor wanita usia 40-an tahun yang awam teknologi.
+Platform terintegrasi absensi digital, monitoring perangkat Dual-ESP32 (RFID RC522 + Kamera ESP32-S3 OV5640), transaksi upah tukang & staf multi-proyek, kalkulasi kasbon & transfer, dan agregasi pengeluaran per proyek konstruksi **PT. Jaya Kedhaton**.
 
 ---
 
-## 🚀 Cara Cepat Membuka untuk Presentasi
+## 🚀 Panduan Membuka & Menjalankan Aplikasi
 
-Pilih salah satu opsi termudah untuk presentasi langsung di depan audiens:
+Aplikasi ini bersifat **Cross-Platform** dan mendukung **Dual-Mode** (Mode Server Interaktif dan Mode Pratinjau Statis Offline).
 
-### Opsi 1: Klik 1x (Paling Cepat & Otomatis)
+### 🖥️ Di Komputer Windows (1-Click)
 Cukup **klik ganda (double-click)** file:
-👉 **`KLIK-UNTUK-PRESENTASI.bat`**
-Website akan otomatis terbuka di browser Anda (Chrome / Edge) pada `http://localhost:8000`.
+👉 **`KLIK-UNTUK-PRESENTASI.bat`**  
+Server otomatis aktif dan browser default langsung terbuka ke `http://localhost:8000/dashboard`.
 
-### Opsi 2: Buka File HTML Langsung (Tanpa Server / Offline)
-Masuk ke folder **`preview/`**, lalu klik ganda file:
-👉 **`preview/dashboard.html`** atau **`preview/login.html`**
+### 🍎 Di Komputer Mac / macOS (1-Click)
+Cukup **klik ganda (double-click)** file di Finder:
+👉 **`KLIK-UNTUK-PRESENTASI.command`**  
+Terminal Mac akan otomatis mengaktifkan server lokal dan membuka browser Safari/Chrome.
 
-### Opsi 3: Menjalankan via Terminal (Node.js)
-```bash
-node server.js
-```
-Buka browser: `http://localhost:8000`
-
-### Opsi 4: Menjalankan via Laravel (PHP & Composer)
-Jika di komputer Anda sudah terpasang PHP dan Composer:
-```bash
-composer install
-php artisan serve
-```
-Buka browser: `http://localhost:8000`
+### 🌐 Mode Offline (Tanpa Server / Standalone HTML)
+Jika komputer tidak memiliki koneksi atau Node.js:
+1. Buka folder **`preview/`**.
+2. Klik ganda salah satu file:
+   - `preview/dashboard.html` (Monitoring kehadiran & KPI)
+   - `preview/upah.html` (Form transaksi upah & cetak slip gaji)
+   - `preview/laporan-proyek.html` (Laporan pengeluaran per proyek)
 
 ---
 
-## 📑 Halaman Multipage yang Tersedia
+## 🛠️ Perintah CLI & Pengujian Kualitas
 
-1. **Dashboard (`/dashboard`)**
-   - 3 Kartu Ringkasan Besar: **Hadir pada filter ini (2)**, **Karyawan aktif (3)**, **Device aktif (1)**.
-   - Filter Tanggal, Kategori, dan Device.
-   - Tabel absensi real-time (Jam, Nama, Kategori, UID, Device) persis seperti tangkapan layar di slide presentasi.
+```bash
+# 1. Menjalankan server aplikasi
+npm start
 
-2. **Riwayat Absensi (`/riwayat`)**
-   - Log absensi harian lengkap.
-   - Kolom **Foto Bukti** otomatis dari kamera ESP32-S3 OV5640 sebagai validasi anti-titip absen.
+# 2. Menjalankan SELURUH suite pengujian otomasi (Syntax + Functional + Security + Integration)
+npm run test:all
 
-3. **Rekap Mingguan (`/rekap`)**
-   - Tabel format mingguan (Senin - Sabtu & Total Hadir) persis seperti lampiran file Excel di materi PPT.
-   - Tombol **Download Excel** untuk laporan pimpinan.
+# 3. Pengujian spesifik
+npm test                    # Pengujian fungsional backend & 10 bugfix patch
+npm run test:security       # Pengujian ketahanan siber & penetrasi (28 skenario serangan)
+npm run test:comprehensive  # Pengujian integrasi mendalam seluruh domain logic & API
+```
 
-4. **Data Karyawan (`/karyawan`)**
-   - Daftar staf kantor yang terdaftar beserta status aktif/nonaktif dan UID RFID masing-masing.
+---
 
-5. **Kartu RFID (`/kartu-rfid`)**
-   - Manajemen kartu RFID fisik yang terdaftar di memori alat absensi.
+## 🏛️ Arsitektur Sistem (Clean Layered Architecture)
 
-6. **Device Absensi (`/device`)**
-   - Pemantauan status online/offline mesin absensi ESP32 Master & ESP32-S3 Cam.
-   - Tombol **Live Cam** untuk simulasi live view kamera jaringan lokal.
+Aplikasi dibangun dengan arsitektur enterprise berlapis:
 
-7. **Login Page (`/login`)**
-   - Halaman login minimalis dan aman untuk admin kantor.
+```
+├── .github/workflows/       # Otomasi CI/CD GitHub Actions (Multi-Node.js Matrix)
+├── api/                     # Serverless Function Entry Point (Vercel deployment)
+├── database/                # Persistensi data lokal atomik (storage.json)
+├── preview/                 # Standalone offline presentation pages & client scripts
+│   ├── master-data.js       # Master 255 pekerja resmi & 30 proyek konstruksi
+│   ├── transaksi-upah.js    # Logika form transaksi, formula upah, & cetak slip
+│   └── *.html               # Antarmuka dashboard, proyek, karyawan, & audit
+├── public/                  # Aset statis publik (logo transparan, styling)
+├── src/
+│   ├── config/              # Konstanta & port environment
+│   ├── controllers/         # Thin Dispatchers (HTTP request/response handlers)
+│   ├── db/                  # Penyimpanan data atomik & in-memory cache
+│   ├── middlewares/         # Interceptor otentikasi sesi & pembatasan akses RBAC
+│   ├── routes/              # Declarative HTTP router & static asset dispatcher
+│   ├── services/            # Domain Business Logic (karyawan, proyek, transaksi)
+│   ├── utils/               # Sanitasi input & fungsi keamanan (anti-XSS)
+│   └── views/               # Template engine antarmuka terisolasi
+├── KLIK-UNTUK-PRESENTASI.bat     # 1-Click Launcher untuk Windows
+├── KLIK-UNTUK-PRESENTASI.command # 1-Click Launcher untuk macOS
+└── server.js                # Bootstrap HTTP server native (tanpa bloatware)
+```
 
+---
+
+## 📑 Fitur-Fitur Utama Perusahaan
+
+1. **Dashboard Monitoring Real-Time (`/dashboard`)**:
+   - KPI Kehadiran Hari Ini, Staf Aktif, dan Status Perangkat Dual-ESP32.
+   - Filter departemen/kategori dan live table presensi.
+2. **Form Transaksi & Penggajian Multi-Proyek (`/upah`)**:
+   - Database terintegrasi **255 pekerja resmi** dan **30 proyek konstruksi** PT. Jaya Kedhaton.
+   - Perhitungan otomatis upah pokok harian, jam lembur, uang makan, **transport opsional**, dan **insentif opsional**.
+   - Input **Kasbon (Rp)** dengan catatan keterangan keperluan.
+   - Pembagian otomatis: **Nominal Transfer** dan **Sisa Diterima Tunai (Cash)**.
+   - Modal cetak **Slip Gaji Resmi** dengan tanda tangan pekerja dan bendahara.
+3. **Laporan Pengeluaran per Proyek (`/laporan-proyek`)**:
+   - Agregasi pengeluaran riil setiap proyek dari alokasi jam kerja tukang/pekerja.
+   - Modal detail rincian pekerja per proyek.
+   - Ekspor laporan keuangan ke format **Microsoft Excel (CSV UTF-8)**.
+4. **Data Karyawan & Soft-Delete (`/karyawan`)**:
+   - Manajemen karyawan aktif dan tab arsip historis.
+   - Sinkronisasi otomatis status kartu RFID saat arsip/pulihkan.
+   - Validasi ketat pencegahan UID RFID ganda/duplikat dan gaji bernilai negatif.
+5. **Log Aktivitas & Audit Forensik (`/audit-log`)**:
+   - Proteksi hak akses khusus **Pimpinan** (`superadmin` & `admin.utama`).
+   - Pencatatan forensik otomatis setiap operasi login, mutasi data, dan percobaan akses ilegal.
+
+---
+
+## 🔐 Akun Akses Default
+
+| Peran / Jabatan | Username | Password | Hak Akses |
+| :--- | :--- | :--- | :--- |
+| **Super Admin** | `superadmin` | `kedhaton2026!` | Akses Penuh Termasuk Log Audit Pimpinan |
+| **Admin Utama** | `admin.utama` | `kedhaton2026!` | Akses Penuh Termasuk Log Audit Pimpinan |
+| **Staf Keuangan** | `staf.keuangan` | `kedhaton2026!` | Operasional Keuangan & Upah Proyek |
+| **Staf HRD** | `staf.hrd` | `kedhaton2026!` | Operasional Presensi & Karyawan |
+
+---
+
+&copy; 2026 PT. Jaya Kedhaton — Sistem Absensi Digital Enterprise Dual-ESP32.
