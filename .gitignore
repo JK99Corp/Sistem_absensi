@@ -19,5 +19,6 @@ Thumbs.db
 
 # Vercel & Agent Tooling
 .vercel
-.agents/
+.agents/*
+!.agents/skills/
 skills-lock.json
