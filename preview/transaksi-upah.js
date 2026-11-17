@@ -58,7 +58,7 @@
         let selectedPekerjaKode = '';
         let selectedPekerjaNama = '';
         let currentProjekList = [
-            { projek: '', hari: 0, lembur: 0, makan: 0, insentif: 0 }
+            { projek: '', hari: 0, lembur: 0, makan: 0, transport: 0, insentif: 0 }
         ];
 
         // Daftar Transaksi Awal
@@ -72,10 +72,13 @@
                 posisi: 'TUKANG',
                 upahPerHari: 140000,
                 projekList: [
-                    { projek: 'FELISA ESTATE', hari: 6, lembur: 6, makan: 30000, insentif: 0 },
-                    { projek: 'RUKO PAK DEDI', hari: 2, lembur: 0, makan: 10000, insentif: 0 }
+                    { projek: 'FELISA ESTATE', hari: 6, lembur: 6, makan: 30000, transport: 20000, insentif: 0 },
+                    { projek: 'RUKO PAK DEDI', hari: 2, lembur: 0, makan: 10000, transport: 0, insentif: 0 }
                 ],
-                kasbon: 100000
+                kasbon: 100000,
+                kasbonKet: 'Pinjam keperluan keluarga',
+                transfer: 1000000,
+                cash: 345000
             },
             {
                 id: 2,
@@ -84,9 +87,12 @@
                 posisi: 'TUKANG',
                 upahPerHari: 140000,
                 projekList: [
-                    { projek: 'FELISA ESTATE', hari: 6, lembur: 4, makan: 30000, insentif: 0 }
+                    { projek: 'FELISA ESTATE', hari: 6, lembur: 4, makan: 30000, transport: 15000, insentif: 0 }
                 ],
-                kasbon: 0
+                kasbon: 0,
+                kasbonKet: '',
+                transfer: 900000,
+                cash: 55000
             },
             {
                 id: 3,
@@ -95,9 +101,12 @@
                 posisi: 'PEMBANTU TUKANG',
                 upahPerHari: 120000,
                 projekList: [
-                    { projek: 'PAGAR RING ROAD', hari: 6, lembur: 2, makan: 25000, insentif: 0 }
+                    { projek: 'PAGAR RING ROAD', hari: 6, lembur: 2, makan: 25000, transport: 0, insentif: 0 }
                 ],
-                kasbon: 50000
+                kasbon: 50000,
+                kasbonKet: 'Beli pulsa & token',
+                transfer: 700000,
+                cash: 25000
             }
         ];
 
@@ -377,7 +386,7 @@
             currentProjekList.forEach((item, idx) => {
                 const subPokok = (Number(item.hari) || 0) * upah;
                 const subLembur = (Number(item.lembur) || 0) * tarifLembur;
-                const subTotal = subPokok + subLembur + (Number(item.makan) || 0) + (Number(item.insentif) || 0);
+                const subTotal = subPokok + subLembur + (Number(item.makan) || 0) + (Number(item.transport) || 0) + (Number(item.insentif) || 0);
 
                 // Cek apakah proyek cocok dengan daftar resmi
                 const matchResmi = DAFTAR_PROJEK.find(p => p.toUpperCase() === (item.projek || '').toUpperCase());
@@ -420,7 +429,7 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-start">
                         <!-- Dropdown Pilihan Proyek -->
-                        <div class="md:col-span-4">
+                        <div class="md:col-span-12 lg:col-span-3">
                             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
                                 Pilihan Proyek:
                             </label>
@@ -443,9 +452,9 @@
                         </div>
 
                         <!-- Hari Kerja -->
-                        <div class="md:col-span-2">
+                        <div class="col-span-6 md:col-span-2 lg:col-span-1">
                             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
-                                Hari Kerja:
+                                Hari:
                             </label>
                             <input type="number" min="0" max="31" step="0.5" value="${item.hari}"
                                    oninput="updateProjekField(${idx}, 'hari', this.value)"
@@ -453,9 +462,9 @@
                         </div>
 
                         <!-- Jam Lembur -->
-                        <div class="md:col-span-2">
+                        <div class="col-span-6 md:col-span-2 lg:col-span-1">
                             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
-                                Lembur (Jam):
+                                Lembur:
                             </label>
                             <input type="number" min="0" step="0.5" value="${item.lembur}"
                                    oninput="updateProjekField(${idx}, 'lembur', this.value)"
@@ -463,30 +472,44 @@
                         </div>
 
                         <!-- Uang Makan -->
-                        <div class="md:col-span-2">
+                        <div class="col-span-6 md:col-span-3 lg:col-span-2">
                             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
-                                Uang Makan (Rp):
+                                Makan (Rp):
                             </label>
                             <input type="number" min="0" step="5000" value="${item.makan}"
                                    oninput="updateProjekField(${idx}, 'makan', this.value)"
                                    class="form-input-lg form-input-num text-slate-800 font-bold bg-white">
                         </div>
 
-                        <!-- Insentif / Transport -->
-                        <div class="md:col-span-2">
-                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
-                                Insentif (Rp):
+                        <!-- Transport (Opsional) -->
+                        <div class="col-span-6 md:col-span-2 lg:col-span-2">
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1 flex items-center justify-between">
+                                <span>Transport:</span>
+                                <span class="text-[10px] text-teal-600 font-semibold normal-case">opsional</span>
                             </label>
-                            <input type="number" min="0" step="5000" value="${item.insentif}"
+                            <input type="number" min="0" step="5000" value="${item.transport || 0}"
+                                   oninput="updateProjekField(${idx}, 'transport', this.value)"
+                                   class="form-input-lg form-input-num text-slate-800 font-bold bg-white"
+                                   placeholder="0">
+                        </div>
+
+                        <!-- Insentif (Opsional) -->
+                        <div class="col-span-12 md:col-span-3 lg:col-span-3">
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1 flex items-center justify-between">
+                                <span>Insentif (Rp):</span>
+                                <span class="text-[10px] text-teal-600 font-semibold normal-case">opsional</span>
+                            </label>
+                            <input type="number" min="0" step="5000" value="${item.insentif || 0}"
                                    oninput="updateProjekField(${idx}, 'insentif', this.value)"
-                                   class="form-input-lg form-input-num text-slate-800 font-bold bg-white">
+                                   class="form-input-lg form-input-num text-slate-800 font-bold bg-white"
+                                   placeholder="0">
                         </div>
                     </div>
 
                     <!-- Subtotal baris ini -->
                     <div class="mt-3 pt-2.5 border-t border-slate-200/80 flex flex-wrap items-center justify-between text-xs gap-2">
                         <span class="text-slate-600 font-medium" id="teks-perhitungan-${idx}">
-                            ${item.hari} hari @ ${formatRp(upah)}${item.lembur > 0 ? ' + ' + item.lembur + ' jam lembur' : ''}
+                            ${item.hari} hari @ ${formatRp(upah)}${item.lembur > 0 ? ' + ' + item.lembur + ' jam lembur' : ''}${item.transport > 0 ? ' + Transport ' + formatRp(item.transport) : ''}
                         </span>
                         <div class="font-bold text-slate-800">
                             Subtotal Proyek: <span id="subtotal-projek-${idx}" class="text-emerald-700 font-extrabold text-sm md:text-base">${formatRp(subTotal)}</span>
@@ -524,6 +547,7 @@
                 hari: 0,
                 lembur: 0,
                 makan: 0,
+                transport: 0,
                 insentif: 0
             });
             renderBlokProyek();
@@ -555,7 +579,7 @@
             currentProjekList.forEach((item, idx) => {
                 const subPokok = (Number(item.hari) || 0) * upah;
                 const subLembur = (Number(item.lembur) || 0) * tarifLembur;
-                const subTotal = subPokok + subLembur + (Number(item.makan) || 0) + (Number(item.insentif) || 0);
+                const subTotal = subPokok + subLembur + (Number(item.makan) || 0) + (Number(item.transport) || 0) + (Number(item.insentif) || 0);
                 totalKotor += subTotal;
                 totalHari += Number(item.hari) || 0;
                 totalLembur += Number(item.lembur) || 0;
@@ -565,12 +589,17 @@
 
                 const elHitung = document.getElementById('teks-perhitungan-' + idx);
                 if (elHitung) {
-                    elHitung.innerText = `${item.hari} hari @ ${formatRp(upah)}${item.lembur > 0 ? ' + ' + item.lembur + ' jam lembur' : ''}`;
+                    elHitung.innerText = `${item.hari} hari @ ${formatRp(upah)}${item.lembur > 0 ? ' + ' + item.lembur + ' jam lembur' : ''}${item.transport > 0 ? ' + Transport ' + formatRp(item.transport) : ''}`;
                 }
             });
 
             const kasbon = parseFloat(document.getElementById('formKasbon').value) || 0;
             const sisaDiterima = totalKotor - kasbon;
+
+            // Hitung Transfer & Sisa Cash (Diterima Tunai = Sisa Gaji - Ditransfer)
+            const elTransfer = document.getElementById('formTransfer');
+            const transfer = elTransfer ? (parseFloat(elTransfer.value) || 0) : 0;
+            const cash = Math.max(0, sisaDiterima - transfer);
 
             document.getElementById('formTotalKotor').innerText = formatRp(totalKotor);
             document.getElementById('formRincianHariLembur').innerText = `${totalHari} Hari Kerja • ${totalLembur} Jam Lembur`;
@@ -579,6 +608,11 @@
             elSisa.innerText = formatRp(sisaDiterima);
             if (sisaDiterima < 0) {
                 elSisa.innerHTML = `${formatRp(sisaDiterima)} <span class="text-xs bg-rose-900 text-rose-200 px-2 py-0.5 rounded font-bold block mt-1">Kasbon Lebih Besar</span>`;
+            }
+
+            const elCashDisplay = document.getElementById('formCashDisplay');
+            if (elCashDisplay) {
+                elCashDisplay.innerText = formatRp(cash);
             }
         }
 
@@ -590,8 +624,18 @@
             document.getElementById('posisiPekerja').value = '';
             document.getElementById('upahPerHari').value = 0;
             document.getElementById('formKasbon').value = 0;
+
+            const elKasbonKet = document.getElementById('formKasbonKet');
+            if (elKasbonKet) elKasbonKet.value = '';
+
+            const elTransfer = document.getElementById('formTransfer');
+            if (elTransfer) elTransfer.value = 0;
+
+            const elCashDisplay = document.getElementById('formCashDisplay');
+            if (elCashDisplay) elCashDisplay.innerText = formatRp(0);
+
             currentProjekList = [
-                { projek: '', hari: 0, lembur: 0, makan: 0, insentif: 0 }
+                { projek: '', hari: 0, lembur: 0, makan: 0, transport: 0, insentif: 0 }
             ];
             renderBlokProyek();
             hitungTotalForm();
@@ -650,15 +694,31 @@
             const posisi = document.getElementById('posisiPekerja').value;
             const upahPerHari = parseFloat(document.getElementById('upahPerHari').value) || 0;
             const kasbon = parseFloat(document.getElementById('formKasbon').value) || 0;
+            const kasbonKet = (document.getElementById('formKasbonKet') ? document.getElementById('formKasbonKet').value : '').trim();
+            const transfer = document.getElementById('formTransfer') ? (parseFloat(document.getElementById('formTransfer').value) || 0) : 0;
 
-            // Validasi proyek
-            const projekList = currentProjekList.map(p => ({
-                projek: (p.projek || 'PROYEK').trim(),
-                hari: Number(p.hari) || 0,
-                lembur: Number(p.lembur) || 0,
-                makan: Number(p.makan) || 0,
-                insentif: Number(p.insentif) || 0
-            }));
+            // Validasi proyek & hitung total kotor
+            const tarifLembur = upahPerHari / 8;
+            let totKotor = 0;
+            const projekList = currentProjekList.map(p => {
+                const subPokok = (Number(p.hari) || 0) * upahPerHari;
+                const subLembur = (Number(p.lembur) || 0) * tarifLembur;
+                const makan = Number(p.makan) || 0;
+                const transport = Number(p.transport) || 0;
+                const insentif = Number(p.insentif) || 0;
+                totKotor += (subPokok + subLembur + makan + transport + insentif);
+                return {
+                    projek: (p.projek || 'PROYEK').trim(),
+                    hari: Number(p.hari) || 0,
+                    lembur: Number(p.lembur) || 0,
+                    makan: makan,
+                    transport: transport,
+                    insentif: insentif
+                };
+            });
+
+            const sisaDiterima = totKotor - kasbon;
+            const cash = Math.max(0, sisaDiterima - transfer);
 
             const tglMulai = document.getElementById('tglMulai').value;
             const tglSelesai = document.getElementById('tglSelesai').value;
@@ -691,6 +751,9 @@
                 periodeTeks: labelPeriode,
                 projekList: projekList,
                 kasbon: kasbon,
+                kasbonKet: kasbonKet,
+                transfer: transfer,
+                cash: cash,
                 updatedAt: new Date().toISOString()
             };
 
@@ -743,13 +806,19 @@
                 trx.projekList.forEach(p => {
                     const subPokok = (Number(p.hari) || 0) * trx.upahPerHari;
                     const subLembur = (Number(p.lembur) || 0) * tarifLembur;
-                    const sub = subPokok + subLembur + (Number(p.makan) || 0) + (Number(p.insentif) || 0);
+                    const sub = subPokok + subLembur + (Number(p.makan) || 0) + (Number(p.transport) || 0) + (Number(p.insentif) || 0);
                     totKotor += sub;
                     totHari += Number(p.hari) || 0;
-                    ringkasanProjek.push(`<span class="font-extrabold text-slate-800">${escapeHtml(p.projek || 'PROYEK')}</span>: ${p.hari} hari${p.lembur > 0 ? ', ' + p.lembur + 'j lembur' : ''}`);
+                    let extraInfo = [];
+                    if (p.transport > 0) extraInfo.push(`trsp: ${formatRp(p.transport)}`);
+                    if (p.insentif > 0) extraInfo.push(`instf: ${formatRp(p.insentif)}`);
+                    const extraStr = extraInfo.length > 0 ? ` (${extraInfo.join(', ')})` : '';
+                    ringkasanProjek.push(`<span class="font-extrabold text-slate-800">${escapeHtml(p.projek || 'PROYEK')}</span>: ${p.hari} hari${p.lembur > 0 ? ', ' + p.lembur + 'j lembur' : ''}${extraStr}`);
                 });
 
                 const bersih = totKotor - (trx.kasbon || 0);
+                const tfNominal = trx.transfer || 0;
+                const cashNominal = trx.cash !== undefined ? trx.cash : Math.max(0, bersih - tfNominal);
 
                 grandKotor += totKotor;
                 grandKasbon += (trx.kasbon || 0);
@@ -778,10 +847,13 @@
                         ${formatRp(totKotor)}
                     </td>
                     <td class="p-3.5 text-right font-bold text-rose-700 bg-rose-50/50 text-sm">
-                        ${trx.kasbon > 0 ? formatRp(trx.kasbon) : '-'}
+                        ${trx.kasbon > 0 ? `<div>${formatRp(trx.kasbon)}</div>${trx.kasbonKet ? `<div class="text-[10px] text-slate-500 italic max-w-[120px] truncate ml-auto" title="${escapeHtml(trx.kasbonKet)}">${escapeHtml(trx.kasbonKet)}</div>` : ''}` : '-'}
                     </td>
                     <td class="p-3.5 text-right font-black text-emerald-950 bg-emerald-50 text-base">
                         ${formatRp(bersih)}
+                        <div class="text-[10px] font-semibold text-slate-500 mt-0.5">
+                            <span class="text-sky-700 font-bold">Tf:</span> ${formatRp(tfNominal)} &bull; <span class="text-amber-700 font-bold">Cash:</span> ${formatRp(cashNominal)}
+                        </div>
                     </td>
                     <td class="p-3.5 text-center no-print">
                         <div class="inline-flex items-center gap-1.5">
@@ -796,8 +868,8 @@
                                 <i class="fas fa-edit"></i>
                             </button>
                             <button type="button" onclick="hapusTrx(${trx.id})" 
-                                    class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold px-2.5 py-1.5 rounded-lg text-xs border border-rose-200 cursor-pointer"
-                                    title="Hapus dari daftar">
+                                     class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold px-2.5 py-1.5 rounded-lg text-xs border border-rose-200 cursor-pointer"
+                                     title="Hapus dari daftar">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </div>
@@ -825,13 +897,26 @@
             document.getElementById('upahPerHari').value = trx.upahPerHari;
             document.getElementById('formKasbon').value = trx.kasbon || 0;
 
+            const elKasbonKet = document.getElementById('formKasbonKet');
+            if (elKasbonKet) elKasbonKet.value = trx.kasbonKet || '';
+
+            const elTransfer = document.getElementById('formTransfer');
+            if (elTransfer) elTransfer.value = trx.transfer || 0;
+
             if (trx.tglMulai && trx.tglSelesai) {
                 document.getElementById('tglMulai').value = trx.tglMulai;
                 document.getElementById('tglSelesai').value = trx.tglSelesai;
                 updatePeriodeKalender();
             }
 
-            currentProjekList = JSON.parse(JSON.stringify(trx.projekList));
+            currentProjekList = JSON.parse(JSON.stringify(trx.projekList)).map(p => ({
+                projek: p.projek || '',
+                hari: Number(p.hari) || 0,
+                lembur: Number(p.lembur) || 0,
+                makan: Number(p.makan) || 0,
+                transport: Number(p.transport) || 0,
+                insentif: Number(p.insentif) || 0
+            }));
             renderBlokProyek();
             hitungTotalForm();
 
@@ -873,36 +958,51 @@
             const barisCsv = [];
 
             // Header Kolom Excel
-            barisCsv.push(['NO', 'KODE', 'NAMA PEKERJA', 'POSISI', 'RINCIAN PROYEK & HARI KERJA', 'TOTAL HARI', 'TOTAL LEMBUR (JAM)', 'UPAH PER HARI (RP)', 'TOTAL UPAH KOTOR (RP)', 'POTONGAN KASBON (RP)', 'SISA DITERIMA (RP)', 'PERIODE TRANSAKSI']);
+            barisCsv.push(['NO', 'KODE', 'NAMA PEKERJA', 'POSISI', 'RINCIAN PROYEK & HARI KERJA', 'TOTAL HARI', 'TOTAL LEMBUR (JAM)', 'TOTAL MAKAN (RP)', 'TOTAL TRANSPORT (RP)', 'TOTAL INSENTIF (RP)', 'UPAH PER HARI (RP)', 'TOTAL UPAH KOTOR (RP)', 'POTONGAN KASBON (RP)', 'KETERANGAN KASBON', 'SISA DITERIMA (RP)', 'DITRANSFER (RP)', 'DITERIMA CASH (RP)', 'PERIODE TRANSAKSI']);
 
             let no = 1;
             let grandKotor = 0;
             let grandKasbon = 0;
             let grandBersih = 0;
+            let grandTf = 0;
+            let grandCash = 0;
 
             transaksiList.forEach(trx => {
                 const tarifLembur = (trx.upahPerHari || 0) / 8;
                 let totKotor = 0;
                 let totHari = 0;
                 let totLembur = 0;
+                let totMakan = 0;
+                let totTransport = 0;
+                let totInsentif = 0;
                 const rincianStr = [];
 
                 trx.projekList.forEach(p => {
                     const subPokok = (Number(p.hari) || 0) * (trx.upahPerHari || 0);
                     const subLembur = (Number(p.lembur) || 0) * tarifLembur;
-                    const sub = subPokok + subLembur + (Number(p.makan) || 0) + (Number(p.insentif) || 0);
+                    const makan = Number(p.makan) || 0;
+                    const transport = Number(p.transport) || 0;
+                    const insentif = Number(p.insentif) || 0;
+                    const sub = subPokok + subLembur + makan + transport + insentif;
                     totKotor += sub;
                     totHari += Number(p.hari) || 0;
                     totLembur += Number(p.lembur) || 0;
-                    rincianStr.push(`${p.projek || 'PROYEK'} (${p.hari} hr, ${p.lembur} jam)`);
+                    totMakan += makan;
+                    totTransport += transport;
+                    totInsentif += insentif;
+                    rincianStr.push(`${p.projek || 'PROYEK'} (${p.hari} hr, ${p.lembur} jam${transport > 0 ? ', trsp ' + transport : ''})`);
                 });
 
                 const kasbon = Number(trx.kasbon) || 0;
                 const bersih = totKotor - kasbon;
+                const tf = Number(trx.transfer) || 0;
+                const cash = trx.cash !== undefined ? Number(trx.cash) : Math.max(0, bersih - tf);
 
                 grandKotor += totKotor;
                 grandKasbon += kasbon;
                 grandBersih += bersih;
+                grandTf += tf;
+                grandCash += cash;
 
                 barisCsv.push([
                     no++,
@@ -912,16 +1012,22 @@
                     `"${rincianStr.join('; ')}"`,
                     totHari,
                     totLembur,
+                    totMakan,
+                    totTransport,
+                    totInsentif,
                     trx.upahPerHari || 0,
                     totKotor,
                     kasbon,
+                    `"${(trx.kasbonKet || '').replace(/"/g, '""')}"`,
                     bersih,
+                    tf,
+                    cash,
                     `"${trx.periodeTeks || labelPeriode}"`
                 ]);
             });
 
             // Baris Grand Total
-            barisCsv.push(['', '', 'TOTAL KESELURUHAN', '', '', '', '', '', grandKotor, grandKasbon, grandBersih, '']);
+            barisCsv.push(['', '', 'TOTAL KESELURUHAN', '', '', '', '', '', '', '', '', grandKotor, grandKasbon, '', grandBersih, grandTf, grandCash, '']);
 
             // BOM UTF-8 (\uFEFF) untuk kompatibilitas sempurna dengan Microsoft Excel di Windows
             const csvContent = '\uFEFF' + barisCsv.map(row => row.join(';')).join('\r\n');
@@ -958,7 +1064,10 @@
             trx.projekList.forEach(p => {
                 const subPokok = (Number(p.hari) || 0) * trx.upahPerHari;
                 const subLembur = (Number(p.lembur) || 0) * tarifLembur;
-                const sub = subPokok + subLembur + (Number(p.makan) || 0) + (Number(p.insentif) || 0);
+                const makan = Number(p.makan) || 0;
+                const transport = Number(p.transport) || 0;
+                const insentif = Number(p.insentif) || 0;
+                const sub = subPokok + subLembur + makan + transport + insentif;
                 grandKotor += sub;
 
                 const tr = document.createElement('tr');
@@ -967,7 +1076,9 @@
                     <td class="p-2 text-center font-semibold">${p.hari} hari</td>
                     <td class="p-2 text-right">${formatRp(trx.upahPerHari)}</td>
                     <td class="p-2 text-center font-semibold">${p.lembur} jam (${formatRp(tarifLembur)}/j)</td>
-                    <td class="p-2 text-right">${formatRp(p.makan)}</td>
+                    <td class="p-2 text-right">${formatRp(makan)}</td>
+                    <td class="p-2 text-right font-medium text-slate-700">${transport > 0 ? formatRp(transport) : '-'}</td>
+                    <td class="p-2 text-right font-medium text-slate-700">${insentif > 0 ? formatRp(insentif) : '-'}</td>
                     <td class="p-2 text-right font-black text-emerald-800">${formatRp(sub)}</td>
                 `;
                 tbody.appendChild(tr);
@@ -975,10 +1086,34 @@
 
             const kasbon = trx.kasbon || 0;
             const bersih = grandKotor - kasbon;
+            const transfer = Number(trx.transfer) || 0;
+            const cash = trx.cash !== undefined ? Number(trx.cash) : Math.max(0, bersih - transfer);
 
             document.getElementById('slipTotalKotor').innerText = formatRp(grandKotor);
             document.getElementById('slipKasbonNilai').innerText = '- ' + formatRp(kasbon);
+
+            const elKasbonKet = document.getElementById('slipKasbonKetDisplay');
+            if (elKasbonKet) {
+                if (trx.kasbonKet) {
+                    elKasbonKet.innerText = `Ket: ${trx.kasbonKet}`;
+                    elKasbonKet.classList.remove('hidden');
+                } else {
+                    elKasbonKet.innerText = '';
+                    elKasbonKet.classList.add('hidden');
+                }
+            }
+
             document.getElementById('slipSisaDiterima').innerText = formatRp(bersih);
+
+            const elSlipTf = document.getElementById('slipTransferNilai');
+            if (elSlipTf) elSlipTf.innerText = formatRp(transfer);
+
+            const elSlipCash = document.getElementById('slipCashNilai');
+            if (elSlipCash) elSlipCash.innerText = formatRp(cash);
+
+            document.getElementById('modalSlip').classList.remove('hidden');
+            document.body.classList.add('slip-open');
+        }
 
             document.getElementById('modalSlip').classList.remove('hidden');
             document.body.classList.add('slip-open');

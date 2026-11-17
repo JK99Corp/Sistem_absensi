@@ -101,6 +101,7 @@ async function runAudit() {
         { url: '/upah', title: 'Form Transaksi (Semua)', check: 'Form Transaksi' },
         { url: '/upah?kategori=Staff+Kantor', title: 'Upah (Filter Staff Kantor)', check: 'Staff Kantor' },
         { url: '/upah?kategori=Pekerja+Harian', title: 'Upah (Filter Pekerja Harian)', check: 'Pekerja Harian' },
+        { url: '/laporan-proyek', title: 'Laporan Pengeluaran Proyek', check: 'Laporan Pengeluaran Per Proyek' },
         { url: '/karyawan?tab=aktif', title: 'Data Karyawan (Tab Aktif)', check: 'Karyawan Aktif' },
         { url: '/karyawan?tab=arsip', title: 'Data Karyawan (Tab Arsip)', check: 'Arsip' },
         { url: '/kartu-rfid', title: 'Kartu RFID', check: 'Kartu RFID' },

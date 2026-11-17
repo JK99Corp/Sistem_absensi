@@ -16,6 +16,7 @@ const { renderAuditLog, renderAccessDenied } = require('../controllers/audit.con
 const { renderRiwayat } = require('../controllers/riwayat.controller');
 const { renderRekap } = require('../controllers/rekap.controller');
 const { renderUpah } = require('../controllers/upah.controller');
+const { renderLaporanProyek } = require('../controllers/projek.controller');
 const {
     renderKaryawan,
     handleCreateKaryawan,
@@ -192,6 +193,9 @@ function handleRequest(req, res) {
     } else if (pathname === '/upah') {
         res.writeHead(200);
         res.end(renderUpah(query.kategori || '', currentUser));
+    } else if (pathname === '/laporan-proyek' || pathname === '/pengeluaran-proyek') {
+        res.writeHead(200);
+        res.end(renderLaporanProyek(query.projek || '', currentUser));
     } else if (pathname === '/karyawan') {
         let notif = '';
         let notifType = 'success';

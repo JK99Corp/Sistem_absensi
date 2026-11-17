@@ -4239,17 +4239,22 @@
           "hari": 6,
           "lembur": 6,
           "makan": 30000,
-          "insentif": 0
+          "insentif": 0,
+          "transport": 0
         },
         {
           "projek": "RUKO PAK DEDI",
           "hari": 2,
           "lembur": 0,
           "makan": 10000,
-          "insentif": 0
+          "insentif": 0,
+          "transport": 0
         }
       ],
-      "kasbon": 100000
+      "kasbon": 100000,
+      "kasbonKet": "Kasbon operasional",
+      "transfer": 1100000,
+      "cash": 65000
     },
     {
       "id": 2,
@@ -4263,10 +4268,14 @@
           "hari": 6,
           "lembur": 4,
           "makan": 30000,
-          "insentif": 0
+          "insentif": 0,
+          "transport": 0
         }
       ],
-      "kasbon": 0
+      "kasbon": 0,
+      "kasbonKet": "",
+      "transfer": 900000,
+      "cash": 40000
     },
     {
       "id": 3,
@@ -4280,10 +4289,14 @@
           "hari": 6,
           "lembur": 2,
           "makan": 25000,
-          "insentif": 0
+          "insentif": 0,
+          "transport": 0
         }
       ],
-      "kasbon": 50000
+      "kasbon": 50000,
+      "kasbonKet": "Kasbon operasional",
+      "transfer": 700000,
+      "cash": 25000
     }
   ],
   "kartu": [

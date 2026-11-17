@@ -138,6 +138,10 @@
                 <i class="fas fa-file-invoice-dollar w-5 text-center text-base"></i>
                 <span>Form Transaksi</span>
             </a>
+            <a href="laporan-proyek.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-700/70 hover:text-white transition-colors">
+                <i class="fas fa-city w-5 text-center text-base"></i>
+                <span>Pengeluaran Proyek</span>
+            </a>
             <a href="karyawan.html" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-700/70 hover:text-white transition-colors">
                 <i class="fas fa-users w-5 text-center text-base"></i>
                 <span>Data Karyawan</span>
@@ -371,7 +375,7 @@
 
                 <!-- 3. PEMBAYARAN & SISA DITERIMA -->
                 <div class="bg-slate-900 text-white rounded-xl p-5 shadow-lg mb-2">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
                         <!-- Total Upah -->
                         <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
                             <span class="text-xs text-slate-400 uppercase font-bold block mb-1">Total Upah Kotor:</span>
@@ -379,15 +383,24 @@
                             <span class="text-[11px] text-slate-400 mt-1 block font-medium" id="formRincianHariLembur">0 Hari Kerja • 0 Jam Lembur</span>
                         </div>
 
-                        <!-- Kasbon -->
-                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
-                            <label class="text-xs text-rose-400 uppercase font-bold block mb-1">
+                        <!-- Kasbon & Keterangan -->
+                        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 space-y-2">
+                            <label class="text-xs text-rose-400 uppercase font-bold block">
                                 Potongan Kasbon (Rp):
                             </label>
-                            <input type="number" id="formKasbon" value="0" min="0" step="10000"
-                                   oninput="hitungTotalForm()"
-                                   placeholder="0"
-                                   class="w-full h-11 px-3 text-right font-black text-xl rounded-lg bg-white text-rose-700 border-2 border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-400">
+                            <div class="relative flex items-center">
+                                <span class="absolute left-3 font-black text-rose-600 text-base pointer-events-none">Rp</span>
+                                <input type="number" id="formKasbon" value="0" min="0" step="10000"
+                                       oninput="hitungTotalForm()"
+                                       placeholder="0"
+                                       class="w-full h-10 pl-11 pr-3 text-right font-black text-lg rounded-lg bg-white text-rose-700 border-2 border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-400">
+                            </div>
+                            <div>
+                                <input type="text" id="formKasbonKet"
+                                       oninput="hitungTotalForm()"
+                                       placeholder="Keterangan kasbon (opsional)..."
+                                       class="w-full h-8 px-2.5 text-xs rounded-lg bg-slate-900 text-slate-200 border border-slate-600 focus:outline-none focus:border-rose-400 placeholder-slate-400 font-medium">
+                            </div>
                         </div>
 
                         <!-- Sisa Diterima -->
@@ -396,6 +409,33 @@
                                 Sisa Gaji Yang Diterima:
                             </span>
                             <div class="text-3xl font-black tracking-tight" id="formSisaDiterima">Rp 0</div>
+                        </div>
+                    </div>
+
+                    <!-- Pembagian Penyerahan: Transfer & Cash -->
+                    <div class="mt-4 pt-3 border-t border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                        <div class="bg-slate-800/90 p-3.5 rounded-xl border border-slate-700">
+                            <label class="text-xs text-sky-400 uppercase font-bold flex items-center gap-1.5 mb-1.5">
+                                <i class="fas fa-paper-plane text-sky-400"></i> Ditransfer ke Rekening (Rp):
+                            </label>
+                            <div class="relative flex items-center">
+                                <span class="absolute left-3 font-bold text-sky-600 text-base pointer-events-none">Rp</span>
+                                <input type="number" id="formTransfer" value="0" min="0" step="10000"
+                                       oninput="hitungTotalForm()"
+                                       placeholder="0"
+                                       class="w-full h-10 pl-11 pr-3 text-right font-black text-lg rounded-lg bg-white text-sky-900 border-2 border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-400">
+                            </div>
+                            <span class="text-[11px] text-slate-400 block mt-1">Nominal gaji yang ditransfer via bank</span>
+                        </div>
+
+                        <div class="bg-amber-950/40 p-3.5 rounded-xl border border-amber-600/50">
+                            <span class="text-xs text-amber-300 uppercase font-bold flex items-center gap-1.5 mb-1.5">
+                                <i class="fas fa-money-bill-wave text-amber-400"></i> Diterima Tunai / Cash (Rp):
+                            </span>
+                            <div class="text-2xl font-black text-amber-300 h-10 flex items-center justify-end pr-3 bg-slate-900/90 rounded-lg border border-amber-500/40 font-mono" id="formCashDisplay">
+                                Rp 0
+                            </div>
+                            <span class="text-[11px] text-slate-400 block mt-1">Sisa gaji diterima - ditransfer (diberikan tunai)</span>
                         </div>
                     </div>
 
@@ -530,6 +570,8 @@
                                         <th class="p-2 text-right">Upah/Hari</th>
                                         <th class="p-2 text-center">Lembur</th>
                                         <th class="p-2 text-right">Makan</th>
+                                        <th class="p-2 text-right">Transport</th>
+                                        <th class="p-2 text-right">Insentif</th>
                                         <th class="p-2 text-right">Subtotal</th>
                                     </tr>
                                 </thead>
@@ -547,12 +589,26 @@
                             <span class="font-bold text-slate-800" id="slipTotalKotor">Rp 0</span>
                         </div>
                         <div class="flex justify-between text-rose-600 font-semibold" id="slipRowKasbon">
-                            <span>Potongan Kasbon:</span>
+                            <div>
+                                <span>Potongan Kasbon:</span>
+                                <div id="slipKasbonKetDisplay" class="text-[11px] text-slate-500 font-normal italic"></div>
+                            </div>
                             <span id="slipKasbonNilai">- Rp 0</span>
                         </div>
-                        <div class="flex justify-between font-extrabold text-base md:text-lg border-t border-slate-200 pt-2 text-slate-900 bg-emerald-50/70 p-2 rounded-lg">
+                        <div class="flex justify-between font-extrabold text-base md:text-lg border-t border-slate-200 pt-2 text-slate-900 bg-emerald-50/70 p-2.5 rounded-lg">
                             <span class="text-emerald-900">Sisa Gaji Yang Diterima:</span>
                             <span class="text-lg md:text-xl text-emerald-800 font-black" id="slipSisaDiterima">Rp 0</span>
+                        </div>
+                        <!-- Rincian Penyerahan: Transfer & Cash -->
+                        <div class="grid grid-cols-2 gap-2.5 pt-2 border-t border-dashed border-slate-300">
+                            <div class="bg-sky-50 border border-sky-200 p-2.5 rounded-lg">
+                                <span class="text-[10px] uppercase font-bold text-sky-800 block">Ditransfer ke Rekening:</span>
+                                <span class="font-extrabold text-sky-900 text-sm md:text-base font-mono" id="slipTransferNilai">Rp 0</span>
+                            </div>
+                            <div class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg">
+                                <span class="text-[10px] uppercase font-bold text-amber-800 block">Diterima Tunai (Cash):</span>
+                                <span class="font-black text-amber-900 text-sm md:text-base font-mono" id="slipCashNilai">Rp 0</span>
+                            </div>
                         </div>
                     </div>
 

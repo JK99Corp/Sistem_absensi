@@ -14,6 +14,7 @@ function renderLayout(title, activeMenu, content, currentUser = null) {
         { id: 'riwayat', href: '/riwayat', icon: 'fa-clipboard-list', label: 'Riwayat Absensi' },
         { id: 'rekap', href: '/rekap', icon: 'fa-calendar-week', label: 'Rekap Mingguan' },
         { id: 'upah', href: '/upah', icon: 'fa-money-bill-wave', label: 'Form Transaksi' },
+        { id: 'laporan-proyek', href: '/laporan-proyek', icon: 'fa-city', label: 'Pengeluaran Proyek' },
         { id: 'karyawan', href: '/karyawan', icon: 'fa-users', label: 'Karyawan' },
         { id: 'kartu-rfid', href: '/kartu-rfid', icon: 'fa-id-card-clip', label: 'Kartu RFID' },
         { id: 'device', href: '/device', icon: 'fa-desktop', label: 'Device' }
