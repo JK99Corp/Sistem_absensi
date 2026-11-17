@@ -6,33 +6,37 @@
 const { REGISTERED_USERS } = require('../config/users');
 const { addAuditLog } = require('../middlewares/auth');
 const { renderLogin } = require('../views/layout');
+const { readRequestBody } = require('../utils/helpers');
 
 function handleLoginSubmit(req, res, clientIp) {
-    let body = '';
-    req.on('data', chunk => body += chunk);
-    req.on('end', () => {
-        const params = new URLSearchParams(body);
-        const u = (params.get('username') || '').trim();
-        const p = params.get('password') || '';
+    readRequestBody(req)
+        .then(body => {
+            const params = new URLSearchParams(body);
+            const u = (params.get('username') || '').trim();
+            const p = params.get('password') || '';
 
-        const userFound = REGISTERED_USERS.find(usr =>
-            usr.username.toLowerCase() === u.toLowerCase() && usr.pass === p
-        );
-        if (userFound) {
-            addAuditLog(userFound.username, 'LOGIN', 'Berhasil login ke sistem melalui Portal Keamanan', clientIp);
-            res.writeHead(302, {
-                'Set-Cookie': `auth_user=${encodeURIComponent(userFound.username)}; Path=/; HttpOnly; SameSite=Lax`,
-                'Location': '/dashboard'
-            });
-            res.end();
-        } else {
-            addAuditLog(u || 'UNKNOWN', 'LOGIN_GAGAL', 'Percobaan login gagal dengan kata sandi salah', clientIp);
-            res.writeHead(302, {
-                'Location': '/login?error=invalid'
-            });
-            res.end();
-        }
-    });
+            const userFound = REGISTERED_USERS.find(usr =>
+                usr.username.toLowerCase() === u.toLowerCase() && usr.pass === p
+            );
+            if (userFound) {
+                addAuditLog(userFound.username, 'LOGIN', 'Berhasil login ke sistem melalui Portal Keamanan', clientIp);
+                res.writeHead(302, {
+                    'Set-Cookie': `auth_user=${encodeURIComponent(userFound.username)}; Path=/; HttpOnly; SameSite=Lax`,
+                    'Location': '/dashboard'
+                });
+                res.end();
+            } else {
+                addAuditLog(u || 'UNKNOWN', 'LOGIN_GAGAL', 'Percobaan login gagal dengan kata sandi salah', clientIp);
+                res.writeHead(302, {
+                    'Location': '/login?error=invalid'
+                });
+                res.end();
+            }
+        })
+        .catch(err => {
+            res.writeHead(err.statusCode || 400, { 'Content-Type': 'text/plain' });
+            res.end('Bad Request');
+        });
 }
 
 function handleLoginView(req, res, query) {

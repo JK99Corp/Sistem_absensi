@@ -113,6 +113,9 @@ function handleRequest(req, res) {
     }
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
 
     const currentUser = getCurrentUser(req);
     const clientIp = (req.socket && req.socket.remoteAddress) ? req.socket.remoteAddress : '127.0.0.1';

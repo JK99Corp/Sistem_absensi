@@ -4,6 +4,7 @@
  */
 
 const { getTransaksiList, syncTransaksi, saveTransaksi, deleteTransaksi } = require('../services/transaksi.service');
+const { readRequestBody } = require('../utils/helpers');
 
 function handleGetTransaksi(req, res) {
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
@@ -11,10 +12,8 @@ function handleGetTransaksi(req, res) {
 }
 
 function handleSaveTransaksi(req, res, currentUser, clientIp) {
-    let body = '';
-    req.on('data', chunk => body += chunk);
-    req.on('end', () => {
-        try {
+    readRequestBody(req)
+        .then(body => {
             const payload = JSON.parse(body);
             if (payload.transaksiSemua && Array.isArray(payload.transaksiSemua)) {
                 const result = syncTransaksi(payload.transaksiSemua, currentUser, clientIp);
@@ -32,27 +31,27 @@ function handleSaveTransaksi(req, res, currentUser, clientIp) {
 
             res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
             res.end(JSON.stringify(result));
-        } catch (err) {
-            res.writeHead(500, { 'Content-Type': 'application/json' });
+        })
+        .catch(err => {
+            const status = err.statusCode || (err instanceof SyntaxError ? 400 : 500);
+            res.writeHead(status, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ success: false, error: err.message }));
-        }
-    });
+        });
 }
 
 function handleHapusTransaksi(req, res, currentUser, clientIp) {
-    let body = '';
-    req.on('data', chunk => body += chunk);
-    req.on('end', () => {
-        try {
+    readRequestBody(req)
+        .then(body => {
             const payload = JSON.parse(body);
             const result = deleteTransaksi(payload.id, currentUser, clientIp);
             res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
             res.end(JSON.stringify(result));
-        } catch (err) {
-            res.writeHead(500, { 'Content-Type': 'application/json' });
+        })
+        .catch(err => {
+            const status = err.statusCode || (err instanceof SyntaxError ? 400 : 500);
+            res.writeHead(status, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ success: false, error: err.message }));
-        }
-    });
+        });
 }
 
 module.exports = {
