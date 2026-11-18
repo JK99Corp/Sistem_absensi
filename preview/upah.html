@@ -54,13 +54,13 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
         }
 
-        /* Mode Cetak Slip 2 Rangkap (Format Susun Atas & Bawah A4 Landscape) */
+        /* Mode Cetak Slip 2 Rangkap & Cetak Rekapitulasi Laporan */
         @media print {
             @page {
                 size: A4 landscape;
-                margin: 4mm 6mm;
+                margin: 5mm 7mm;
             }
-            aside, header, #areaPetunjuk, #areaKalender, #areaInputForm, #areaTabelRekap, .no-print { 
+            aside, header, #areaPetunjuk, #areaKalender, #areaInputForm, .no-print { 
                 display: none !important; 
             }
             .ml-64, #mainContentWrapper { 
@@ -76,6 +76,11 @@
                 padding: 0 !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
+            }
+
+            /* --- KONDISI 1: JIKA CETAK SLIP GAJI (body.slip-open) --- */
+            body.slip-open #areaTabelRekap { 
+                display: none !important; 
             }
             body.slip-open main > div:not(#modalSlip) { 
                 display: none !important; 
@@ -133,6 +138,51 @@
                 padding: 0 !important;
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
+            }
+
+            /* --- KONDISI 2: JIKA CETAK REKAPITULASI (body TANPA slip-open) --- */
+            body:not(.slip-open) #modalSlip {
+                display: none !important;
+            }
+            body:not(.slip-open) #areaTabelRekap {
+                display: block !important;
+                width: 100% !important;
+                border: none !important;
+                box-shadow: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+            }
+            body:not(.slip-open) #printHeaderRekap {
+                display: block !important;
+            }
+            body:not(.slip-open) #printFooterTtdRekap {
+                display: flex !important;
+            }
+            body:not(.slip-open) #areaTabelRekap table {
+                min-width: 100% !important;
+                width: 100% !important;
+                border: 1.5px solid #0f172a !important;
+                border-collapse: collapse !important;
+            }
+            body:not(.slip-open) #areaTabelRekap th,
+            body:not(.slip-open) #areaTabelRekap td {
+                border: 1px solid #94a3b8 !important;
+                padding: 4px 6px !important;
+                font-size: 8pt !important;
+            }
+            body:not(.slip-open) #areaTabelRekap th {
+                background-color: #0f172a !important;
+                color: #ffffff !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            body:not(.slip-open) #areaTabelRekap tfoot td {
+                background-color: #f1f5f9 !important;
+                border-top: 2px solid #0f172a !important;
+                font-weight: bold !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
         }
     </style>
@@ -518,11 +568,30 @@
                             <i class="fas fa-file-excel"></i> Ekspor Laporan (XLSX)
                         </button>
 
-                        <button type="button" onclick="window.print()" 
+                        <button type="button" onclick="cetakRekapitulasi()" 
                                 class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-1.5 px-3.5 rounded-lg text-xs shadow-sm inline-flex items-center gap-1.5 cursor-pointer transition-colors"
-                                title="Cetak Rekapitulasi Keseluruhan">
+                                title="Cetak Dokumen Rekapitulasi Upah Resmi">
                             <i class="fas fa-print"></i> Cetak Rekapitulasi
                         </button>
+                    </div>
+                </div>
+
+                <!-- KOP SURAT RESMI CETAK REKAPITULASI (HANYA MUNCUL DI PRINT) -->
+                <div id="printHeaderRekap" class="hidden p-5 pb-3 border-b-2 border-slate-900 bg-white">
+                    <div class="flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <img src="images/logo.png" alt="Logo PT. Jaya Kedhaton" class="w-12 h-12 object-contain">
+                            <div>
+                                <h2 class="text-base font-black text-slate-900 uppercase tracking-wider leading-none">PT. JAYA KEDHATON</h2>
+                                <p class="text-[10px] text-slate-700 font-bold uppercase mt-1 leading-tight">Design Build • General Contractor • Interior</p>
+                                <p class="text-[8.5px] text-slate-500 leading-tight">Jl. AW. Syahranie No. 36 A Samarinda</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <h3 class="text-xs font-black text-slate-900 uppercase tracking-tight">LAPORAN REKAPITULASI PEMBAYARAN UPAH &amp; KASBON</h3>
+                            <p class="text-[11px] font-bold text-teal-800 mt-0.5" id="printRekapPeriodeTeks">Periode: -</p>
+                            <p class="text-[8.5px] text-slate-500" id="printRekapTglCetak">Dicetak pada: -</p>
+                        </div>
                     </div>
                 </div>
 
@@ -555,6 +624,22 @@
                             </tr>
                         </tfoot>
                     </table>
+                </div>
+
+                <!-- TANDA TANGAN PENGESAHAN LAPORAN REKAPITULASI (HANYA MUNCUL DI PRINT) -->
+                <div id="printFooterTtdRekap" class="hidden justify-between items-end p-6 pt-10 bg-white text-xs">
+                    <div class="text-center w-60">
+                        <p class="text-slate-600 text-[11px] mb-1">Dibuat &amp; Diverifikasi Oleh:</p>
+                        <p class="font-bold text-slate-800 mb-16">Staf Keuangan &amp; Absensi</p>
+                        <div class="border-b border-slate-900 w-48 mx-auto"></div>
+                        <p class="font-bold text-slate-900 mt-1">( .................................................... )</p>
+                    </div>
+                    <div class="text-center w-60">
+                        <p class="text-slate-600 text-[11px] mb-1">Samarinda, <span id="printFooterTglRekap">-</span></p>
+                        <p class="font-bold text-slate-800 mb-16">Mengetahui / Menyetujui:</p>
+                        <div class="border-b border-slate-900 w-48 mx-auto"></div>
+                        <p class="font-bold text-slate-900 mt-1">Direktur / Pimpinan</p>
+                    </div>
                 </div>
             </div>
 
@@ -628,6 +713,6 @@
 
     <!-- SCRIPT DATA & LOGIKA FORM TRANSAKSI -->
     <script src="master-data.js"></script>
-    <script src="transaksi-upah.js?v=2.5"></script>
+    <script src="transaksi-upah.js?v=2.6"></script>
 </body>
 </html>

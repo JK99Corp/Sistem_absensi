@@ -914,7 +914,7 @@
         }
 
         // =========================================================================
-        // EKSPOR REKAP TRANSAKSI KE MICROSOFT EXCEL / CSV
+        // EKSPOR REKAP TRANSAKSI KE MICROSOFT EXCEL (.XLS / SPREADSHEET RESMI)
         // =========================================================================
         function eksporRekapExcel() {
             if (!transaksiList || transaksiList.length === 0) {
@@ -923,10 +923,7 @@
             }
 
             const labelPeriode = (document.getElementById('labelPeriodeAktif') ? document.getElementById('labelPeriodeAktif').innerText : 'Periode').trim();
-            const barisCsv = [];
-
-            // Header Kolom Excel
-            barisCsv.push(['NO', 'KODE', 'NAMA PEKERJA', 'POSISI', 'RINCIAN PROYEK & HARI KERJA', 'TOTAL HARI', 'TOTAL LEMBUR (JAM)', 'TOTAL MAKAN (RP)', 'TOTAL TRANSPORT (RP)', 'TOTAL INSENTIF (RP)', 'UPAH PER HARI (RP)', 'TOTAL UPAH KOTOR (RP)', 'POTONGAN KASBON (RP)', 'KETERANGAN KASBON', 'SISA DITERIMA (RP)', 'DITRANSFER (RP)', 'DITERIMA CASH (RP)', 'PERIODE TRANSAKSI']);
+            const tglCetak = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
             let no = 1;
             let grandKotor = 0;
@@ -934,9 +931,12 @@
             let grandBersih = 0;
             let grandTf = 0;
             let grandCash = 0;
+            let grandHari = 0;
+            let grandLembur = 0;
+            let rowsHtml = '';
 
             transaksiList.forEach(trx => {
-                const tarifLembur = (trx.upahPerHari || 0) / 8;
+                const tarifLembur = Math.round((trx.upahPerHari || 0) / 8);
                 let totKotor = 0;
                 let totHari = 0;
                 let totLembur = 0;
@@ -945,20 +945,20 @@
                 let totInsentif = 0;
                 const rincianStr = [];
 
-                trx.projekList.forEach(p => {
-                    const subPokok = (Number(p.hari) || 0) * (trx.upahPerHari || 0);
-                    const subLembur = (Number(p.lembur) || 0) * tarifLembur;
-                    const makan = Number(p.makan) || 0;
-                    const transport = Number(p.transport) || 0;
-                    const insentif = Number(p.insentif) || 0;
-                    const sub = subPokok + subLembur + makan + transport + insentif;
+                (trx.projekList || []).forEach(p => {
+                    const h = Number(p.hari) || 0;
+                    const l = Number(p.lembur) || 0;
+                    const m = Number(p.makan) || 0;
+                    const t = Number(p.transport) || 0;
+                    const ins = Number(p.insentif) || 0;
+                    const sub = (h * (trx.upahPerHari || 0)) + (l * tarifLembur) + m + t + ins;
                     totKotor += sub;
-                    totHari += Number(p.hari) || 0;
-                    totLembur += Number(p.lembur) || 0;
-                    totMakan += makan;
-                    totTransport += transport;
-                    totInsentif += insentif;
-                    rincianStr.push(`${p.projek || 'PROYEK'} (${p.hari} hr, ${p.lembur} jam${transport > 0 ? ', trsp ' + transport : ''})`);
+                    totHari += h;
+                    totLembur += l;
+                    totMakan += m;
+                    totTransport += t;
+                    totInsentif += ins;
+                    rincianStr.push(`${p.projek || 'PROYEK'} (${h} hr, ${l} jam${t > 0 ? ', trsp ' + t : ''})`);
                 });
 
                 const kasbon = Number(trx.kasbon) || 0;
@@ -971,44 +971,148 @@
                 grandBersih += bersih;
                 grandTf += tf;
                 grandCash += cash;
+                grandHari += totHari;
+                grandLembur += totLembur;
 
-                barisCsv.push([
-                    no++,
-                    trx.kode || '-',
-                    `"${(trx.nama || '').replace(/"/g, '""')}"`,
-                    `"${(trx.posisi || '').replace(/"/g, '""')}"`,
-                    `"${rincianStr.join('; ')}"`,
-                    totHari,
-                    totLembur,
-                    totMakan,
-                    totTransport,
-                    totInsentif,
-                    trx.upahPerHari || 0,
-                    totKotor,
-                    kasbon,
-                    `"${(trx.kasbonKet || '').replace(/"/g, '""')}"`,
-                    bersih,
-                    tf,
-                    cash,
-                    `"${trx.periodeTeks || labelPeriode}"`
-                ]);
+                rowsHtml += `
+                    <tr>
+                        <td style="text-align:center; vertical-align:middle;">${no++}</td>
+                        <td style="text-align:center; vertical-align:middle; mso-number-format:'\\@';">${escapeHtml(trx.kode || '-')}</td>
+                        <td style="font-weight:bold; vertical-align:middle;">${escapeHtml(trx.nama || '')}</td>
+                        <td style="text-align:center; vertical-align:middle;">${escapeHtml(trx.posisi || '-')}</td>
+                        <td style="vertical-align:middle;">${escapeHtml(rincianStr.join('; '))}</td>
+                        <td style="text-align:center; vertical-align:middle; mso-number-format:'#,##0';">${totHari}</td>
+                        <td style="text-align:center; vertical-align:middle; mso-number-format:'#,##0';">${totLembur}</td>
+                        <td style="text-align:right; vertical-align:middle; mso-number-format:'#,##0';">${trx.upahPerHari || 0}</td>
+                        <td style="text-align:right; vertical-align:middle; mso-number-format:'#,##0';">${totMakan}</td>
+                        <td style="text-align:right; vertical-align:middle; mso-number-format:'#,##0';">${totTransport + totInsentif}</td>
+                        <td style="text-align:right; font-weight:bold; vertical-align:middle; mso-number-format:'#,##0';">${totKotor}</td>
+                        <td style="text-align:right; color:#b91c1c; font-weight:bold; vertical-align:middle; mso-number-format:'#,##0';">${kasbon}</td>
+                        <td style="vertical-align:middle;">${escapeHtml(trx.kasbonKet || '-')}</td>
+                        <td style="text-align:right; font-weight:bold; background-color:#ecfdf5; color:#065f46; vertical-align:middle; mso-number-format:'#,##0';">${bersih}</td>
+                        <td style="text-align:right; vertical-align:middle; mso-number-format:'#,##0';">${tf}</td>
+                        <td style="text-align:right; font-weight:bold; vertical-align:middle; mso-number-format:'#,##0';">${cash}</td>
+                        <td style="text-align:center; vertical-align:middle;">${escapeHtml(trx.periodeTeks || labelPeriode)}</td>
+                    </tr>
+                `;
             });
 
-            // Baris Grand Total
-            barisCsv.push(['', '', 'TOTAL KESELURUHAN', '', '', '', '', '', '', '', '', grandKotor, grandKasbon, '', grandBersih, grandTf, grandCash, '']);
+            // Template XML/HTML Excel yang valid dan diformat rapi
+            const excelTemplate = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+                <head>
+                    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+                    <!--[if gte mso 9]>
+                    <xml>
+                        <x:ExcelWorkbook>
+                            <x:ExcelWorksheets>
+                                <x:ExcelWorksheet>
+                                    <x:Name>Rekap Upah</x:Name>
+                                    <x:WorksheetOptions>
+                                        <x:DisplayGridlines/>
+                                    </x:WorksheetOptions>
+                                </x:ExcelWorksheet>
+                            </x:ExcelWorksheets>
+                        </x:ExcelWorkbook>
+                    </xml>
+                    <![endif]-->
+                    <style>
+                        table { border-collapse: collapse; width: 100%; font-family: Calibri, Arial, sans-serif; font-size: 10pt; }
+                        th { background-color: #0f172a; color: #ffffff; font-weight: bold; border: 1px solid #334155; padding: 7px 10px; text-align: center; }
+                        td { border: 1px solid #cbd5e1; padding: 5px 8px; }
+                        .kop-title { font-size: 13pt; font-weight: bold; color: #0f172a; }
+                        .kop-sub { font-size: 10pt; color: #475569; font-weight: bold; }
+                        .total-row td { background-color: #e2e8f0; font-weight: bold; border-top: 2px solid #0f172a; border-bottom: 2px solid #0f172a; }
+                    </style>
+                </head>
+                <body>
+                    <table>
+                        <tr>
+                            <td colspan="17" class="kop-title">PT. JAYA KEDHATON — LAPORAN REKAPITULASI PEMBAYARAN UPAH</td>
+                        </tr>
+                        <tr>
+                            <td colspan="17" class="kop-sub">Periode: ${escapeHtml(labelPeriode)} | Tanggal Ekspor: ${tglCetak} | Total: ${transaksiList.length} Pekerja</td>
+                        </tr>
+                        <tr><td colspan="17"></td></tr>
+                        <thead>
+                            <tr>
+                                <th>NO</th>
+                                <th>KODE</th>
+                                <th>NAMA PEKERJA</th>
+                                <th>JABATAN</th>
+                                <th>RINCIAN ALOKASI PROYEK &amp; HARI</th>
+                                <th>TOTAL HARI</th>
+                                <th>TOTAL LEMBUR (JAM)</th>
+                                <th>UPAH POKOK/HARI (RP)</th>
+                                <th>UANG MAKAN (RP)</th>
+                                <th>TRANSPORT/INSENTIF (RP)</th>
+                                <th>TOTAL UPAH KOTOR (RP)</th>
+                                <th>POTONGAN KASBON (RP)</th>
+                                <th>KETERANGAN KASBON</th>
+                                <th>SISA DITERIMA BERSIH (RP)</th>
+                                <th>DITRANSFER (RP)</th>
+                                <th>DITERIMA CASH (RP)</th>
+                                <th>PERIODE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rowsHtml}
+                        </tbody>
+                        <tfoot>
+                            <tr class="total-row">
+                                <td colspan="5" style="text-align:right; font-weight:bold;">TOTAL KESELURUHAN (${transaksiList.length} PEKERJA):</td>
+                                <td style="text-align:center; font-weight:bold; mso-number-format:'#,##0';">${grandHari}</td>
+                                <td style="text-align:center; font-weight:bold; mso-number-format:'#,##0';">${grandLembur}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style="text-align:right; font-weight:bold; mso-number-format:'#,##0';">${grandKotor}</td>
+                                <td style="text-align:right; font-weight:bold; color:#b91c1c; mso-number-format:'#,##0';">${grandKasbon}</td>
+                                <td></td>
+                                <td style="text-align:right; font-weight:bold; background-color:#d1fae5; color:#064e3b; mso-number-format:'#,##0';">${grandBersih}</td>
+                                <td style="text-align:right; font-weight:bold; mso-number-format:'#,##0';">${grandTf}</td>
+                                <td style="text-align:right; font-weight:bold; mso-number-format:'#,##0';">${grandCash}</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </body>
+                </html>
+            `;
 
-            // BOM UTF-8 (\uFEFF) untuk kompatibilitas sempurna dengan Microsoft Excel di Windows
-            const csvContent = '\uFEFF' + barisCsv.map(row => row.join(';')).join('\r\n');
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            // Download sebagai format .xls (MIME ms-excel dengan BOM UTF-8)
+            const blob = new Blob(['\uFEFF' + excelTemplate], { type: 'application/vnd.ms-excel;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             const safePeriode = labelPeriode.replace(/[^a-zA-Z0-9]/g, '_');
             a.href = url;
-            a.download = `Rekap_Transaksi_Upah_JayaKedhaton_${safePeriode}.csv`;
+            a.download = `Rekap_Upah_JayaKedhaton_${safePeriode}.xls`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+        }
+
+        // =========================================================================
+        // CETAK REKAPITULASI DOKUMEN RESMI (A4 LANDSCAPE)
+        // =========================================================================
+        function cetakRekapitulasi() {
+            // Pastikan modal slip tertutup agar tidak tumpang tindih
+            tutupSlip();
+
+            const tglStr = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            const labelPeriode = document.getElementById('labelPeriodeAktif') ? document.getElementById('labelPeriodeAktif').innerText.trim() : '';
+
+            const elTeks = document.getElementById('printRekapPeriodeTeks');
+            if (elTeks) elTeks.innerText = 'Periode: ' + (labelPeriode || '-');
+
+            const elTgl = document.getElementById('printRekapTglCetak');
+            if (elTgl) elTgl.innerText = 'Dicetak pada: ' + tglStr + ' ' + new Date().toLocaleTimeString('id-ID') + ' WIB';
+
+            const elTglFooter = document.getElementById('printFooterTglRekap');
+            if (elTglFooter) elTglFooter.innerText = tglStr;
+
+            window.print();
         }
 
         // =========================================================================
