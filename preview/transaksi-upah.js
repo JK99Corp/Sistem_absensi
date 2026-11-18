@@ -369,9 +369,9 @@
                     btnHapusHtml = `
                         <button type="button" onclick="hapusBlokProyek(${idx})" 
                                 class="text-rose-600 hover:text-rose-800 hover:bg-rose-50 font-bold text-xs px-2.5 py-1 rounded-lg border border-rose-200 transition-colors inline-flex items-center gap-1.5 cursor-pointer"
-                                title="Hapus Proyek #${idx + 1}">
+                                title="Hapus Alokasi Proyek #${idx + 1}">
                             <i class="fas fa-trash-alt text-[10px]"></i>
-                            <span>Hapus Proyek Ini</span>
+                            <span>Hapus Alokasi</span>
                         </button>
                     `;
                 } else {
@@ -826,18 +826,18 @@
                     <td class="p-3.5 text-center no-print">
                         <div class="inline-flex items-center gap-1.5">
                             <button type="button" onclick="bukaSlipById('${trx.id}')" 
-                                    class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-2.5 py-1.5 rounded-lg text-xs shadow-sm cursor-pointer"
-                                    title="Cetak Slip Gaji">
-                                <i class="fas fa-file-invoice"></i> Slip
+                                    class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-3 py-1.5 rounded-lg text-xs shadow-xs cursor-pointer inline-flex items-center gap-1.5 transition-colors"
+                                    title="Cetak Dokumen Slip Gaji Resmi">
+                                <i class="fas fa-print"></i> Cetak Slip
                             </button>
                             <button type="button" onclick="editTrxKeForm('${trx.id}')" 
-                                    class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-2.5 py-1.5 rounded-lg text-xs border border-slate-300 cursor-pointer"
-                                    title="Muat kembali data ke form di atas untuk diedit">
+                                    class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold p-1.5 rounded-lg text-xs border border-slate-300 cursor-pointer transition-colors"
+                                    title="Edit Data Transaksi">
                                 <i class="fas fa-edit"></i>
                             </button>
                             <button type="button" onclick="hapusTrx('${trx.id}')" 
-                                     class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold px-2.5 py-1.5 rounded-lg text-xs border border-rose-200 cursor-pointer"
-                                     title="Hapus dari daftar">
+                                     class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold p-1.5 rounded-lg text-xs border border-rose-200 cursor-pointer transition-colors"
+                                     title="Hapus Data Transaksi">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </div>
@@ -1054,14 +1054,23 @@
             const transfer = Number(trx.transfer) || 0;
             const cash = trx.cash !== undefined ? Number(trx.cash) : Math.max(0, bersih - transfer);
 
+            const kasbonKetHtml = trx.kasbonKet ? `
+                <div class="text-[7.5px] text-slate-600 italic leading-tight pl-1.5 border-l-2 border-rose-400 mt-0.5 bg-rose-50/60 py-0.5 rounded-r" title="${escapeHtml(trx.kasbonKet)}">
+                    <span class="font-semibold text-rose-800 not-italic">Ket:</span> ${escapeHtml(trx.kasbonKet)}
+                </div>
+            ` : '';
+
             const kasbonRowHtml = kasbon > 0 ? `
-                <div class="flex justify-between items-center text-rose-600 font-semibold text-[8px]">
-                    <span class="truncate mr-1">Kasbon${trx.kasbonKet ? ` (${escapeHtml(trx.kasbonKet)})` : ''}:</span>
-                    <span class="font-bold shrink-0">- ${formatRp(kasbon)}</span>
+                <div class="space-y-0.5">
+                    <div class="flex justify-between items-center text-rose-700 font-bold text-[8.5px]">
+                        <span>Potongan Kasbon:</span>
+                        <span class="font-mono shrink-0">- ${formatRp(kasbon)}</span>
+                    </div>
+                    ${kasbonKetHtml}
                 </div>
             ` : `
                 <div class="flex justify-between items-center text-slate-400 text-[8px]">
-                    <span>Kasbon:</span>
+                    <span>Potongan Kasbon:</span>
                     <span>-</span>
                 </div>
             `;
@@ -1138,7 +1147,7 @@
                     </div>
 
                     <!-- 2. Rincian Kotor & Kasbon -->
-                    <div class="w-44 space-y-0.5 text-[8px] shrink-0">
+                    <div class="w-48 space-y-0.5 text-[8px] shrink-0">
                         <div class="flex justify-between font-bold text-slate-700">
                             <span>Total Upah Kotor:</span>
                             <span class="font-bold text-slate-900">${formatRp(grandKotor)}</span>
