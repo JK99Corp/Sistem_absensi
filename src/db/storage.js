@@ -12,10 +12,24 @@ const DB_FILE = path.join(__dirname, '..', '..', 'database', 'storage.json');
 let dummyData = JSON.parse(JSON.stringify(defaultTemplateData));
 
 function saveToDisk() {
+    const dataStr = JSON.stringify(dummyData, null, 2);
+    const tmpFile = DB_FILE + '.tmp';
     try {
-        const tmpFile = DB_FILE + '.tmp';
-        fs.writeFileSync(tmpFile, JSON.stringify(dummyData, null, 2), 'utf-8');
-        fs.renameSync(tmpFile, DB_FILE);
+        fs.writeFileSync(tmpFile, dataStr, 'utf-8');
+        try {
+            fs.renameSync(tmpFile, DB_FILE);
+            return;
+        } catch (renameErr) {
+            // Windows file-system locking fallback: direct copy and unlink
+            fs.copyFileSync(tmpFile, DB_FILE);
+            try { fs.unlinkSync(tmpFile); } catch (_) {}
+            return;
+        }
+    } catch (_) {}
+
+    // Direct write fallback
+    try {
+        fs.writeFileSync(DB_FILE, dataStr, 'utf-8');
     } catch (e) {
         console.error('Gagal menulis ke storage.json:', e.message);
     }

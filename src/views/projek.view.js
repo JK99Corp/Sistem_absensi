@@ -126,11 +126,13 @@ function renderLaporanProyekView(listProyek = [], filterProjek = '', currentUser
 
             <div class="flex items-center gap-2.5 no-print">
                 <button type="button" onclick="eksporLaporanProyekCsv()" 
-                        class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2 px-4 rounded-xl text-xs md:text-sm shadow-sm inline-flex items-center gap-2 cursor-pointer transition-colors">
-                    <i class="fas fa-file-excel"></i> Ekspor CSV / Excel
+                        class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2 px-4 rounded-xl text-xs md:text-sm shadow-sm inline-flex items-center gap-2 cursor-pointer transition-colors"
+                        title="Ekspor laporan pengeluaran proyek ke spreadsheet Microsoft Excel">
+                    <i class="fas fa-file-excel"></i> Ekspor Laporan (XLSX)
                 </button>
                 <button type="button" onclick="window.print()" 
-                        class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded-xl text-xs md:text-sm shadow-sm inline-flex items-center gap-2 cursor-pointer transition-colors">
+                        class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded-xl text-xs md:text-sm shadow-sm inline-flex items-center gap-2 cursor-pointer transition-colors"
+                        title="Cetak Laporan Resmi">
                     <i class="fas fa-print"></i> Cetak Laporan
                 </button>
             </div>
@@ -373,38 +375,153 @@ function renderLaporanProyekView(listProyek = [], filterProjek = '', currentUser
                 return;
             }
 
-            const baris = [];
-            baris.push(['NO', 'NAMA PROYEK', 'STATUS', 'JUMLAH PEKERJA', 'TOTAL HARI (MANDAYS)', 'TOTAL LEMBUR (JAM)', 'BIAYA POKOK (RP)', 'BIAYA LEMBUR (RP)', 'UANG MAKAN (RP)', 'TRANSPORT (RP)', 'INSENTIF (RP)', 'TOTAL PENGELUARAN (RP)']);
-
+            const tglCetak = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
             let no = 1;
+            let rowsHtml = '';
+            let totPekerjaSemua = 0;
+            let totHariSemua = 0;
+            let totLemburSemua = 0;
+            let totPokokSemua = 0;
+            let totBiayaLemburSemua = 0;
+            let totMakanSemua = 0;
+            let totTransportSemua = 0;
+            let totInsentifSemua = 0;
+            let grandTotalPengeluaran = 0;
+
             DATA_PROYEK_AGREGASI.forEach(p => {
-                baris.push([
-                    no++,
-                    \`"\${(p.nama || '').replace(/"/g, '""')}"\`,
-                    p.totalPengeluaran > 0 ? 'AKTIF' : 'BELUM ADA ALOKASI',
-                    p.pekerjaList.length,
-                    p.totalHari,
-                    p.totalLembur,
-                    p.totalPokok,
-                    p.totalBiayaLembur,
-                    p.totalMakan,
-                    p.totalTransport,
-                    p.totalInsentif,
-                    p.totalPengeluaran
-                ]);
+                const pekerja = p.pekerjaList.length;
+                const hari = p.totalHari || 0;
+                const lembur = p.totalLembur || 0;
+                const pokok = p.totalPokok || 0;
+                const biayaLembur = p.totalBiayaLembur || 0;
+                const makan = p.totalMakan || 0;
+                const transport = p.totalTransport || 0;
+                const insentif = p.totalInsentif || 0;
+                const total = p.totalPengeluaran || 0;
+
+                totPekerjaSemua += pekerja;
+                totHariSemua += hari;
+                totLemburSemua += lembur;
+                totPokokSemua += pokok;
+                totBiayaLemburSemua += biayaLembur;
+                totMakanSemua += makan;
+                totTransportSemua += transport;
+                totInsentifSemua += insentif;
+                grandTotalPengeluaran += total;
+
+                rowsHtml += \`
+                    <tr>
+                        <td style="text-align:center; vertical-align:middle;">\${no++}</td>
+                        <td style="font-weight:bold; vertical-align:middle;">\${escapeHtml(p.nama || '')}</td>
+                        <td style="text-align:center; vertical-align:middle; \${total > 0 ? 'color:#15803d; font-weight:bold;' : 'color:#94a3b8;'}">\${total > 0 ? 'AKTIF' : 'BELUM ADA ALOKASI'}</td>
+                        <td style="text-align:center; vertical-align:middle; mso-number-format:'#,##0';">\${pekerja}</td>
+                        <td style="text-align:center; vertical-align:middle; mso-number-format:'#,##0';">\${hari}</td>
+                        <td style="text-align:center; vertical-align:middle; mso-number-format:'#,##0';">\${lembur}</td>
+                        <td style="text-align:right; vertical-align:middle; mso-number-format:'#,##0';">\${pokok}</td>
+                        <td style="text-align:right; vertical-align:middle; mso-number-format:'#,##0';">\${biayaLembur}</td>
+                        <td style="text-align:right; vertical-align:middle; mso-number-format:'#,##0';">\${makan}</td>
+                        <td style="text-align:right; vertical-align:middle; mso-number-format:'#,##0';">\${transport}</td>
+                        <td style="text-align:right; vertical-align:middle; mso-number-format:'#,##0';">\${insentif}</td>
+                        <td style="text-align:right; font-weight:bold; background-color:#ecfdf5; color:#065f46; vertical-align:middle; mso-number-format:'#,##0';">\${total}</td>
+                    </tr>
+                \`;
             });
 
-            const csvContent = '\\uFEFF' + baris.map(r => r.join(';')).join('\\r\\n');
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
+            const excelTemplate = \`
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+                <head>
+                    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+                    <!--[if gte mso 9]>
+                    <xml>
+                        <x:ExcelWorkbook>
+                            <x:ExcelWorksheets>
+                                <x:ExcelWorksheet>
+                                    <x:Name>Pengeluaran Proyek</x:Name>
+                                    <x:WorksheetOptions>
+                                        <x:DisplayGridlines/>
+                                    </x:WorksheetOptions>
+                                </x:ExcelWorksheet>
+                            </x:ExcelWorksheets>
+                        </x:ExcelWorkbook>
+                    </xml>
+                    <![endif]-->
+                    <style>
+                        table { border-collapse: collapse; width: 100%; font-family: Calibri, 'Segoe UI', Arial, sans-serif; font-size: 10pt; }
+                        th { background-color: #0f172a; color: #ffffff; font-weight: bold; border: 1px solid #334155; padding: 7px 10px; text-align: center; }
+                        td { border: 1px solid #cbd5e1; padding: 5px 8px; }
+                        .kop-title { font-size: 13pt; font-weight: bold; color: #0f172a; }
+                        .kop-sub { font-size: 10pt; color: #475569; font-weight: bold; }
+                        .total-row td { background-color: #e2e8f0; font-weight: bold; border-top: 2px solid #0f172a; border-bottom: 2px solid #0f172a; }
+                    </style>
+                </head>
+                <body>
+                    <table>
+                        <tr>
+                            <td colspan="12" class="kop-title">PT. JAYA KEDHATON — LAPORAN REKAPITULASI PENGELUARAN KEUANGAN PROYEK</td>
+                        </tr>
+                        <tr>
+                            <td colspan="12" class="kop-sub">Tanggal Ekspor: \${tglCetak} | Total Proyek: \${DATA_PROYEK_AGREGASI.length} Proyek</td>
+                        </tr>
+                        <tr><td colspan="12"></td></tr>
+                        <thead>
+                            <tr>
+                                <th>NO</th>
+                                <th>NAMA PROYEK</th>
+                                <th>STATUS</th>
+                                <th>JUMLAH PEKERJA</th>
+                                <th>TOTAL HARI (MANDAYS)</th>
+                                <th>TOTAL LEMBUR (JAM)</th>
+                                <th>BIAYA POKOK (RP)</th>
+                                <th>BIAYA LEMBUR (RP)</th>
+                                <th>UANG MAKAN (RP)</th>
+                                <th>TRANSPORT (RP)</th>
+                                <th>INSENTIF (RP)</th>
+                                <th>TOTAL PENGELUARAN (RP)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            \${rowsHtml}
+                        </tbody>
+                        <tfoot>
+                            <tr class="total-row">
+                                <td colspan="3" style="text-align:right; font-weight:bold;">GRAND TOTAL KESELURUHAN:</td>
+                                <td style="text-align:center; font-weight:bold; mso-number-format:'#,##0';">\${totPekerjaSemua}</td>
+                                <td style="text-align:center; font-weight:bold; mso-number-format:'#,##0';">\${totHariSemua}</td>
+                                <td style="text-align:center; font-weight:bold; mso-number-format:'#,##0';">\${totLemburSemua}</td>
+                                <td style="text-align:right; font-weight:bold; mso-number-format:'#,##0';">\${totPokokSemua}</td>
+                                <td style="text-align:right; font-weight:bold; mso-number-format:'#,##0';">\${totBiayaLemburSemua}</td>
+                                <td style="text-align:right; font-weight:bold; mso-number-format:'#,##0';">\${totMakanSemua}</td>
+                                <td style="text-align:right; font-weight:bold; mso-number-format:'#,##0';">\${totTransportSemua}</td>
+                                <td style="text-align:right; font-weight:bold; mso-number-format:'#,##0';">\${totInsentifSemua}</td>
+                                <td style="text-align:right; font-weight:bold; background-color:#d1fae5; color:#064e3b; mso-number-format:'#,##0';">\${grandTotalPengeluaran}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </body>
+                </html>
+            \`;
+
+            const blob = new Blob(['\uFEFF' + excelTemplate], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            const filename = \`Laporan_Pengeluaran_Proyek_JayaKedhaton_\${new Date().toISOString().slice(0, 10)}.xls\`;
+
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(blob, filename);
+                return;
+            }
+
+            const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
+            a.style.display = 'none';
             a.href = url;
-            a.download = \`Laporan_Pengeluaran_Proyek_JayaKedhaton_\${new Date().toISOString().slice(0, 10)}.csv\`;
+            a.download = filename;
             document.body.appendChild(a);
             a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            setTimeout(() => {
+                if (a.parentNode) a.parentNode.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 3000);
         }
+
     </script>
     `;
 
