@@ -1012,7 +1012,7 @@
         }
 
         // =========================================================================
-        // E. CETAK SLIP GAJI MULTI-PROJEK (2 RANGKAP: SUSUN ATAS & BAWAH A4 PORTRAIT)
+        // E. CETAK SLIP GAJI MULTI-PROJEK (2 RANGKAP: SUSUN ATAS & BAWAH A4 LANDSCAPE)
         // =========================================================================
         function renderSlipLembar(trx, tipe, tglCetakLengkap, tglCetakSingkat) {
             const tarifLembur = Math.round((trx.upahPerHari || 0) / 8);
@@ -1038,7 +1038,7 @@
 
                 rowsProyekHtml += `
                     <tr class="hover:bg-slate-50">
-                        <td class="p-1 font-bold text-slate-800 text-[8.5px] max-w-[130px] truncate" title="${escapeHtml(p.projek || 'PROYEK')}">${escapeHtml(p.projek || 'PROYEK')}</td>
+                        <td class="p-1 font-bold text-slate-800 text-[8.5px] max-w-[140px] truncate" title="${escapeHtml(p.projek || 'PROYEK')}">${escapeHtml(p.projek || 'PROYEK')}</td>
                         <td class="p-1 text-center font-semibold text-[8.5px]">${hari} hr</td>
                         <td class="p-1 text-right text-[8.5px]">${formatRp(trx.upahPerHari || 0)}</td>
                         <td class="p-1 text-center font-semibold text-[8.5px]">${lembur > 0 ? `${lembur}j (${formatRp(tarifLembur)}/j)` : '-'}</td>
@@ -1067,37 +1067,39 @@
             `;
 
             return `
-                <!-- KOP SURAT JAYA KEDHATON -->
-                <div class="border-b-2 border-slate-800 pb-1 flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                        <img src="images/logo.png" alt="Logo" class="w-8 h-8 object-contain">
+                <!-- KOP SURAT & IDENTITAS (BARIS ATAS LEBAR) -->
+                <div class="border-b-2 border-slate-800 pb-1 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2 shrink-0">
+                        <img src="images/logo.png" alt="Logo" class="w-7 h-7 object-contain">
                         <div class="text-left">
                             <h4 class="text-xs font-black text-slate-900 tracking-wider uppercase leading-none">PT. JAYA KEDHATON</h4>
-                            <p class="text-[8px] text-slate-600 uppercase font-bold tracking-tight">Design Build • General Contractor • Interior</p>
-                            <p class="text-[7.5px] text-slate-500 leading-none">Jl. AW. Syahranie No. 36 A Samarinda</p>
+                            <p class="text-[7.5px] text-slate-600 uppercase font-bold tracking-tight">Design Build • General Contractor • Interior</p>
+                            <p class="text-[7px] text-slate-500 leading-none">Jl. AW. Syahranie No. 36 A Samarinda</p>
                         </div>
                     </div>
-                    <div class="text-right">
+
+                    <!-- Info Pekerja & Periode Horizontal di Tengah -->
+                    <div class="flex items-center gap-4 bg-slate-50 border border-slate-200 px-3 py-0.5 rounded text-[8.5px]">
+                        <div>
+                            <span class="text-slate-400 text-[7px] uppercase font-bold block leading-none">Pekerja:</span>
+                            <span class="font-black text-slate-900 text-[10px] leading-tight">${escapeHtml(namaDisplay)}</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 text-[7px] uppercase font-bold block leading-none">Jabatan:</span>
+                            <span class="font-bold text-slate-800 text-[9.5px] leading-tight">${escapeHtml(trx.posisi || '-')}</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 text-[7px] uppercase font-bold block leading-none">Periode Upah:</span>
+                            <span class="font-bold text-teal-800 text-[9.5px] leading-tight">${escapeHtml(periodeTeks)}</span>
+                        </div>
+                    </div>
+
+                    <!-- Badge Tipe Lembar di Kanan -->
+                    <div class="text-right shrink-0">
                         <span class="inline-block ${tipe.badgeClass} font-black text-[8px] uppercase px-2.5 py-0.5 rounded tracking-wider border border-slate-800">
                             ${tipe.label}
                         </span>
-                        <p class="text-[7.5px] text-slate-500 font-semibold mt-0.5">${tipe.sub}</p>
-                    </div>
-                </div>
-
-                <!-- IDENTITAS PEKERJA & PERIODE (3 KOLOM LEBAR) -->
-                <div class="py-1 text-[9px] grid grid-cols-3 gap-2 border-b border-slate-300 bg-slate-50/70 px-2 rounded mt-1">
-                    <div>
-                        <span class="text-slate-500 block text-[7.5px] uppercase font-bold leading-tight">Nama Pekerja:</span>
-                        <span class="font-black text-slate-900 text-[10.5px] truncate block leading-tight">${escapeHtml(namaDisplay)}</span>
-                    </div>
-                    <div>
-                        <span class="text-slate-500 block text-[7.5px] uppercase font-bold leading-tight">Posisi / Jabatan:</span>
-                        <span class="font-bold text-slate-800 text-[10px] truncate block leading-tight">${escapeHtml(trx.posisi || '-')}</span>
-                    </div>
-                    <div class="text-right">
-                        <span class="text-slate-500 block text-[7.5px] uppercase font-bold leading-tight">Periode Upah:</span>
-                        <span class="font-bold text-slate-800 text-[9.5px] block leading-tight">${escapeHtml(periodeTeks)}</span>
+                        <p class="text-[7px] text-slate-500 font-semibold mt-0.5">${tipe.sub}</p>
                     </div>
                 </div>
 
@@ -1107,12 +1109,12 @@
                         <thead class="bg-slate-100 text-slate-700 uppercase font-black text-[7.5px] border-b border-slate-300">
                             <tr>
                                 <th class="p-1 text-left">Alokasi Proyek</th>
-                                <th class="p-1 text-center">Hari</th>
-                                <th class="p-1 text-right">Upah/H</th>
-                                <th class="p-1 text-center">Lembur</th>
-                                <th class="p-1 text-right">Makan</th>
-                                <th class="p-1 text-right">Trp/Ins</th>
-                                <th class="p-1 text-right">Subtotal</th>
+                                <th class="p-1 text-center">Hari Kerja</th>
+                                <th class="p-1 text-right">Tarif Upah/Hari</th>
+                                <th class="p-1 text-center">Jam Lembur</th>
+                                <th class="p-1 text-right">Uang Makan</th>
+                                <th class="p-1 text-right">Transport / Insentif</th>
+                                <th class="p-1 text-right">Subtotal Upah</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-200">
@@ -1121,47 +1123,40 @@
                     </table>
                 </div>
 
-                <!-- TOTAL & PENYERAHAN (3 KOLOM SEJAJAR) -->
-                <div class="pt-1 border-t-2 border-slate-800 text-[9px]">
-                    <div class="grid grid-cols-3 gap-2 items-center">
-                        <!-- Kolom 1: Pembayaran (Tf & Cash) -->
-                        <div class="space-y-0.5 text-[8.5px]">
-                            <div class="bg-sky-50 border border-sky-200 px-2 py-0.5 rounded flex justify-between items-center">
-                                <span class="font-bold text-sky-800">Ditransfer:</span>
-                                <span class="font-extrabold text-sky-950 font-mono">${formatRp(transfer)}</span>
-                            </div>
-                            <div class="bg-amber-50 border border-amber-200 px-2 py-0.5 rounded flex justify-between items-center">
-                                <span class="font-bold text-amber-800">Tunai (Cash):</span>
-                                <span class="font-black text-amber-950 font-mono">${formatRp(cash)}</span>
-                            </div>
+                <!-- BARIS BAWAH: FINANSIAL & TANDA TANGAN SEJAJAR -->
+                <div class="pt-1 border-t-2 border-slate-800 text-[9px] flex items-end justify-between gap-3">
+                    <!-- 1. Penyerahan Upah (Tf & Cash) -->
+                    <div class="w-44 space-y-0.5 text-[8px] shrink-0">
+                        <div class="bg-sky-50 border border-sky-200 px-2 py-0.5 rounded flex justify-between items-center">
+                            <span class="font-bold text-sky-800">Ditransfer:</span>
+                            <span class="font-extrabold text-sky-950 font-mono">${formatRp(transfer)}</span>
                         </div>
-
-                        <!-- Kolom 2: Total Kotor & Potongan Kasbon -->
-                        <div class="space-y-0.5 text-[8.5px]">
-                            <div class="flex justify-between font-bold text-slate-700">
-                                <span>Total Kotor:</span>
-                                <span class="font-bold text-slate-900">${formatRp(grandKotor)}</span>
-                            </div>
-                            ${kasbonRowHtml}
-                        </div>
-
-                        <!-- Kolom 3: Sisa Bersih Diterima -->
-                        <div class="bg-emerald-50 border border-emerald-300 px-2.5 py-1 rounded text-right">
-                            <span class="text-[7.5px] uppercase font-bold text-emerald-800 block leading-tight">Sisa Upah Diterima (Bersih):</span>
-                            <span class="text-xs font-black text-emerald-950 font-mono leading-tight">${formatRp(bersih)}</span>
+                        <div class="bg-amber-50 border border-amber-200 px-2 py-0.5 rounded flex justify-between items-center">
+                            <span class="font-bold text-amber-800">Tunai (Cash):</span>
+                            <span class="font-black text-amber-950 font-mono">${formatRp(cash)}</span>
                         </div>
                     </div>
-                </div>
 
-                <!-- TANDA TANGAN (HANYA PENERIMA SAJA) -->
-                <div class="mt-1 pt-1 border-t border-slate-300 flex justify-between items-end text-[9px]">
-                    <div class="text-[7.5px] text-slate-500 leading-tight">
-                        <p>Samarinda, ${tglCetakSingkat}</p>
-                        <p class="italic text-[7px] text-slate-400 mt-0.5">*Simpan slip ini sebagai bukti sah transaksi pembayaran upah</p>
+                    <!-- 2. Rincian Kotor & Kasbon -->
+                    <div class="w-44 space-y-0.5 text-[8px] shrink-0">
+                        <div class="flex justify-between font-bold text-slate-700">
+                            <span>Total Upah Kotor:</span>
+                            <span class="font-bold text-slate-900">${formatRp(grandKotor)}</span>
+                        </div>
+                        ${kasbonRowHtml}
                     </div>
-                    <div class="text-center w-36">
-                        <p class="text-[8px] font-semibold text-slate-600 mb-6 leading-tight">Tanda Tangan Penerima,</p>
-                        <p class="font-bold underline text-[9.5px] text-slate-900 leading-tight">${escapeHtml(trx.nama)}</p>
+
+                    <!-- 3. Sisa Upah Diterima Bersih -->
+                    <div class="bg-emerald-50 border border-emerald-300 px-3 py-1 rounded text-right shrink-0">
+                        <span class="text-[7.5px] uppercase font-bold text-emerald-800 block leading-tight">Sisa Upah Diterima (Bersih):</span>
+                        <span class="text-xs font-black text-emerald-950 font-mono leading-tight">${formatRp(bersih)}</span>
+                    </div>
+
+                    <!-- 4. Tanda Tangan Penerima -->
+                    <div class="text-center w-40 shrink-0">
+                        <p class="text-[7px] text-slate-500 leading-tight">Samarinda, ${tglCetakSingkat}</p>
+                        <p class="text-[7.5px] font-semibold text-slate-600 mb-5 leading-tight">Tanda Tangan Penerima,</p>
+                        <p class="font-bold underline text-[9px] text-slate-900 leading-tight">${escapeHtml(trx.nama)}</p>
                     </div>
                 </div>
             `;
@@ -1217,14 +1212,14 @@
                 const elOldTtdNama = document.getElementById('slipTtdNama');
                 if (elOldTtdNama) elOldTtdNama.innerText = trx.nama;
 
-                // Pastikan @page diatur ke portrait saat modal slip dibuka
+                // Pastikan @page diatur ke landscape saat modal slip dibuka
                 let dynamicPrintStyle = document.getElementById('dynamicPrintPageStyle');
                 if (!dynamicPrintStyle) {
                     dynamicPrintStyle = document.createElement('style');
                     dynamicPrintStyle.id = 'dynamicPrintPageStyle';
                     document.head.appendChild(dynamicPrintStyle);
                 }
-                dynamicPrintStyle.innerHTML = '@page { size: A4 portrait; margin: 5mm 6mm; }';
+                dynamicPrintStyle.innerHTML = '@page { size: A4 landscape; margin: 4mm 6mm; }';
 
                 const modal = document.getElementById('modalSlip');
                 if (modal) {

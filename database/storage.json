@@ -4379,6 +4379,16 @@
   ],
   "auditLogs": [
     {
+      "id": 1794970530499,
+      "waktu": "2026-11-18 10:55:30",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "LOGIN",
+      "keterangan": "Berhasil login ke sistem melalui Portal Keamanan",
+      "ip": "::1"
+    },
+    {
       "id": 1794812477285,
       "waktu": "2026-11-16 15:01:17",
       "username": "superadmin",
