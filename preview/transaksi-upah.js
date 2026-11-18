@@ -957,7 +957,7 @@
         function hapusTrx(idTrx) {
             const trx = transaksiList.find(t => String(t.id) === String(idTrx));
             if (!trx) return;
-            if (confirm(`Pindahkan transaksi upah ${trx.nama} ke Arsip?\n\nCatatan: Data tidak akan dihapus permanen dan dapat dipulihkan kembali oleh Super Admin.`)) {
+            if (confirm(`Apakah Anda yakin ingin menghapus transaksi upah "${trx.nama}"?\n\nPerhatian: Tindakan ini akan menghapus data dari sistem operasional.`)) {
                 transaksiList = transaksiList.filter(t => String(t.id) !== String(idTrx));
                 const archivedItem = {
                     ...trx,

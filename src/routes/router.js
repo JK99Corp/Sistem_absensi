@@ -216,7 +216,7 @@ function handleRequest(req, res) {
         let notif = '';
         let notifType = 'success';
         if (query.msg === 'sukses_tambah') notif = 'Karyawan baru berhasil ditambahkan dan langsung terhubung dengan alat Dual-ESP32!';
-        if (query.msg === 'sukses_hapus') notif = 'Karyawan berhasil dipindahkan ke Arsip. Seluruh data laporan keuangan masa lalu tetap aman!';
+        if (query.msg === 'sukses_hapus') notif = 'Data karyawan berhasil dihapus dari sistem operasional.';
         if (query.msg === 'sukses_restore') notif = 'Karyawan berhasil dipulihkan dari Arsip ke daftar aktif!';
         if (query.msg === 'err_uid_duplikat') {
             notif = 'Gagal menambahkan karyawan: UID Kartu RFID tersebut sudah digunakan oleh karyawan aktif lain!';
