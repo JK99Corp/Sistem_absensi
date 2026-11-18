@@ -27,8 +27,10 @@ const { renderKartuRfid } = require('../controllers/kartu.controller');
 const { renderDevice } = require('../controllers/device.controller');
 const {
     handleGetTransaksi,
+    handleGetTransaksiArsip,
     handleSaveTransaksi,
-    handleHapusTransaksi
+    handleHapusTransaksi,
+    handleRestoreTransaksi
 } = require('../controllers/transaksi.controller');
 
 function handleRequest(req, res) {
@@ -148,6 +150,14 @@ function handleRequest(req, res) {
 
     if (pathname === '/api/transaksi/hapus' && req.method === 'POST') {
         return handleHapusTransaksi(req, res, currentUser, clientIp);
+    }
+
+    if (pathname === '/api/transaksi/arsip' && req.method === 'GET') {
+        return handleGetTransaksiArsip(req, res, currentUser, clientIp);
+    }
+
+    if (pathname === '/api/transaksi/restore' && req.method === 'POST') {
+        return handleRestoreTransaksi(req, res, currentUser, clientIp);
     }
 
     // 4. AUTH GUARD: Seluruh modul internal wajib login terlebih dahulu

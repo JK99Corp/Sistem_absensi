@@ -93,7 +93,8 @@ const defaultTemplateData = {
         { id: 1006, waktu: '2026-08-03 09:20:30', username: 'staf.hrd', nama: 'Rendra Bagus', role: 'Staf HRD & Personalia', aksi: 'AKSES_DITOLAK', keterangan: 'Percobaan akses tidak sah ke Log Audit Pimpinan (Otomatis ditolak sistem)', ip: '192.168.1.28' }
     ],
 
-    transaksiUpah: []
+    transaksiUpah: [],
+    transaksiUpahArsip: []
 };
 
 module.exports = {

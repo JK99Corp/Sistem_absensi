@@ -22,6 +22,11 @@
             : (typeof window !== 'undefined' && window.MASTER_PROJEK) || [];
 
         // State Form Saat Ini
+        let currentTabTransaksi = 'aktif';
+        const isUserAdmin = (typeof window !== 'undefined' && window.SERVER_DATA && window.SERVER_DATA.currentUser && window.SERVER_DATA.currentUser.isAdmin) || false;
+        let transaksiArsipList = (typeof window !== 'undefined' && window.SERVER_DATA && window.SERVER_DATA.transaksiArsipList && Array.isArray(window.SERVER_DATA.transaksiArsipList))
+            ? window.SERVER_DATA.transaksiArsipList
+            : [];
         let editingTrxId = null;
         let selectedPekerjaKode = '';
         let selectedPekerjaNama = '';
@@ -103,6 +108,18 @@
                     }
                 })
                 .catch(() => {});
+
+            if (isUserAdmin) {
+                fetch('/api/transaksi/arsip')
+                    .then(r => r.json())
+                    .then(res => {
+                        if (res && res.success && Array.isArray(res.data)) {
+                            transaksiArsipList = res.data;
+                            renderDaftarTransaksiArsip();
+                        }
+                    })
+                    .catch(() => {});
+            }
         }
 
         function simpanKeStorage() {
@@ -847,6 +864,8 @@
             });
 
             document.getElementById('totalJumlahPekerja').innerText = countPekerja;
+            const badgeCountAktif = document.getElementById('badgeCountTrxAktif');
+            if (badgeCountAktif) badgeCountAktif.innerText = countPekerja;
             document.getElementById('totalGrandKotor').innerText = formatRp(grandKotor);
             document.getElementById('totalGrandKasbon').innerText = formatRp(grandKasbon);
             document.getElementById('totalGrandBersih').innerText = formatRp(grandBersih);
@@ -903,14 +922,176 @@
             document.getElementById('areaInputForm').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function hapusTrx(idTrx) {
-            const trx = transaksiList.find(t => t.id === idTrx);
-            if (!trx) return;
-            if (confirm(`Yakin ingin menghapus transaksi upah ${trx.nama}?`)) {
-                transaksiList = transaksiList.filter(t => t.id !== idTrx);
-                simpanKeStorage();
+        function gantiTabTransaksi(tab) {
+            currentTabTransaksi = tab;
+            const btnAktif = document.getElementById('tabBtnTrxAktif');
+            const btnArsip = document.getElementById('tabBtnTrxArsip');
+            const wrapAktif = document.getElementById('wrapperTabelTrxAktif');
+            const wrapArsip = document.getElementById('wrapperTabelTrxArsip');
+            const btnEkspor = document.getElementById('btnEksporExcelTrx');
+            const btnCetak = document.getElementById('btnCetakRekapTrx');
+
+            if (tab === 'aktif') {
+                if (btnAktif) btnAktif.className = 'px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-bold bg-teal-600 text-white shadow-sm inline-flex items-center gap-2 cursor-pointer transition-colors';
+                if (btnArsip) btnArsip.className = 'px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-bold bg-slate-200 hover:bg-slate-300 text-slate-700 shadow-sm inline-flex items-center gap-2 cursor-pointer transition-colors';
+                if (wrapAktif) wrapAktif.classList.remove('hidden');
+                if (wrapArsip) wrapArsip.classList.add('hidden');
+                if (btnEkspor) btnEkspor.classList.remove('hidden');
+                if (btnCetak) btnCetak.classList.remove('hidden');
                 renderDaftarTransaksi();
+            } else {
+                if (!isUserAdmin) {
+                    alert('Akses Ditolak: Hanya Super Admin dan Admin Utama yang berhak membuka Arsip Transaksi Upah.');
+                    return;
+                }
+                if (btnAktif) btnAktif.className = 'px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-bold bg-slate-200 hover:bg-slate-300 text-slate-700 shadow-sm inline-flex items-center gap-2 cursor-pointer transition-colors';
+                if (btnArsip) btnArsip.className = 'px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-bold bg-amber-600 text-white shadow-sm inline-flex items-center gap-2 cursor-pointer transition-colors';
+                if (wrapAktif) wrapAktif.classList.add('hidden');
+                if (wrapArsip) wrapArsip.classList.remove('hidden');
+                if (btnEkspor) btnEkspor.classList.add('hidden');
+                if (btnCetak) btnCetak.classList.add('hidden');
+                renderDaftarTransaksiArsip();
             }
+        }
+
+        function hapusTrx(idTrx) {
+            const trx = transaksiList.find(t => String(t.id) === String(idTrx));
+            if (!trx) return;
+            if (confirm(`Pindahkan transaksi upah ${trx.nama} ke Arsip?\n\nCatatan: Data tidak akan dihapus permanen dan dapat dipulihkan kembali oleh Super Admin.`)) {
+                transaksiList = transaksiList.filter(t => String(t.id) !== String(idTrx));
+                const archivedItem = {
+                    ...trx,
+                    status: 'Diarsipkan',
+                    deletedAt: new Date().toLocaleString('id-ID'),
+                    deletedBy: (typeof window !== 'undefined' && window.SERVER_DATA && window.SERVER_DATA.currentUser && window.SERVER_DATA.currentUser.username) || 'operator'
+                };
+                transaksiArsipList.unshift(archivedItem);
+
+                if (typeof window !== 'undefined' && window.location && window.location.protocol.startsWith('http')) {
+                    fetch('/api/transaksi/hapus', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: idTrx })
+                    }).catch(() => {});
+                }
+
+                try {
+                    localStorage.setItem('jaya_transaksi_upah_v3', JSON.stringify(transaksiList));
+                } catch (_) {}
+
+                renderDaftarTransaksi();
+                renderDaftarTransaksiArsip();
+            }
+        }
+
+        function restoreTrx(idTrx) {
+            if (!isUserAdmin) {
+                alert('Akses Ditolak: Hanya Super Admin dan Admin Utama yang berhak memulihkan transaksi.');
+                return;
+            }
+            const trx = transaksiArsipList.find(t => String(t.id) === String(idTrx));
+            if (!trx) return;
+            if (confirm(`Pulihkan transaksi upah ${trx.nama} kembali ke Daftar Transaksi Aktif?`)) {
+                transaksiArsipList = transaksiArsipList.filter(t => String(t.id) !== String(idTrx));
+                delete trx.deletedAt;
+                delete trx.deletedBy;
+                trx.status = 'Aktif';
+                transaksiList.unshift(trx);
+
+                if (typeof window !== 'undefined' && window.location && window.location.protocol.startsWith('http')) {
+                    fetch('/api/transaksi/restore', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: idTrx })
+                    }).catch(() => {});
+                }
+
+                try {
+                    localStorage.setItem('jaya_transaksi_upah_v3', JSON.stringify(transaksiList));
+                } catch (_) {}
+
+                alert(`Transaksi upah ${trx.nama} berhasil dipulihkan kembali ke Daftar Aktif!`);
+                renderDaftarTransaksi();
+                renderDaftarTransaksiArsip();
+                gantiTabTransaksi('aktif');
+            }
+        }
+
+        function renderDaftarTransaksiArsip() {
+            const tbody = document.getElementById('tbodyDaftarTransaksiArsip');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            const badgeArsip = document.getElementById('badgeCountTrxArsip');
+            if (badgeArsip) badgeArsip.innerText = transaksiArsipList.length;
+
+            const labelTotalArsip = document.getElementById('labelTotalArsipTrx');
+            if (labelTotalArsip) labelTotalArsip.innerText = `${transaksiArsipList.length} Item Diarsipkan`;
+
+            if (transaksiArsipList.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="p-8 text-center text-slate-400 font-semibold italic bg-slate-50">
+                            <i class="fas fa-box-open text-3xl mb-2 block text-slate-300"></i>
+                            Belum ada riwayat transaksi upah yang diarsipkan. Seluruh data aktif aman.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            let nomor = 1;
+            transaksiArsipList.forEach(trx => {
+                const tarifLembur = Math.round((trx.upahPerHari || 0) / 8);
+                let totKotor = 0;
+                let totHari = 0;
+                let ringkasanProjek = [];
+
+                (trx.projekList || []).forEach(p => {
+                    const subPokok = (Number(p.hari) || 0) * (trx.upahPerHari || 0);
+                    const subLembur = (Number(p.lembur) || 0) * tarifLembur;
+                    const sub = subPokok + subLembur + (Number(p.makan) || 0) + (Number(p.transport) || 0) + (Number(p.insentif) || 0);
+                    totKotor += sub;
+                    totHari += Number(p.hari) || 0;
+                    ringkasanProjek.push(`${p.projek || 'PROYEK'} (${p.hari || 0} hr)`);
+                });
+
+                const kasbon = Number(trx.kasbon) || 0;
+                const bersih = totKotor - kasbon;
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-amber-50/50 transition-colors border-b border-slate-200';
+                tr.innerHTML = `
+                    <td class="p-3 text-center font-bold text-slate-400 bg-slate-50">${nomor++}</td>
+                    <td class="p-3">
+                        <div class="font-extrabold text-slate-900">${escapeHtml(trx.nama)}</div>
+                        <div class="text-[11px] font-mono text-slate-500 font-bold">${escapeHtml(trx.kode || '-')} • ${escapeHtml(trx.posisi || '-')}</div>
+                    </td>
+                    <td class="p-3 text-slate-600 text-xs font-semibold">
+                        <div class="flex items-center gap-1.5 text-rose-700">
+                            <i class="fas fa-calendar-xmark text-xs"></i>
+                            <span>${escapeHtml(trx.deletedAt || '-')}</span>
+                        </div>
+                    </td>
+                    <td class="p-3 text-slate-700 text-xs">
+                        <span class="px-2 py-0.5 rounded bg-slate-100 font-bold text-slate-800 border border-slate-200 font-mono">${escapeHtml(trx.deletedBy || 'admin')}</span>
+                    </td>
+                    <td class="p-3 text-slate-600 text-xs max-w-xs truncate" title="${escapeHtml(ringkasanProjek.join(', '))}">
+                        ${escapeHtml(ringkasanProjek.join(', ') || '-')}
+                    </td>
+                    <td class="p-3 text-right font-bold text-slate-800 text-xs">${formatRp(totKotor)}</td>
+                    <td class="p-3 text-right font-bold text-rose-700 text-xs">${kasbon > 0 ? formatRp(kasbon) : '-'}</td>
+                    <td class="p-3 text-right font-black text-emerald-900 text-sm bg-emerald-50/40">${formatRp(bersih)}</td>
+                    <td class="p-3 text-center no-print">
+                        <button type="button" onclick="restoreTrx(\`${trx.id}\`)"
+                                class="px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs inline-flex items-center gap-1.5 transition-colors shadow-sm cursor-pointer"
+                                title="Pulihkan transaksi ini kembali ke Daftar Transaksi Aktif">
+                            <i class="fas fa-rotate-left"></i> Pulihkan
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
 
         // =========================================================================
@@ -1461,4 +1642,21 @@
             window.simpanTransaksi = simpanTransaksi;
             window.editTrxKeForm = editTrxKeForm;
             window.hapusTrx = hapusTrx;
+        }
+        if (typeof window !== 'undefined') {
+            window.addEventListener('DOMContentLoaded', () => {
+                if (isUserAdmin) {
+                    const tabArsip = document.getElementById('tabBtnTrxArsip');
+                    if (tabArsip) tabArsip.classList.remove('hidden');
+                    renderDaftarTransaksiArsip();
+                }
+            });
+            // Jalankan juga langsung jika DOM sudah siap
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                if (isUserAdmin) {
+                    const tabArsip = document.getElementById('tabBtnTrxArsip');
+                    if (tabArsip) tabArsip.classList.remove('hidden');
+                    renderDaftarTransaksiArsip();
+                }
+            }
         }

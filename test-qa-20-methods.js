@@ -275,6 +275,16 @@ async function runQATesting() {
 
         const rGuest = await rawRequest('GET', '/audit-log');
         recordResult(8, 'RBAC Testing', 'Pengguna tanpa sesi login ditolak dan dialihkan (HTTP 302)', rGuest.status === 302 && rGuest.headers.location === '/login');
+
+        // RBAC Khusus Arsip Transaksi Upah
+        const rArsipKeuangan = await rawRequest('GET', '/api/transaksi/arsip', null, { Cookie: 'auth_user=staf.keuangan' });
+        recordResult(8, 'RBAC Testing', 'Staf Keuangan DITOLAK membuka Arsip Transaksi Upah (HTTP 403 Forbidden)', rArsipKeuangan.status === 403);
+
+        const rArsipSuper = await rawRequest('GET', '/api/transaksi/arsip', null, { Cookie: 'auth_user=superadmin' });
+        recordResult(8, 'RBAC Testing', 'Superadmin diizinkan membuka Arsip Transaksi Upah (HTTP 200 OK)', rArsipSuper.status === 200);
+
+        const rRestoreKeuangan = await rawRequest('POST', '/api/transaksi/restore', { id: 999 }, { Cookie: 'auth_user=staf.keuangan' });
+        recordResult(8, 'RBAC Testing', 'Staf Keuangan DITOLAK memulihkan transaksi dari Arsip (HTTP 403 Forbidden)', rRestoreKeuangan.status === 403);
     } catch (err) {
         recordResult(8, 'RBAC Testing', 'Gagal RBAC Testing', false, err.message);
     }
@@ -374,6 +384,34 @@ async function runQATesting() {
         recordResult(12, 'Data Immutability', 'Data karyawan tidak terhapus permanen dari memori sistem', !inActive && inArsip !== undefined);
         recordResult(12, 'Data Immutability', 'Status karyawan di arsip berubah menjadi "Diarsipkan"', inArsip && inArsip.status === 'Diarsipkan');
         recordResult(12, 'Data Immutability', 'Status kartu RFID otomatis nonaktif (Arsip)', card && card.status === 'Nonaktif (Arsip)');
+
+        // Soft Delete & Restore pada Transaksi Upah
+        const testTrxId = 99988;
+        await rawRequest('POST', '/api/transaksi', {
+            id: testTrxId,
+            kode: 'SOFT-01',
+            nama: 'Pekerja Soft Trx',
+            upahPerHari: 130000,
+            projekList: [{ projek: 'FELISA ESTATE', hari: 4, lembur: 0 }]
+        }, { Cookie: 'auth_user=superadmin' });
+
+        await rawRequest('POST', '/api/transaksi/hapus', { id: testTrxId }, { Cookie: 'auth_user=superadmin' });
+        storage = JSON.parse(fs.readFileSync(STORAGE_PATH, 'utf8'));
+        const trxActive = (storage.transaksiUpah || []).some(t => t.id === testTrxId);
+        const trxArsip = (storage.transaksiUpahArsip || []).find(t => t.id === testTrxId);
+
+        recordResult(12, 'Data Immutability', 'Soft Delete Transaksi: Transaksi dipindahkan ke transaksiUpahArsip tanpa hilang permanen', !trxActive && trxArsip !== undefined);
+        recordResult(12, 'Data Immutability', 'Status transaksi di arsip terverifikasi "Diarsipkan" dan memuat deletedBy', trxArsip && trxArsip.status === 'Diarsipkan' && trxArsip.deletedBy === 'superadmin');
+
+        // Restore Transaksi
+        await rawRequest('POST', '/api/transaksi/restore', { id: testTrxId }, { Cookie: 'auth_user=superadmin' });
+        storage = JSON.parse(fs.readFileSync(STORAGE_PATH, 'utf8'));
+        const trxRestored = (storage.transaksiUpah || []).find(t => t.id === testTrxId);
+        recordResult(12, 'Data Immutability', 'Pemulihan Transaksi: Transaksi upah berhasil dipulihkan kembali ke status Aktif', trxRestored !== undefined && trxRestored.status === 'Aktif');
+
+        // Bersihkan data tes
+        storage.transaksiUpah = (storage.transaksiUpah || []).filter(t => t.id !== testTrxId);
+        fs.writeFileSync(STORAGE_PATH, JSON.stringify(storage, null, 2), 'utf8');
     } catch (err) {
         recordResult(12, 'Data Immutability', 'Gagal Data Integrity', false, err.message);
     }

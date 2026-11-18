@@ -28,12 +28,18 @@ function renderUpah(filterKategori = '', currentUser = null) {
             }))
             : [];
 
+        const isAdmin = currentUser && (currentUser.username === 'superadmin' || currentUser.username === 'admin.utama');
         const serverDataScript = `
     <script>
         window.SERVER_DATA = {
             daftarProjek: ${JSON.stringify(dummyData.daftarProjek || [])},
             transaksiList: ${JSON.stringify(dummyData.transaksiUpah || [])},
-            daftarPekerja: ${JSON.stringify(listPekerjaDb)}
+            transaksiArsipList: ${isAdmin ? JSON.stringify(dummyData.transaksiUpahArsip || []) : '[]'},
+            daftarPekerja: ${JSON.stringify(listPekerjaDb)},
+            currentUser: {
+                username: ${JSON.stringify(currentUser ? currentUser.username : '')},
+                isAdmin: ${isAdmin ? 'true' : 'false'}
+            }
         };
     </script>
 `;

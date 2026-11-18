@@ -549,10 +549,21 @@
             <div id="areaTabelRekap" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-8">
                 
                 <div class="px-5 py-3.5 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-slate-50 no-print">
-                    <h3 class="text-sm md:text-base font-bold text-slate-900 flex items-center gap-2">
-                        <i class="fas fa-list-check text-teal-600"></i>
-                        <span>Daftar Transaksi Periode Ini</span>
-                    </h3>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="tabBtnTrxAktif" onclick="gantiTabTransaksi('aktif')"
+                                class="px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-bold bg-teal-600 text-white shadow-sm inline-flex items-center gap-2 cursor-pointer transition-colors">
+                            <i class="fas fa-list-check"></i>
+                            <span>Transaksi Aktif</span>
+                            <span id="badgeCountTrxAktif" class="px-1.5 py-0.5 rounded-full text-[10px] bg-white/20 font-mono">0</span>
+                        </button>
+                        <button type="button" id="tabBtnTrxArsip" onclick="gantiTabTransaksi('arsip')"
+                                class="hidden px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-bold bg-slate-200 hover:bg-slate-300 text-slate-700 shadow-sm inline-flex items-center gap-2 cursor-pointer transition-colors">
+                            <i class="fas fa-box-archive text-amber-600"></i>
+                            <span>Arsip Transaksi</span>
+                            <span class="text-[9px] uppercase px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-extrabold border border-amber-300">Admin Only</span>
+                            <span id="badgeCountTrxArsip" class="px-1.5 py-0.5 rounded-full text-[10px] bg-slate-500 text-white font-mono">0</span>
+                        </button>
+                    </div>
 
                     <div class="flex items-center gap-2.5">
                         <div class="relative">
@@ -562,13 +573,13 @@
                             <i class="fas fa-search absolute left-2.5 top-2.5 text-slate-400 text-xs"></i>
                         </div>
 
-                        <button type="button" onclick="eksporRekapExcel()" 
+                        <button type="button" id="btnEksporExcelTrx" onclick="eksporRekapExcel()" 
                                 class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-1.5 px-3.5 rounded-lg text-xs shadow-sm inline-flex items-center gap-1.5 cursor-pointer transition-colors"
                                 title="Ekspor seluruh rekap transaksi ke format spreadsheet Microsoft Excel / CSV">
                             <i class="fas fa-file-excel"></i> Ekspor Laporan (XLSX)
                         </button>
 
-                        <button type="button" onclick="cetakRekapitulasi()" 
+                        <button type="button" id="btnCetakRekapTrx" onclick="cetakRekapitulasi()" 
                                 class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-1.5 px-3.5 rounded-lg text-xs shadow-sm inline-flex items-center gap-1.5 cursor-pointer transition-colors"
                                 title="Cetak Dokumen Rekapitulasi Upah Resmi">
                             <i class="fas fa-print"></i> Cetak Rekapitulasi
@@ -595,7 +606,8 @@
                     </div>
                 </div>
 
-                <div class="overflow-x-auto">
+                <!-- TAB 1: TABEL DAFTAR TRANSAKSI AKTIF -->
+                <div id="wrapperTabelTrxAktif" class="overflow-x-auto">
                     <table class="w-full text-left border-collapse" style="min-width: 1050px;">
                         <thead>
                             <tr class="bg-slate-800 text-white text-xs uppercase tracking-wider font-extrabold">
@@ -623,6 +635,35 @@
                                 <td class="p-4 bg-slate-300 no-print"></td>
                             </tr>
                         </tfoot>
+                    </table>
+                </div>
+
+                <!-- TAB 2: TABEL ARSIP TRANSAKSI (HANYA BISA DIAKSES OLEH ADMIN / SUPER ADMIN) -->
+                <div id="wrapperTabelTrxArsip" class="hidden overflow-x-auto">
+                    <div class="p-3.5 bg-amber-50 border-b border-amber-200 flex flex-wrap items-center justify-between gap-2 text-xs text-amber-900 font-semibold no-print">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-shield-halved text-amber-600 text-sm"></i>
+                            <span>Area Terbatas: Arsip Transaksi Upah hanya dapat diakses dan dipulihkan oleh <strong>Super Admin</strong> &amp; <strong>Admin Utama</strong>.</span>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-md bg-amber-200 text-amber-950 font-bold font-mono text-xs" id="labelTotalArsipTrx">0 Item Diarsipkan</span>
+                    </div>
+                    <table class="w-full text-left border-collapse" style="min-width: 1050px;">
+                        <thead>
+                            <tr class="bg-slate-700 text-white text-xs uppercase tracking-wider font-extrabold">
+                                <th class="p-3 text-center w-12">No</th>
+                                <th class="p-3">Pekerja</th>
+                                <th class="p-3">Waktu Diarsipkan</th>
+                                <th class="p-3">Diarsip Oleh</th>
+                                <th class="p-3">Rincian Proyek &amp; Hari</th>
+                                <th class="p-3 text-right">Total Upah Kotor</th>
+                                <th class="p-3 text-right text-rose-300 bg-rose-900/40">Potongan Kasbon</th>
+                                <th class="p-3 text-right text-emerald-300 bg-emerald-950">Sisa Bersih</th>
+                                <th class="p-3 text-center w-36 no-print">Aksi Pemulihan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyDaftarTransaksiArsip" class="divide-y divide-slate-200 text-sm">
+                            <!-- Diisi JS -->
+                        </tbody>
                     </table>
                 </div>
 
