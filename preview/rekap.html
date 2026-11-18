@@ -613,14 +613,24 @@
             `;
 
             const blob = new Blob(['\uFEFF' + excelTemplate], { type: 'application/vnd.ms-excel;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
+            const filename = 'Rekap_Kehadiran_Jaya_Kedhaton_20260803.xls';
+
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(blob, filename);
+                return;
+            }
+
+            const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
+            link.style.display = 'none';
             link.setAttribute('href', url);
-            link.setAttribute('download', 'Rekap_Kehadiran_Jaya_Kedhaton_20260803.xls');
+            link.setAttribute('download', filename);
             document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
+            setTimeout(() => {
+                if (link.parentNode) link.parentNode.removeChild(link);
+                window.URL.revokeObjectURL(url);
+            }, 3000);
         }
 
         function toggleSidebar() {

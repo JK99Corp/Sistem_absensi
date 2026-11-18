@@ -1082,15 +1082,25 @@
 
             // Download sebagai format .xls (MIME ms-excel dengan BOM UTF-8)
             const blob = new Blob(['\uFEFF' + excelTemplate], { type: 'application/vnd.ms-excel;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
             const safePeriode = labelPeriode.replace(/[^a-zA-Z0-9]/g, '_');
+            const filename = `Rekap_Upah_JayaKedhaton_${safePeriode}.xls`;
+
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(blob, filename);
+                return;
+            }
+
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
             a.href = url;
-            a.download = `Rekap_Upah_JayaKedhaton_${safePeriode}.xls`;
+            a.download = filename;
             document.body.appendChild(a);
             a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            setTimeout(() => {
+                if (a.parentNode) a.parentNode.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 3000);
         }
 
         // =========================================================================
