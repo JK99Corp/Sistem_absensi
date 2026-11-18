@@ -334,7 +334,7 @@ function handleSimpanRename(namaLama, idx) {
 }
 
 function handleHapusProjek(nama) {
-    if (!confirm(`Apakah Anda yakin ingin menghapus "${nama}"?\n\nKaryawan pada projek ini akan dialihkan.`)) return;
+    if (!confirm(`Pindahkan projek "${nama}" ke Arsip?\n\nCatatan: Data tidak akan dihapus permanen dan dapat dipulihkan kembali oleh Super Admin.`)) return;
     const res = hapusProjek(nama);
     if (res.success) {
         refreshListProjekModal();

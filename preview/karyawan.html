@@ -217,7 +217,7 @@
                             <button onclick="alert('Edit data: Dimas Arya Kedhaton')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors cursor-pointer">
                                 <i class="fas fa-edit mr-1"></i> Edit
                             </button>
-                            <form method="POST" action="/karyawan/delete" onsubmit="return confirm('PERINGATAN AMAN:\n\nKaryawan ini akan dipindahkan ke Arsip.\n\nApakah Anda yakin? Seluruh data laporan keuangan dan jam lembur masa lalu TETAP AMAN dan TIDAK AKAN HILANG.')">
+                            <form method="POST" action="/karyawan/delete" onsubmit="return confirm('Pindahkan karyawan Dimas Arya Kedhaton ke Arsip?\n\nCatatan: Data tidak akan dihapus permanen dan dapat dipulihkan kembali oleh Super Admin.')">
                                 <input type="hidden" name="id" value="1">
                                 <button type="submit" class="bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-semibold py-1.5 px-3 rounded-lg text-xs transition-colors flex items-center gap-1 cursor-pointer">
                                     <i class="fas fa-archive"></i> Arsipkan
@@ -248,7 +248,7 @@
                             <button onclick="alert('Edit data: Akmal Zaidan')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors cursor-pointer">
                                 <i class="fas fa-edit mr-1"></i> Edit
                             </button>
-                            <form method="POST" action="/karyawan/delete" onsubmit="return confirm('PERINGATAN AMAN:\n\nKaryawan ini akan dipindahkan ke Arsip.\n\nApakah Anda yakin? Seluruh data laporan keuangan dan jam lembur masa lalu TETAP AMAN dan TIDAK AKAN HILANG.')">
+                            <form method="POST" action="/karyawan/delete" onsubmit="return confirm('Pindahkan karyawan Akmal Zaidan ke Arsip?\n\nCatatan: Data tidak akan dihapus permanen dan dapat dipulihkan kembali oleh Super Admin.')">
                                 <input type="hidden" name="id" value="2">
                                 <button type="submit" class="bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-semibold py-1.5 px-3 rounded-lg text-xs transition-colors flex items-center gap-1 cursor-pointer">
                                     <i class="fas fa-archive"></i> Arsipkan
@@ -279,7 +279,7 @@
                             <button onclick="alert('Edit data: Anom Arya')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors cursor-pointer">
                                 <i class="fas fa-edit mr-1"></i> Edit
                             </button>
-                            <form method="POST" action="/karyawan/delete" onsubmit="return confirm('PERINGATAN AMAN:\n\nKaryawan ini akan dipindahkan ke Arsip.\n\nApakah Anda yakin? Seluruh data laporan keuangan dan jam lembur masa lalu TETAP AMAN dan TIDAK AKAN HILANG.')">
+                            <form method="POST" action="/karyawan/delete" onsubmit="return confirm('Pindahkan karyawan Anom Arya ke Arsip?\n\nCatatan: Data tidak akan dihapus permanen dan dapat dipulihkan kembali oleh Super Admin.')">
                                 <input type="hidden" name="id" value="3">
                                 <button type="submit" class="bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-semibold py-1.5 px-3 rounded-lg text-xs transition-colors flex items-center gap-1 cursor-pointer">
                                     <i class="fas fa-archive"></i> Arsipkan
@@ -310,7 +310,7 @@
                             <button onclick="alert('Edit data: Joko Susilo')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors cursor-pointer">
                                 <i class="fas fa-edit mr-1"></i> Edit
                             </button>
-                            <form method="POST" action="/karyawan/delete" onsubmit="return confirm('PERINGATAN AMAN:\n\nKaryawan ini akan dipindahkan ke Arsip.\n\nApakah Anda yakin? Seluruh data laporan keuangan dan jam lembur masa lalu TETAP AMAN dan TIDAK AKAN HILANG.')">
+                            <form method="POST" action="/karyawan/delete" onsubmit="return confirm('Pindahkan karyawan Joko Susilo ke Arsip?\n\nCatatan: Data tidak akan dihapus permanen dan dapat dipulihkan kembali oleh Super Admin.')">
                                 <input type="hidden" name="id" value="4">
                                 <button type="submit" class="bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-semibold py-1.5 px-3 rounded-lg text-xs transition-colors flex items-center gap-1 cursor-pointer">
                                     <i class="fas fa-archive"></i> Arsipkan
@@ -341,7 +341,7 @@
                             <button onclick="alert('Edit data: Slamet Riyadi')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors cursor-pointer">
                                 <i class="fas fa-edit mr-1"></i> Edit
                             </button>
-                            <form method="POST" action="/karyawan/delete" onsubmit="return confirm('PERINGATAN AMAN:\n\nKaryawan ini akan dipindahkan ke Arsip.\n\nApakah Anda yakin? Seluruh data laporan keuangan dan jam lembur masa lalu TETAP AMAN dan TIDAK AKAN HILANG.')">
+                            <form method="POST" action="/karyawan/delete" onsubmit="return confirm('Pindahkan karyawan Slamet Riyadi ke Arsip?\n\nCatatan: Data tidak akan dihapus permanen dan dapat dipulihkan kembali oleh Super Admin.')">
                                 <input type="hidden" name="id" value="5">
                                 <button type="submit" class="bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-semibold py-1.5 px-3 rounded-lg text-xs transition-colors flex items-center gap-1 cursor-pointer">
                                     <i class="fas fa-archive"></i> Arsipkan
@@ -742,7 +742,7 @@
 
             function arsipkanKaryawan(e, id, nama) {
                 if (e && e.preventDefault) e.preventDefault();
-                const yakin = confirm(`PERINGATAN AMAN:\n\nKaryawan "${nama}" akan dipindahkan ke Arsip.\n\nApakah Anda yakin? Seluruh data laporan keuangan dan jam lembur masa lalu TETAP AMAN dan TIDAK AKAN HILANG.`);
+                const yakin = confirm(`Pindahkan karyawan "${nama}" ke Arsip?\n\nCatatan: Data tidak akan dihapus permanen dan dapat dipulihkan kembali oleh Super Admin.`);
                 if (!yakin) return false;
 
                 const row = document.getElementById(`rowKaryawan_${id}`) || (e?.target ? e.target.closest('tr') : null);

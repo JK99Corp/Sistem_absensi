@@ -66,7 +66,7 @@ function renderKaryawanView(tab = 'aktif', notifMsg = '', currentUser = null, no
                             <button data-nama="${escapeHtml(p.nama)}" onclick="alert('Edit data: ' + this.dataset.nama)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-1.5 px-3 rounded-lg text-xs transition-colors cursor-pointer">
                                 <i class="fas fa-edit mr-1"></i> Edit
                             </button>
-                            <form method="POST" action="/karyawan/delete" onsubmit="return confirm('PERINGATAN AMAN:\\n\\nKaryawan ini akan dipindahkan ke Arsip.\\n\\nApakah Anda yakin? Seluruh data laporan keuangan dan jam lembur masa lalu TETAP AMAN dan TIDAK AKAN HILANG.')">
+                            <form method="POST" action="/karyawan/delete" onsubmit="return confirm('Pindahkan karyawan ${escapeHtml(p.nama)} ke Arsip?\\n\\nCatatan: Data tidak akan dihapus permanen dan dapat dipulihkan kembali oleh Super Admin.')">
                                 <input type="hidden" name="id" value="${p.id}">
                                 <button type="submit" class="bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-semibold py-1.5 px-3 rounded-lg text-xs transition-colors flex items-center gap-1 cursor-pointer">
                                     <i class="fas fa-archive"></i> Arsipkan

@@ -3871,6 +3871,28 @@
       "tarifLembur": 30000,
       "tglGabung": "01/01/2026",
       "projek": "-"
+    },
+    {
+      "id": 256,
+      "nama": "QA Worker 2666",
+      "kategori": "Pekerja Harian",
+      "uid": "TEST2666",
+      "noHp": "-",
+      "status": "Aktif",
+      "upahHarian": 135000,
+      "tarifLembur": 16875,
+      "tglGabung": "18/11/2026"
+    },
+    {
+      "id": 257,
+      "nama": "<script>alert(\"XSS_PWN\")</script>",
+      "kategori": "Pekerja Harian",
+      "uid": "XSS8648",
+      "noHp": "-",
+      "status": "Aktif",
+      "upahHarian": 100000,
+      "tarifLembur": 25000,
+      "tglGabung": "18/11/2026"
     }
   ],
   "karyawanArsip": [
@@ -3886,6 +3908,19 @@
       "tglGabung": "01/06/2026",
       "deletedAt": "2026-07-28 16:00",
       "keterangan": "Selesai Proyek Harian Juli. Riwayat gaji & absensi tetap tersimpan rapi."
+    },
+    {
+      "id": 258,
+      "nama": "Immutability Worker",
+      "kategori": "Pekerja Harian",
+      "uid": "SOFTDEL8536",
+      "noHp": "-",
+      "status": "Diarsipkan",
+      "upahHarian": 120000,
+      "tarifLembur": 25000,
+      "tglGabung": "18/11/2026",
+      "deletedAt": "18/11/2026, 16.44.55",
+      "keterangan": "Diarsipkan oleh admin. Data keuangan & riwayat absensi tetap aman 100%."
     }
   ],
   "absensiHariIni": [
@@ -4180,6 +4215,39 @@
       "uangMakan": 20000,
       "insentif": 0,
       "kasbon": 0
+    },
+    {
+      "id": 256,
+      "nama": "QA Worker 2666",
+      "kategori": "Pekerja Harian",
+      "tipe": "harian",
+      "uid": "TEST2666",
+      "hariKerja": 0,
+      "jamLembur": 0,
+      "pokok": 135000,
+      "tarifLembur": 16875
+    },
+    {
+      "id": 257,
+      "nama": "<script>alert(\"XSS_PWN\")</script>",
+      "kategori": "Pekerja Harian",
+      "tipe": "harian",
+      "uid": "XSS8648",
+      "hariKerja": 0,
+      "jamLembur": 0,
+      "pokok": 100000,
+      "tarifLembur": 25000
+    },
+    {
+      "id": 258,
+      "nama": "Immutability Worker",
+      "kategori": "Pekerja Harian",
+      "tipe": "harian",
+      "uid": "SOFTDEL8536",
+      "hariKerja": 0,
+      "jamLembur": 0,
+      "pokok": 120000,
+      "tarifLembur": 25000
     }
   ],
   "pekerjaHarian": [
@@ -4224,9 +4292,82 @@
       "uangMakan": 20000,
       "insentif": 0,
       "kasbon": 0
+    },
+    {
+      "id": 256,
+      "nama": "QA Worker 2666",
+      "uid": "TEST2666",
+      "hariKerja": 0,
+      "jamLembur": 0,
+      "upahHarian": 135000,
+      "tarifLembur": 16875
+    },
+    {
+      "id": 257,
+      "nama": "<script>alert(\"XSS_PWN\")</script>",
+      "uid": "XSS8648",
+      "hariKerja": 0,
+      "jamLembur": 0,
+      "upahHarian": 100000,
+      "tarifLembur": 25000
+    },
+    {
+      "id": 258,
+      "nama": "Immutability Worker",
+      "uid": "SOFTDEL8536",
+      "hariKerja": 0,
+      "jamLembur": 0,
+      "upahHarian": 120000,
+      "tarifLembur": 25000
     }
   ],
   "transaksiUpah": [
+    {
+      "id": 99988,
+      "kode": "SOFT-01",
+      "nama": "Pekerja Soft Trx",
+      "upahPerHari": 130000,
+      "projekList": [
+        {
+          "projek": "FELISA ESTATE",
+          "hari": 4,
+          "lembur": 0
+        }
+      ],
+      "status": "Aktif"
+    },
+    {
+      "id": 77711,
+      "kode": "IDEM-01",
+      "nama": "Idem Tester",
+      "posisi": "TUKANG",
+      "upahPerHari": 120000,
+      "projekList": [],
+      "kasbon": 0,
+      "transfer": 0,
+      "cash": 0
+    },
+    {
+      "id": 88866,
+      "kode": "QA-2666",
+      "nama": "QA Worker 2666",
+      "posisi": "TUKANG",
+      "upahPerHari": 135000,
+      "projekList": [
+        {
+          "projek": "FELISA ESTATE",
+          "hari": 6,
+          "lembur": 2,
+          "makan": 30000,
+          "transport": 10000,
+          "insentif": 0
+        }
+      ],
+      "kasbon": 20000,
+      "kasbonKet": "Kasbon tes fungsional",
+      "transfer": 800000,
+      "cash": 63750
+    },
     {
       "id": 1,
       "kode": "KANCIL-013",
@@ -4355,6 +4496,30 @@
       "kategori": "Pekerja Harian",
       "tgl": "2026-11-09",
       "status": "Nonaktif (Arsip)"
+    },
+    {
+      "id": 256,
+      "uid": "TEST2666",
+      "pemilik": "QA Worker 2666",
+      "kategori": "Pekerja Harian",
+      "tgl": "2026-11-18",
+      "status": "Aktif"
+    },
+    {
+      "id": 257,
+      "uid": "XSS8648",
+      "pemilik": "<script>alert(\"XSS_PWN\")</script>",
+      "kategori": "Pekerja Harian",
+      "tgl": "2026-11-18",
+      "status": "Aktif"
+    },
+    {
+      "id": 258,
+      "uid": "SOFTDEL8536",
+      "pemilik": "Immutability Worker",
+      "kategori": "Pekerja Harian",
+      "tgl": "2026-11-18",
+      "status": "Nonaktif (Arsip)"
     }
   ],
   "devices": [
@@ -4378,6 +4543,186 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": 1794991495259,
+      "waktu": "2026-11-18 16:44:55",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "LOGOUT",
+      "keterangan": "Keluar dari sistem",
+      "ip": "::1"
+    },
+    {
+      "id": 1794991495256,
+      "waktu": "2026-11-18 16:44:55",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "LOGIN",
+      "keterangan": "Berhasil login ke sistem melalui Portal Keamanan",
+      "ip": "::1"
+    },
+    {
+      "id": 1794991495226,
+      "waktu": "2026-11-18 16:44:55",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "PULIHKAN_TRANSAKSI",
+      "keterangan": "Memulihkan transaksi upah Pekerja Soft Trx (ID: 99988) dari Arsip ke Aktif",
+      "ip": "::1"
+    },
+    {
+      "id": 1794991495218,
+      "waktu": "2026-11-18 16:44:55",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "ARSIP_TRANSAKSI",
+      "keterangan": "Memindahkan transaksi upah Pekerja Soft Trx (ID: 99988) ke Arsip",
+      "ip": "::1"
+    },
+    {
+      "id": 1794991495212,
+      "waktu": "2026-11-18 16:44:55",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "SIMPAN_TRANSAKSI",
+      "keterangan": "Menyimpan transaksi upah: Pekerja Soft Trx (SOFT-01)",
+      "ip": "::1"
+    },
+    {
+      "id": 1794991495206,
+      "waktu": "2026-11-18 16:44:55",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "ARSIP_KARYAWAN",
+      "keterangan": "Memindahkan karyawan Immutability Worker (ID: 258) ke Arsip",
+      "ip": "::1"
+    },
+    {
+      "id": 1794991495201,
+      "waktu": "2026-11-18 16:44:55",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "TAMBAH_KARYAWAN",
+      "keterangan": "Menambahkan karyawan baru: Immutability Worker (Pekerja Harian, UID: SOFTDEL8536)",
+      "ip": "::1"
+    },
+    {
+      "id": 1794991495196,
+      "waktu": "2026-11-18 16:44:55",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "SIMPAN_TRANSAKSI",
+      "keterangan": "Menyimpan transaksi upah: Idem Tester (IDEM-01)",
+      "ip": "::1"
+    },
+    {
+      "id": 1794991495191,
+      "waktu": "2026-11-18 16:44:55",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "SIMPAN_TRANSAKSI",
+      "keterangan": "Menyimpan transaksi upah: Idem Tester (IDEM-01)",
+      "ip": "::1"
+    },
+    {
+      "id": 1794991495174,
+      "waktu": "2026-11-18 16:44:55",
+      "username": "' OR '1'='1",
+      "nama": "' OR '1'='1",
+      "role": "Pengguna",
+      "aksi": "LOGIN_GAGAL",
+      "keterangan": "Percobaan login gagal dengan kata sandi salah",
+      "ip": "::1"
+    },
+    {
+      "id": 1794991495158,
+      "waktu": "2026-11-18 16:44:55",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "TAMBAH_KARYAWAN",
+      "keterangan": "Menambahkan karyawan baru: <script>alert(\"XSS_PWN\")</script> (Pekerja Harian, UID: XSS8648)",
+      "ip": "::1"
+    },
+    {
+      "id": 1794991495151,
+      "waktu": "2026-11-18 16:44:55",
+      "username": "staf.keuangan",
+      "nama": "Siti Aminah",
+      "role": "Staf Keuangan",
+      "aksi": "AKSES_DITOLAK",
+      "keterangan": "Mencoba memulihkan transaksi dari Arsip tanpa wewenang Admin/Superadmin",
+      "ip": "::1"
+    },
+    {
+      "id": 1794991495147,
+      "waktu": "2026-11-18 16:44:55",
+      "username": "staf.keuangan",
+      "nama": "Siti Aminah",
+      "role": "Staf Keuangan",
+      "aksi": "AKSES_DITOLAK",
+      "keterangan": "Mencoba mengakses Arsip Transaksi Upah tanpa wewenang Admin/Superadmin",
+      "ip": "::1"
+    },
+    {
+      "id": 1794991495143,
+      "waktu": "2026-11-18 16:44:55",
+      "username": "staf.hrd",
+      "nama": "Rendra Bagus",
+      "role": "Staf HRD & Personalia",
+      "aksi": "AKSES_DITOLAK",
+      "keterangan": "Mencoba mengakses halaman Log Audit Pimpinan tanpa izin",
+      "ip": "::1"
+    },
+    {
+      "id": 1794991495138,
+      "waktu": "2026-11-18 16:44:55",
+      "username": "staf.keuangan",
+      "nama": "Siti Aminah",
+      "role": "Staf Keuangan",
+      "aksi": "AKSES_DITOLAK",
+      "keterangan": "Mencoba mengakses halaman Log Audit Pimpinan tanpa izin",
+      "ip": "::1"
+    },
+    {
+      "id": 1794991495130,
+      "waktu": "2026-11-18 16:44:55",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "LOGIN",
+      "keterangan": "Berhasil login ke sistem melalui Portal Keamanan",
+      "ip": "::1"
+    },
+    {
+      "id": 1794991495120,
+      "waktu": "2026-11-18 16:44:55",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "SIMPAN_TRANSAKSI",
+      "keterangan": "Menyimpan transaksi upah: QA Worker 2666 (QA-2666)",
+      "ip": "::1"
+    },
+    {
+      "id": 1794991495114,
+      "waktu": "2026-11-18 16:44:55",
+      "username": "superadmin",
+      "nama": "Direktur Utama",
+      "role": "Super Admin (Direksi)",
+      "aksi": "TAMBAH_KARYAWAN",
+      "keterangan": "Menambahkan karyawan baru: QA Worker 2666 (Pekerja Harian, UID: TEST2666)",
+      "ip": "::1"
+    },
     {
       "id": 1794984922668,
       "waktu": "2026-11-18 14:55:22",
