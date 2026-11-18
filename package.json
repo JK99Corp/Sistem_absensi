@@ -8,7 +8,8 @@
     "test": "node test-inmemory.js",
     "test:security": "node test-security.js",
     "test:comprehensive": "node test-comprehensive.js",
-    "test:all": "node test-syntax-all.js && node test-inmemory.js && node test-security.js && node test-comprehensive.js"
+    "test:qa": "node test-qa-20-methods.js",
+    "test:all": "node test-syntax-all.js && node test-inmemory.js && node test-security.js && node test-comprehensive.js && node test-qa-20-methods.js"
   },
   "dependencies": {
     "pg": "^8.13.1"
