@@ -54,10 +54,10 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
         }
 
-        /* Mode Cetak Slip 2 Rangkap & Rekap (Format Landscape A4 Hemat Kertas) */
+        /* Mode Cetak Slip 2 Rangkap (Format Susun Atas & Bawah A4 Portrait) */
         @media print {
             @page {
-                size: A4 landscape;
+                size: A4 portrait;
                 margin: 5mm 6mm;
             }
             aside, header, #areaPetunjuk, #areaKalender, #areaInputForm, #areaTabelRekap, .no-print { 
@@ -100,26 +100,39 @@
                 background: white !important;
             }
             body.slip-open #slipPrintWrapper {
-                display: grid !important;
-                grid-template-columns: 1fr 1fr !important;
-                gap: 8mm !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
+                gap: 2mm !important;
                 width: 100% !important;
+                height: 284mm !important;
+                max-height: 284mm !important;
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
             }
             body.slip-open .slip-box {
                 border: 1.5px solid #0f172a !important;
                 border-radius: 6px !important;
-                padding: 8px 12px !important;
+                padding: 6px 12px !important;
                 background: white !important;
                 box-shadow: none !important;
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
-                height: 100% !important;
-                min-height: 178mm !important;
+                height: 136mm !important;
+                max-height: 136mm !important;
                 display: flex !important;
                 flex-direction: column !important;
                 justify-content: space-between !important;
+                overflow: hidden !important;
+            }
+            body.slip-open .slip-cut-divider {
+                display: flex !important;
+                align-items: center !important;
+                height: 6mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
         }
     </style>
@@ -545,10 +558,10 @@
             </div>
 
             <!-- ============================================================ -->
-            <!-- MODAL SLIP GAJI 2 RANGKAP (1 KERTAS LANDSCAPE: PENERIMA & KEUANGAN) -->
+            <!-- MODAL SLIP GAJI 2 RANGKAP (1 KERTAS A4 PORTRAIT: SUSUN ATAS & BAWAH) -->
             <!-- ============================================================ -->
             <div id="modalSlip" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden overflow-y-auto p-2 sm:p-4 lg:p-6 flex justify-center items-start">
-                <div class="bg-white rounded-2xl shadow-2xl w-full max-w-7xl p-4 sm:p-6 text-slate-800 relative my-auto border border-slate-300">
+                <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl p-4 sm:p-6 text-slate-800 relative my-auto border border-slate-300">
                     
                     <!-- Header Modal & Kontrol (Hanya Layar, No-Print) -->
                     <div class="flex flex-wrap items-center justify-between pb-4 mb-4 border-b border-slate-200 no-print gap-3">
@@ -558,15 +571,15 @@
                                     <i class="fas fa-file-invoice-dollar"></i> Cetak 2 Rangkap (Hemat Kertas)
                                 </span>
                                 <span class="bg-slate-100 text-slate-700 font-semibold text-xs px-2.5 py-1 rounded-md">
-                                    Format: A4 Landscape
+                                    Format: A4 Portrait (Atas &amp; Bawah)
                                 </span>
                             </div>
                             <h3 class="text-base sm:text-lg font-bold text-slate-900 mt-1">Pratinjau Slip Upah Pekerja PT. Jaya Kedhaton</h3>
-                            <p class="text-xs text-slate-500">Hasil print memuat 2 lembar berdampingan dalam 1 kertas landscape: <strong>Lembar Penerima</strong> &amp; <strong>Bukti Staf Keuangan</strong> (Tanda tangan khusus Penerima).</p>
+                            <p class="text-xs text-slate-500">Hasil print memuat 2 lembar susun atas-bawah dalam 1 kertas A4: <strong>Lembar Atas (Penerima)</strong> &amp; <strong>Lembar Bawah (Bukti Staf Keuangan)</strong>. Cukup dipotong di garis tengah setelah diprint.</p>
                         </div>
                         <div class="flex items-center gap-2">
                             <button type="button" onclick="window.print()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-4 py-2 rounded-xl text-xs sm:text-sm shadow cursor-pointer transition-colors inline-flex items-center gap-2">
-                                <i class="fas fa-print"></i> Cetak Slip (Landscape)
+                                <i class="fas fa-print"></i> Cetak Slip (A4)
                             </button>
                             <button type="button" onclick="tutupSlip()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-xl text-xs sm:text-sm cursor-pointer transition-colors">
                                 &times; Tutup
@@ -574,15 +587,24 @@
                         </div>
                     </div>
 
-                    <!-- CONTAINER 2 RANGKAP SLIP (SIDE-BY-SIDE DALAM PRINT LANDSCAPE) -->
-                    <div id="slipPrintWrapper" class="grid grid-cols-1 xl:grid-cols-2 gap-5 relative">
-                        <!-- Lembar 1: UNTUK PENERIMA -->
-                        <div id="slipLembarPenerima" class="slip-box bg-white rounded-xl border border-slate-300 p-4 sm:p-5 flex flex-col justify-between relative shadow-sm">
+                    <!-- CONTAINER 2 RANGKAP SLIP (SUSUN ATAS & BAWAH) -->
+                    <div id="slipPrintWrapper" class="flex flex-col gap-3 relative">
+                        <!-- Lembar 1: ATAS (UNTUK PENERIMA) -->
+                        <div id="slipLembarPenerima" class="slip-box bg-white rounded-xl border border-slate-300 p-3 sm:p-4 flex flex-col justify-between relative shadow-sm">
                             <!-- Diisi oleh JS -->
                         </div>
 
-                        <!-- Lembar 2: BUKTI BUAT STAF KEUANGAN -->
-                        <div id="slipLembarKeuangan" class="slip-box bg-white rounded-xl border border-slate-300 p-4 sm:p-5 flex flex-col justify-between relative shadow-sm">
+                        <!-- Garis Pemotong Tengah -->
+                        <div class="slip-cut-divider flex items-center justify-center gap-2 py-1 select-none">
+                            <span class="flex-1 border-b-2 border-dashed border-slate-400"></span>
+                            <span class="flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-slate-100 border border-slate-300 text-slate-600 font-bold text-[10px] tracking-wider uppercase">
+                                <i class="fas fa-cut"></i> POTONG DI SINI (1 KERTAS A4 DIBAGI 2 SLIP) <i class="fas fa-cut"></i>
+                            </span>
+                            <span class="flex-1 border-b-2 border-dashed border-slate-400"></span>
+                        </div>
+
+                        <!-- Lembar 2: BAWAH (BUKTI BUAT STAF KEUANGAN) -->
+                        <div id="slipLembarKeuangan" class="slip-box bg-white rounded-xl border border-slate-300 p-3 sm:p-4 flex flex-col justify-between relative shadow-sm">
                             <!-- Diisi oleh JS -->
                         </div>
                     </div>
@@ -593,7 +615,7 @@
                             Batal
                         </button>
                         <button type="button" onclick="window.print()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-6 py-2.5 rounded-xl text-xs sm:text-sm shadow cursor-pointer transition-colors inline-flex items-center gap-2">
-                            <i class="fas fa-print"></i> Cetak 1 Lembar Landscape
+                            <i class="fas fa-print"></i> Cetak 1 Lembar A4 (Atas-Bawah)
                         </button>
                     </div>
 
@@ -605,6 +627,6 @@
 
     <!-- SCRIPT DATA & LOGIKA FORM TRANSAKSI -->
     <script src="master-data.js"></script>
-    <script src="transaksi-upah.js?v=2.2"></script>
+    <script src="transaksi-upah.js?v=2.3"></script>
 </body>
 </html>
